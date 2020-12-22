@@ -133,10 +133,11 @@ var systemComponents = {
             This is made entirely for entertainment and parody purposes, no income is generated from this nor it's made to steal anybody's original works.
         </h5>
 		<br><br>
-		<div class="link" onclick="showTab('changelog-tab')">Changelog</div><br>
+		<div class="link" onclick="showTab('changelog-tab')">Changelog<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(see what happened throughout this thing's history)</h5></div><br>
+		<a class="link" href="acknowledgements.md" target="_blank">Acknowledgements<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(wall of text saying I do not own most of this)</h5></a><br>
         <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
-        <a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
-        <a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
+        <a class="link" href="https://discord.gg/F3xveHV" target="_blank">The Modding Tree Discord<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(suggest everything and talk about how bad this mod is here)</h5></a><br>
+        <a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree server<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(server of the person who made the original game)</h5></a><br>
 		<br><br>
         Time Played: {{ formatTime(player.timePlayed) }}<br><br>
         <h3>Hotkeys</h3><br>

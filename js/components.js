@@ -413,6 +413,7 @@ function loadVue() {
 	`
 	})
 
+
 	// SYSTEM COMPONENTS
 
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])
