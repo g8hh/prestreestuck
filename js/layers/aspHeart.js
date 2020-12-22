@@ -163,12 +163,18 @@ addLayer("aspHeart", {
     doReset(pLayer) {
         if (pLayer && layers[pLayer].row > layers[this.layer].row) {
             var listKeep = [];
+            var upgradeKeep = [];
             var milestoneKeep = [];
             if ((pLayer === "aspHope" && hasMilestone("aspHope", 0)) || (pLayer === "aspRage" && hasMilestone("aspRage", 0))) {
                 milestoneKeep.push("0", "1", "2", "3", "4", "5")
             }
+            if ((pLayer === "aspHope" && hasMilestone("aspHope", 2)) || (pLayer === "aspRage" && hasMilestone("aspRage", 2))) {
+                milestoneKeep.push("6")
+                upgradeKeep.push(11, 12, 13, 14, 21)
+            }
             layerDataReset("aspHeart", listKeep)
-            player.aspHeart.milestones = milestoneKeep;
+            player.aspHeart.milestones = milestoneKeep
+            player.aspHeart.upgrades = upgradeKeep;
         }
     },
 
@@ -181,6 +187,7 @@ addLayer("aspHeart", {
         if (hasUpgrade("aspHeart", 12)) mult = mult.mul(tmp.aspHeart.upgrades[12].effect)
         if (hasUpgrade("aspHeart", 13)) mult = mult.mul(tmp.aspHeart.upgrades[13].effect)
         if (hasUpgrade("aspHeart", 14)) mult = mult.mul(tmp.aspHeart.upgrades[13].effect)
+        if (hasUpgrade("aspHope", 31)) mult = mult.mul(tmp.aspHope.upgrades[31].effect)
         return mult
     },
     gainExp() {

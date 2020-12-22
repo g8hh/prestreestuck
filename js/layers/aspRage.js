@@ -32,6 +32,7 @@ addLayer("aspRage", {
     requires() {
         let req = new Decimal(1e32)
         if (challengeCompletions("aspRage", 11)) req = req.div(tmp.aspRage.challenges[11].rewardEffect.rageReqReduce)
+        if (hasUpgrade("aspHope", 11)) req = req.div(tmp.aspHope.upgrades[11].effect)
         return req;
     },
     base: 1000,
@@ -54,6 +55,11 @@ addLayer("aspRage", {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>COMMENCE DESTRUCTION</alternate></p>3 Rage Essence",
             done() { return player[this.layer].best.gte(3) },
             effectDescription: "Unlocks Rage challenges.",
+        },
+        2: {
+            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>UNEXPECTED SYNERGY</alternate></p>8 Rage Essence",
+            done() { return player[this.layer].best.gte(8) },
+            effectDescription: "Gives you all Heart and Mind upgrades and their seventh milestone on Rage reset.",
         },
     },
 
@@ -88,13 +94,13 @@ addLayer("aspRage", {
             completionLimit: 5,
             challengeDescription() {
                 return "<h3>(" + challengeCompletions(this.layer, this.id) + " / " + this.completionLimit + " completions)</h3><br/>\
-                Raises Time Power gain to the power of ^" + format(1 / (challengeCompletions(this.layer, this.id) + 2)) + "."
+                Raises Time Power gain to the power of ^" + format(1 / (challengeCompletions(this.layer, this.id) + 2), 3) + "."
             },
             unlocked() { return challengeCompletions(this.layer, this.id - 1) },
             goalDescription() {
-                return format(new Decimal(1e30).pow((challengeCompletions(this.layer, this.id) + 1) ** 2)) + ' Time Power'
+                return format(new Decimal(1e30).pow((challengeCompletions(this.layer, this.id) + 1) ** 3)) + ' Time Power'
             },
-            canComplete() { return player.aspTime.points.gte(new Decimal(1e30).pow((challengeCompletions(this.layer, this.id) + 1) ** 2)) },
+            canComplete() { return player.aspTime.points.gte(new Decimal(1e30).pow((challengeCompletions(this.layer, this.id) + 1) ** 3)) },
             rewardEffect() {
                 let times = challengeCompletions(this.layer, this.id)
                 let ret = player.aspRage.points.mul(player.aspHope.points).add(1).pow((2 * times) ** ((times + 1) ** 0.25))
@@ -109,13 +115,13 @@ addLayer("aspRage", {
             completionLimit: 5,
             challengeDescription() {
                 return "<h3>(" + challengeCompletions(this.layer, this.id) + " / " + this.completionLimit + " completions)</h3><br/>\
-                Raises Space Power gain to the power of ^" + format(1 / (challengeCompletions(this.layer, this.id) + 4)) + "."
+                Raises Space Power gain to the power of ^" + format(1 / (challengeCompletions(this.layer, this.id) + 4), 3) + "."
             },
             unlocked() { return challengeCompletions(this.layer, this.id - 1) },
             goalDescription() {
-                return format(new Decimal(1e20).pow((challengeCompletions(this.layer, this.id) + 1) ** 2)) + ' Space Power'
+                return format(new Decimal(1e20).pow((challengeCompletions(this.layer, this.id) + 1) ** 3)) + ' Space Power'
             },
-            canComplete() { return player.aspSpace.points.gte(new Decimal(1e20).pow((challengeCompletions(this.layer, this.id) + 1) ** 2)) },
+            canComplete() { return player.aspSpace.points.gte(new Decimal(1e20).pow((challengeCompletions(this.layer, this.id) + 1) ** 3)) },
             rewardEffect() {
                 let times = challengeCompletions(this.layer, this.id)
                 let ret = player.aspRage.points.mul(player.aspHope.points).add(1).pow((2 * times) ** ((times + 1) ** 0.2))

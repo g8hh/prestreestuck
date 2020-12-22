@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" type="text/css" href="popup.css" />
+
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+	<script>
+		let app = {} 
+
+        function update() {
+            app.mods = []
+            fetch("https://api.github.com/repos/Acamaeda/The-Modding-Tree/forks?per_page=100&sort=stargazers")
+                .then(res => {
+                    res.json()
+						.then(json => {
+							app.mods = json
+                            if (app.mods.sort) app.mods.sort(function (x, y) {
+                                if (x.updated_at < y.updated_at) {
+                                    return 1;
+                                }
+                                if (x.updated_at > y.updated_at) {
+                                    return -1;
+                                }
+                                return 0;
+                            });
+						})
+                });
+		}
+
+		function formatTime(ms) {
+			if (ms < 1000) return ms.toLocaleString("en-US") + "ms"
+            ms /= 1000
+            if (ms < 60) return Math.floor(ms).toLocaleString("en-US") + " seconds"
+            ms /= 60
+            if (ms < 60) return Math.floor(ms).toLocaleString("en-US") + " minutes"
+            ms /= 60
+            if (ms < 24) return Math.floor(ms).toLocaleString("en-US") + " hours"
+            ms /= 24
+            if (ms < 30) return Math.floor(ms).toLocaleString("en-US") + " days"
+            if (ms < 365) return Math.floor(ms / 30).toLocaleString("en-US") + " months"
+            return Math.floor(ms / 365).toLocaleString("en-US") + " years"
+        }
+
+		function load() {
+            app = new Vue({
+                el: "#finderApp",
+                data: {
+                    mods: [],
+                    width: 100,
+                },
+            })
+			update()
+        }
+
+        setInterval(() => app.width = window.innerWidth, 100)
+		
+	</script>
+</head>
+<body onload="load()" style="overflow-y:scroll">
+	<div id="finderApp">
+		<div>
+            <br/>
+            <h3>ducdat0507's The Prestige Tree Modfinder</h3><br/>
+            This basically fetches all forks from TMT's repository using the GitHub API.<br/>
+            <br/>
+        </div>
+		<div v-for="repo in mods" v-bind:style="{'width': (100 / Math.max(Math.floor(width / 400), 1)) + '%'}" style="display:inline-flex;margin:0;transition:none">
+            <div v-if="repo.owner">
+                <h3>{{repo.owner.login}}<span style="opacity:0.5">/{{repo.name}}</span></h3><br />
+                <h5>
+                    Created {{formatTime(new Date() - new Date(repo.created_at))}} ago, Last updated {{formatTime(new Date() - new Date(repo.updated_at))}} ago<br />
+                    <a class="link" style="font-size:12px;display:inline" v-bind:href="'https://' + repo.owner.login + '.github.io/' + repo.name" target="_blank">github.io link</a> |
+                    <a class="link" style="font-size:12px;display:inline" v-bind:href="'https://raw.githack.com/' + repo.owner.login + '/' + repo.name + '/' + repo.default_branch + '/'" target="_blank">raw.githack.com link</a>
+                </h5>
+                <br />
+            </div>
+		</div>
+	</div>
+</body>

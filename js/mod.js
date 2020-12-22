@@ -17,9 +17,9 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+	<h3>v0.0.1 alpha</h3><br>
+		The beginning. Nothing is really changed at this point because this is the first version... <i>ever.</i><br>
+`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -53,6 +53,8 @@ function getPointGen() {
 
 	if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
 	if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
+
+	if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
 
 	gain = gain.mul(tmp.aspHeart.effect.pointBoost)
 	gain = gain.mul(tmp.aspMind.effect.pointBoost)

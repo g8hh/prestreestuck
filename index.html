@@ -28,8 +28,8 @@
 
 </head>
 <body onload="load()">
-	<div id="app"> 
-		<canvas id="treeCanvas" class="canvas" v-if ="!(gameEnded && !player.keepGoing)"></canvas>
+	<div id="app">
+		<canvas id="treeCanvas" class="canvas" v-if="!(gameEnded && !player.keepGoing)"></canvas>
 
 		<div v-if="false" id="loadingSection" class="fullWidth">
 			<h1>Loading... (If this takes too long it means there was a serious error!)←</h1>
@@ -48,15 +48,15 @@
 			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
 			<a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
 			<br><br>
-		</div>		
-		
+		</div>
+
 		<div id="treeOverlay" v-if="!(gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.screenWidth >= 1000)" class="treeOverlay" onscroll="resizeCanvas()" v-bind:class="{ fullWidth: (player.tab == 'none' || player.navTab == 'none'), col: (player.tab !== 'none' && player.navTab !== 'none'), left: (player.tab !== 'none' && player.navTab !== 'none')}">
 			<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
-			<button v-if= "player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside')" class="other-back overlayThing" onclick="goBack()">←</button>
-			<img id="optionWheel"  class="overlayThing" v-if="player.tab!='options-tab'" src="options_wheel.png" onclick="showTab('options-tab')"></img>
-			<div id="info" v-if="player.tab!='info-tab'"  class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
+			<button v-if="player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside')" class="other-back overlayThing" onclick="goBack()">←</button>
+			<img id="optionWheel" class="overlayThing" v-if="player.tab!='options-tab'" src="options_wheel.png" onclick="showTab('options-tab')"></img>
+			<div id="info" v-if="player.tab!='info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
 			<div id="discord" class="overlayThing">
-				<img onclick="window.open((modInfo.discordLink ? modInfo.discordLink : 'https://discord.gg/F3xveHV'),'mywindow')" src="discord.png"  target="_blank"></img>
+				<img onclick="window.open((modInfo.discordLink ? modInfo.discordLink : 'https://discord.gg/F3xveHV'),'mywindow')" src="discord.png" target="_blank"></img>
 				<ul id="discord-links">
 					<li v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></li>
 					<li><a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br></li>
@@ -64,7 +64,7 @@
 				</ul>
 			</div>
 			<overlay-head v-if="!(gameEnded && !player.keepGoing)"></overlay-head>
-			<div class="sideLayers" >
+			<div class="sideLayers">
 				<div v-for="(node, index) in OTHER_LAYERS['side']"><tree-node :layer='node' :abb='tmp[node].symbol' :size="'small'" :key="'side' + index"></tree-node></div>
 			</div>
 		</div>
@@ -89,8 +89,8 @@
 		</div>
 
 		<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !(gameEnded && !player.keepGoing)" onscroll="resizeCanvas()" style="background-color:var(--background)" v-bind:class="{ fullWidth: player.navTab == 'none' || tmp.other.screenWidth < 1000, col: player.navTab != 'none', right: player.navTab != 'none', fast: true, tab: true}">
-			<div v-for="layer in LAYERS" >
-				<div v-if="player.tab==layer" > 
+			<div v-for="layer in LAYERS">
+				<div v-if="player.tab==layer">
 					<layer-tab :layer="layer" :back="'none'" :spacing="'50px'" :key="'left'"></layer-tab>
 				</div>
 			</div>

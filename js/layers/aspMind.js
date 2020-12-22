@@ -191,12 +191,18 @@ addLayer("aspMind", {
     doReset(pLayer) {
         if (pLayer && layers[pLayer].row > layers[this.layer].row) {
             var listKeep = [];
+            var upgradeKeep = [];
             var milestoneKeep = [];
             if ((pLayer === "aspHope" && hasMilestone("aspHope", 0)) || (pLayer === "aspRage" && hasMilestone("aspRage", 0))) {
                 milestoneKeep.push("0", "1", "2", "3", "4", "5")
             }
+            if ((pLayer === "aspHope" && hasMilestone("aspHope", 2)) || (pLayer === "aspRage" && hasMilestone("aspRage", 2))) {
+                milestoneKeep.push("6")
+                upgradeKeep.push(11, 12, 13, 14, 21, 22, 23)
+            }
             layerDataReset("aspMind", listKeep)
-            player.aspMind.milestones = milestoneKeep;
+            player.aspMind.milestones = milestoneKeep
+            player.aspMind.upgrades = upgradeKeep;
         }
     },
 
@@ -205,6 +211,7 @@ addLayer("aspMind", {
     exponent: 0.335,
     gainMult() {
         mult = new Decimal(1).mul(tmp.aspHope.effect.gainBoost)
+        if (hasUpgrade("aspHope", 31)) mult = mult.mul(tmp.aspHope.upgrades[31].effect)
         return mult
     },
     gainExp() {

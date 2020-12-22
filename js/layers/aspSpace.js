@@ -40,6 +40,7 @@ addLayer("aspSpace", {
         mult = new Decimal(1)
         if (hasUpgrade("aspSpace", 31)) mult = mult.mul(tmp.aspSpace.upgrades[31].effect)
         if (hasUpgrade("aspMind", 13)) mult = mult.mul(tmp.aspMind.upgrades[13].effect)
+        if (hasUpgrade("aspHope", 23)) mult = mult.mul(tmp.aspHope.upgrades[23].effect)
         if (hasChallenge("aspRage", 13)) mult = mult.mul(tmp.aspRage.challenges[13].rewardEffect)
         return mult
     },

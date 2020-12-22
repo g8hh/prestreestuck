@@ -4,4 +4,4 @@ So what really happened is I attempted to merge two totally unrelated things tog
 - **The icons for the aspect layers:** I stripped those from The Extended Zodiac website. You can find it [here](http://hs.hiveswap.com/ezodiac/aboutaspects.php).
 - **The troll language:** As you may or may not know, _Homestuck_ has it's own alphabet system, although saying "has" is a little bit too much because it's literally just Elder Scrolls' Daedric language rotated 180 degrees. So what I did is download the _["Dongle's Oblivion Daedric font set"](http://en.uesp.net/wiki/File:Obliviontt.zip)_, used it in the project (the page said I'm free to do something with it anyways), then used CSS magic to rotate the text 180 degrees so it becames the Alternian language you may or may not love.
 
-Also, in case you're wondering why am I doing this, considering half of the people actively talks in the Discord server knows what _Homestuck_ is, I'd say _why the hell not lol?_.
+Also, in case you're wondering why am I doing this, considering half of the people actively talk in the Discord server know what _Homestuck_ is, I'd say _why the hell not lol?_.

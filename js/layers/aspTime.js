@@ -28,6 +28,7 @@ addLayer("aspTime", {
         if (hasUpgrade("aspTime", 22)) mult = mult.mul(tmp.aspTime.upgrades[22].effect)
         if (hasUpgrade("aspMind", 12)) mult = mult.mul(tmp.aspMind.upgrades[12].effect)
         if (hasUpgrade("aspMind", 23)) mult = mult.mul(tmp.aspMind.upgrades[23].effect)
+        if (hasUpgrade("aspHope", 22)) mult = mult.mul(tmp.aspHope.upgrades[22].effect)
         if (hasChallenge("aspRage", 12)) mult = mult.mul(tmp.aspRage.challenges[12].rewardEffect)
         return mult
     },
