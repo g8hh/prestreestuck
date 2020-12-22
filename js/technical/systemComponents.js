@@ -44,8 +44,8 @@ var systemComponents = {
 			}"
 			v-bind:style="[(tmp[layer].isLayer && layerunlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick) ? {
 				'background-color': tmp[layer].color,
-			} : {}, tmp[layer].nodeStyle]">
-			{{(abb !== '' ? abb : '&nbsp;')}}
+			} : {}, tmp[layer].nodeStyle]"
+			v-html="abb !== '' ? abb : '&nbsp;'">
 		</button>
 		`
 	},
@@ -116,18 +116,25 @@ var systemComponents = {
         template: `
         <div>
         <h2>{{modInfo.name}}</h2>
-        <br>
+		<p style='transform: scale(-1, -1)'>(<alternate>NOW WITH TROLL LANGUAGE SUPPORT</alternate>)</p>
         <h3>{{VERSION.withName}}</h3>
+        <br>
         <span v-if="modInfo.author">
             <br>
-            Made by {{modInfo.author}}	
+            made by {{modInfo.author}}	
         </span>
+        <br><br>
+        a mod of The Prestige Tree made by Jacorb and Aarex
         <br>
-        The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda
+        original idea by papyrus (on discord)
         <br>
-        The Prestige Tree made by Jacorb and Aarex
+        using The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda
         <br>
-        Original idea by papyrus (on discord)
+        based on Homestuck by Andrew Hussie (of course)
+		<br><br>
+        <h5 style="opacity: 0.5">
+            This is made entirely for entertainment and parody purposes, no income is generated from this nor it's made to steal anybody's original works.
+        </h5>
 		<br><br>
 		<div class="link" onclick="showTab('changelog-tab')">Changelog</div><br>
         <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>

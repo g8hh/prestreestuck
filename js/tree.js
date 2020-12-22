@@ -16,5 +16,7 @@ addNode("blank", {
 
 
 addLayer("tree-tab", {
-    tabFormat: [["tree", function() {return (layoutInfo.treeLayout ? layoutInfo.treeLayout : TREE_LAYERS)}]]
+    tabFormat: [["tree", [
+        ["aspHope", "aspMind", "aspTime", "skaia", "aspSpace", "aspHeart", "aspRage"],
+    ]]]
 })

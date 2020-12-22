@@ -1,3 +1,11 @@
+// ************ Le softcaps >;D ************
+function applyPolynomialSoftcap(number, threshold, strength = new Decimal(2)) {
+	number = new Decimal(number)
+	threshold = new Decimal(threshold)
+	strength = new Decimal(strength)
+	return number.gte(threshold) ? number.multiply(threshold.pow(strength.sub(1))).root(strength) : number
+}
+
 // ************ Number formatting ************
 
 function exponentialFormat(num, precision, mantissa = true) {
@@ -36,7 +44,7 @@ function sumValues(x) {
 	return x.reduce((a, b) => Decimal.add(a, b))
 }
 
-function format(decimal, precision=2,) {
+function format(decimal, precision=2, precision2=3) {
 	decimal = new Decimal(decimal)
 	if (isNaN(decimal.sign)||isNaN(decimal.layer)||isNaN(decimal.mag)) {
 		player.hasNaN = true;
@@ -51,7 +59,7 @@ function format(decimal, precision=2,) {
 	}
 	else if (decimal.gte("1e100000")) return exponentialFormat(decimal, 0, false)
 	else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
-	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
+	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision2)
 	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
 	else return regularFormat(decimal, precision)
 }
@@ -358,32 +366,34 @@ var saveInterval = setInterval(function() {
 // ************ Themes ************
 
 const themes = {
-	1: "aqua"
+	0: ["Default", "#0f0f0f", "#000000b0", "#dfdfdf", "#ffffff", "#bf8f8f"],
+	1: ["Aqua", "#001f3f", "#000f1fb0", "#bfdfff", "#dfefff", "#c4a7b3"],
+	2: ["Homosuck", "#042300", "#030f00b0", "#abefb0", "#efffdf", "#c4a7b3"],
 }
-const theme_names = {
-	aqua: "Aqua"
+const colors = {
+	0: { 1: "#ffffff", 2: "#ffffffbf", 3: "#ffffff7f", },
+	1: { 1: "#bfdfff", 2: "#bfdfffbf", 3: "#bfdfff7f", },
+	2: { 1: "#abefb0", 2: "#abefb0bf", 3: "#abefb07f", },
 }
 
 function changeTheme() {
 	let aqua = player.theme == "aqua"
-	colors_theme = colors[player.theme || "default"]
-	document.body.style.setProperty('--background', aqua ? "#001f3f" : "#0f0f0f")
-	document.body.style.setProperty('--background_tooltip', aqua ? "rgba(0, 15, 31, 0.75)" : "rgba(0, 0, 0, 0.75)")
-	document.body.style.setProperty('--color', aqua ? "#bfdfff" : "#dfdfdf")
-	document.body.style.setProperty('--points', aqua ? "#dfefff" : "#ffffff")
-	document.body.style.setProperty("--locked", aqua ? "#c4a7b3" : "#bf8f8f")
+	colors_theme = colors[player.theme] || colors[0]
+	document.body.style.setProperty('--background', themes[player.theme] ? themes[player.theme][1] : "#0f0f0f")
+	document.body.style.setProperty('--background_tooltip', themes[player.theme] ? themes[player.theme][2] : "#000000b0")
+	document.body.style.setProperty('--color', themes[player.theme] ? themes[player.theme][3] : "#dfdfdf")
+	document.body.style.setProperty('--points', themes[player.theme] ? themes[player.theme][4] : "#ffffff")
+	document.body.style.setProperty("--locked", themes[player.theme] ? themes[player.theme][5] : "#bf8f8f")
 }
 
 function getThemeName() {
-	return player.theme ? theme_names[player.theme] : "Default"
+	return player.theme && themes[player.theme] ? themes[player.theme][0] : "Default"
 }
 
 function switchTheme() {
-	if (player.theme === undefined) player.theme = themes[1]
-	else {
-		player.theme = themes[Object.keys(themes)[player.theme] + 1]
-		if (!player.theme) delete player.theme
-	}
+	if (typeof(player.theme) !== "number") player.theme = 0
+	player.theme++
+	if (!player.theme || !themes[player.theme]) player.theme = 0
 	changeTheme()
 	resizeCanvas()
 }

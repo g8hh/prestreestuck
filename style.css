@@ -1,7 +1,12 @@
+@font-face {
+	font-family: Oblivion;
+	src: url(Oblivion.ttf);
+}
+
 * {
 	transition-duration: 0.5s;
 	text-align: center;
-	font-family: "Inconsolata", monospace;
+	font-family: Inconsolata, monospace;
 	font-weight: bold;
 	table-align: center;
 	margin: auto;
@@ -10,6 +15,27 @@
 *:focus {
 	outline: none;
 	webkit-outline: none;
+}
+
+#skaia { position: absolute; transform: translate(-37.50px, 112.50px); }
+#skaia:hover { transform: translate(-37.50px, 112.50px) scale(1.1, 1.1); }
+
+#aspTime { position: absolute; transform: translate(112.50px, 112.50px); }
+#aspTime:hover { transform: translate(112.50px, 112.50px) scale(1.1, 1.1); }
+#aspSpace { position: absolute; transform: translate(-187.50px, 112.50px); }
+#aspSpace:hover { transform: translate(-187.50px, 112.50px) scale(1.1, 1.1); }
+#aspHeart { position: absolute; transform: translate(92.40px, 187.50px); }
+#aspHeart:hover { transform: translate(92.40px, 187.50px) scale(1.1, 1.1); }
+#aspMind { position: absolute; transform: translate(-167.40px, 37.50px); }
+#aspMind:hover { transform: translate(-167.40px, 37.50px) scale(1.1, 1.1); }
+#aspHope { position: absolute; transform: translate(-112.50px, -17.40px); }
+#aspHope:hover { transform: translate(-112.50px, -17.40px) scale(1.1, 1.1); }
+#aspRage { position: absolute; transform: translate(37.50px, 242.40px); }
+#aspRage:hover { transform: translate(37.50px, 242.40px) scale(1.1, 1.1); }
+
+alternate {
+	font-family: Oblivion;
+	transform: scale(-1, -1) !important;
 }
 
 body {
@@ -67,20 +93,21 @@ td {
 
 h1, h2, h3, b, input {
 	display: inline;
-	font-family: "Lucida Console", "Courier New", monospace
+	font-family: "Courier New", "Lucida Console", monospace
 }
 
 
 
 .treeNode {
-	height: 100px;
-	width: 100px;
+	height: 70px;
+	width: 70px;
+	margin: 5px;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.125);
 	border-radius: 50%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
-	font-family: "Lucida Console", "Courier New", monospace;
+	font-family: "Courier New", "Lucida Console", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
@@ -88,18 +115,18 @@ h1, h2, h3, b, input {
 
 
 .treeButton {
-	height: 100px;
-	width: 100px;
+	height: 70px;
+	width: 70px;
+	margin: 5px;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.125);
 	border-radius: 33%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
-	font-family: "Lucida Console", "Courier New", monospace;
+	font-family: "Courier New", "Lucida Console", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
-
 }
 
 
@@ -215,6 +242,7 @@ h1, h2, h3, b, input {
 
 .tabButton {
 	background-color: transparent;
+	font-family: "Courier New", "Lucida Console", monospace;
 	color: var(--color);
 	font-size: 20px;
 	cursor: pointer;
@@ -223,7 +251,6 @@ h1, h2, h3, b, input {
 	border-radius: 10px;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
-
 }
 
 .tabButton:hover {
@@ -387,7 +414,7 @@ a {
 	font-size: 20px;
 	color: #41f5f5;
 	cursor: pointer;
-	font-family: "Lucida Console", "Courier New", monospace;
+	font-family: "Courier New", "Lucida Console", monospace;
 	-webkit-text-stroke-width: 1px;
 	-webkit-text-stroke-color: #02f2f2;
 	text-decoration: none;
@@ -523,6 +550,7 @@ ul {
 }
 
 .hChallenge {
+	padding: 5px;
 	background-color: #bf8f8f;
 	border: 4px solid;
 	border-color: rgba(0, 0, 0, 0.125);
@@ -553,7 +581,7 @@ ul {
 
 [tooltip] {
 	position: relative;
-	z-index: 99999999 !important
+	z-index: 2147483647 !important
 }
 
 [tooltip]:before,
@@ -579,8 +607,9 @@ ul {
 	color: var(--points);
 	content: attr(tooltip);
 	text-align: center;
-	font-size: 14px;
+	font-family: Inconsolata, monospace;
 	line-height: 1.2;
+	font-size: 13px;
 	transition-duration: 0.5s;
 	white-space: pre-wrap;
 }
@@ -621,8 +650,8 @@ ul {
 }
 
 .overlayThing {
-	pointer-events:auto;
-	background-color: var(--background);
+	pointer-events: auto;
+	/* background-color: var(--background); */
 }
 
 .sideLayers {

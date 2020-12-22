@@ -135,7 +135,7 @@ function layerDataReset(layer, keep = []) {
 		player[layer].clickables = getStartClickables(layer)
 
 	for (thing in storedData) {
-		player[layer][thing] =storedData[thing]
+		player[layer][thing] = storedData[thing]
 	}
 }
 

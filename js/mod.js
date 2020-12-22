@@ -1,7 +1,7 @@
 let modInfo = {
-	name: "The ??? Tree",
-	id: "mymod",
-	author: "nobody",
+	name: "The Prestreestuck",
+	id: "treestuck",
+	author: "ducdat0507",
 	pointsName: "points",
 	discordName: "",
 	discordLink: "",
@@ -12,8 +12,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "0.0.1 alpha",
+	name: "This is stupid",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -42,6 +42,23 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
+
+	if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
+	if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
+
+	if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
+	if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
+	if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
+
+	if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
+	if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
+
+	gain = gain.mul(tmp.aspHeart.effect.pointBoost)
+	gain = gain.mul(tmp.aspMind.effect.pointBoost)
+
+	if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
+
 	return gain
 }
 
@@ -51,6 +68,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
+	() => `<h2><br/>Act 0</h2><br/>- Genesis -`
 ]
 
 // Determines when the game "ends"

@@ -33,6 +33,11 @@ function setupTemp() {
 		tmp[layer].prestigeButtonText = {}
 		setupBarStyles(layer)
 	}
+
+	tmp.other = {
+		screenWidth: window.innerWidth,
+    }
+	
 	temp = tmp
 }
 
@@ -88,6 +93,10 @@ function updateTemp() {
 		let text = displayThings[thing]
 		if (isFunction(text)) text = text()
 		tmp.displayThings.push(text) 
+	}
+
+	tmp.other = {
+		screenWidth: window.innerWidth,
 	}
 
 }
