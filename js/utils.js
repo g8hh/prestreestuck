@@ -3,7 +3,31 @@ function applyPolynomialSoftcap(number, threshold, strength = new Decimal(2)) {
 	number = new Decimal(number)
 	threshold = new Decimal(threshold)
 	strength = new Decimal(strength)
-	return number.gte(threshold) ? number.multiply(threshold.pow(strength.sub(1))).root(strength) : number
+	return number.gte(threshold) ? number.mul(threshold.pow(strength.sub(1))).root(strength) : number
+}
+
+function applyLogapolynomialSoftcap(number, threshold, strength = new Decimal(2)) {
+	number = new Decimal(number)
+	threshold = new Decimal(threshold)
+	strength = new Decimal(strength)
+	return number.gte(threshold) ? Decimal.pow(10, number.add(1).log(10).mul(threshold.add(1).log(10).pow(strength.sub(1))).root(strength)).sub(1) : number
+}
+
+
+function randomBetween(a, b) {
+	a = new Decimal(a); b = new Decimal(b)
+	return new Decimal(Math.random()).add(a).mul(b.sub(a))
+}
+
+function randomLogBetween(a, b) {
+	return Decimal.pow(10, randomBetween(a.log10(), b.log10()))
+}
+
+function simulateStock(target, min, max, mag) {
+	const between = (min + max) / 2
+	const price = player.skaia[target + "Price"] = player.skaia[target + "Price"].add(player.skaia[target + "Speed"]).min(max).max(min)
+	const speed = player.skaia[target + "Speed"] = player.skaia[target + "Speed"].add(randomBetween(Decimal.sub(price, min).mul(mag), Decimal.sub(max, price).mul(mag)))
+	return price + ' ' + speed
 }
 
 // ************ Number formatting ************
@@ -15,11 +39,10 @@ function exponentialFormat(num, precision, mantissa = true) {
 		m = new Decimal(1)
 		e = e.add(1)
 	}
-	e = (e.gte(10000) ? commaFormat(e, 0) : e.toStringWithDecimalPlaces(0))
 	if (mantissa)
-		return m.toStringWithDecimalPlaces(precision)+"e"+e
-		else return "e"+e
-	}
+		return m.toStringWithDecimalPlaces(precision) + "e" + (e.gte(10000) ? commaFormat(e, 0) : e.toStringWithDecimalPlaces(0))
+	else return "e" + format(e, precision)
+}
 
 function commaFormat(num, precision) {
 	if (num === null || num === undefined) return "NaN"
@@ -52,12 +75,12 @@ function format(decimal, precision=2, precision2=3) {
 	}
 	if (decimal.sign<0) return "-"+format(decimal.neg(), precision)
 	if (decimal.mag == Number.POSITIVE_INFINITY) return "Infinity"
-	if (decimal.gte("eeee1000")) {
+	if (decimal.gte("eeeee9")) {
 		var slog = decimal.slog()
-		if (slog.gte(1e6)) return "F" + format(slog.floor())
+		if (slog.gte(1e9)) return "F" + format(slog.floor())
 		else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
 	}
-	else if (decimal.gte("1e100000")) return exponentialFormat(decimal, 0, false)
+	else if (decimal.gte("ee6")) return exponentialFormat(decimal, 0, false)
 	else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
 	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision2)
 	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)

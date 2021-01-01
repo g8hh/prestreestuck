@@ -5,7 +5,7 @@ addLayer("aspMind", {
     position: 1,
     branches: ["aspSpace"],
 
-    layerShown() { return hasUpgrade("aspSpace", 41) || player.aspMind.unlocked  },
+    layerShown() { return (hasUpgrade("aspSpace", 41) || player.aspMind.unlocked) && !inChallenge("aspDoom", 12)  },
     resource: "Mind Power",
     baseAmount() { return player.aspSpace.points },
     baseResource: "Space Power",
@@ -35,17 +35,17 @@ addLayer("aspMind", {
         0: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>NOW WITH MORE IDLE</alternate></p>1 Mind Power",
             done() { return player[this.layer].best.gte(1) },
-            effectDescription: "You keep your first six even Space upgrades on Mind Power absorb.",
+            effectDescription: "You keep your 2nd, 4th, 6th, 8th, 10th, and 12th Space upgrades on Mind Power absorb.",
         },
         1: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>WORRY ABOUT UPGRADES LESS</alternate></p>10 Mind Power",
             done() { return player[this.layer].best.gte(10) },
-            effectDescription: "You keep your first three odd Space upgrades on Mind Power absorb.",
+            effectDescription: "You keep your 1st, 3nd, and 5th Space upgrades on Mind Power absorb.",
         },
         2: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>ALMOST THE ENTIRE UPGRADE PANEL</alternate></p>100 Mind Power",
             done() { return player[this.layer].best.gte(100) },
-            effectDescription: "You keep your second three odd Space upgrades on Mind Power absorb.",
+            effectDescription: "You keep your 7th, 9th, and 11th Space upgrades on Mind Power absorb.",
         },
         3: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>SUSPICIOUSLY SIMILAR MILESTONE</alternate></p>" + formatWhole(10000) + " Mind Power",
@@ -79,7 +79,8 @@ addLayer("aspMind", {
             cost: new Decimal(1e12),
             effect() {
                 let ret = player.aspMind.points.div(1e10).pow(0.6).add(1).mul(10000)
-                return ret
+                if (challengeCompletions("aspDoom", 12) >= 2) ret = ret.pow(2)
+                return ret.pow(tmp.aspBreath.buyables[18].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -90,7 +91,7 @@ addLayer("aspMind", {
             cost: new Decimal(1e16),
             effect() {
                 let ret = player.aspMind.points.div(1e14).pow(0.3).add(1).mul(100)
-                return ret
+                return ret.pow(tmp.aspBreath.buyables[18].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -101,7 +102,7 @@ addLayer("aspMind", {
             cost: new Decimal(1e21),
             effect() {
                 let ret = player.aspMind.points.div(1e19).pow(0.2).add(1).mul(100)
-                return ret
+                return ret.pow(tmp.aspBreath.buyables[18].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -112,7 +113,7 @@ addLayer("aspMind", {
             cost: new Decimal(1e27),
             effect() {
                 let ret = player.aspMind.points.div(1e26).pow(0.03).add(1).mul(1.5)
-                return ret
+                return ret.pow(tmp.aspBreath.buyables[18].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -129,7 +130,7 @@ addLayer("aspMind", {
             cost: new Decimal(1e18),
             effect() {
                 let ret = tmp.aspTime.buyables[21].effect.pow(0.045).add(1)
-                return ret
+                return ret.pow(tmp.aspBreath.buyables[19].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -140,7 +141,7 @@ addLayer("aspMind", {
             cost: new Decimal(1e30),
             effect() {
                 let ret = tmp.aspTime.buyables[22].effect.pow(0.06).add(1)
-                return ret
+                return ret.pow(tmp.aspBreath.buyables[19].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -193,15 +194,15 @@ addLayer("aspMind", {
             var listKeep = [];
             var upgradeKeep = [];
             var milestoneKeep = [];
-            if ((pLayer === "aspHope" && hasMilestone("aspHope", 0)) || (pLayer === "aspRage" && hasMilestone("aspRage", 0))) {
+            if ((pLayer === "aspHope" && hasMilestone("aspHope", 0)) || (pLayer === "aspRage" && hasMilestone("aspRage", 0)) || (pLayer === "aspDoom" && hasMilestone("aspDoom", 1)) || (layers[pLayer].row == 7 && hasMilestone("skaia", 1))) {
                 milestoneKeep.push("0", "1", "2", "3", "4", "5")
             }
-            if ((pLayer === "aspHope" && hasMilestone("aspHope", 2)) || (pLayer === "aspRage" && hasMilestone("aspRage", 2))) {
+            if ((pLayer === "aspHope" && hasMilestone("aspHope", 2)) || (pLayer === "aspRage" && hasMilestone("aspRage", 2)) || (pLayer === "aspDoom" && hasMilestone("aspDoom", 1)) || (layers[pLayer].row == 7 && hasMilestone("skaia", 1))) {
                 milestoneKeep.push("6")
                 upgradeKeep.push(11, 12, 13, 14, 21, 22, 23)
             }
             layerDataReset("aspMind", listKeep)
-            player.aspMind.milestones = milestoneKeep
+            if (!upgradeKeep.includes["milestones"]) player.aspMind.milestones = milestoneKeep
             player.aspMind.upgrades = upgradeKeep;
         }
     },
@@ -212,10 +213,14 @@ addLayer("aspMind", {
     gainMult() {
         mult = new Decimal(1).mul(tmp.aspHope.effect.gainBoost)
         if (hasUpgrade("aspHope", 31)) mult = mult.mul(tmp.aspHope.upgrades[31].effect)
+        mult = mult.mul(tmp.aspLight.buyables[14].effect)
+        mult = mult.mul(tmp.aspBreath.buyables[17].effect)
         return mult
     },
     gainExp() {
-        return new Decimal(1)
+        let mult = new Decimal(1)
+        if (inChallenge("aspDoom", 11)) mult = mult.mul(0.75)
+        return mult
     },
 
     hotkeys: [

@@ -211,7 +211,7 @@ function doReset(layer, force=false) {
 		tmp[layer].baseAmount = new Decimal(0) // quick fix
 	}
 
-	if (tmp[layer].resetsNothing) return
+	if (tmp[layer].resetsNothing && !force) return
 
 
 	for (layerResetting in layers) {
@@ -383,6 +383,7 @@ function hardReset() {
 }
 
 var ticking = false
+var diff = 0;
 
 var interval = setInterval(function() {
 	if (player===undefined||tmp===undefined) return;
@@ -390,7 +391,7 @@ var interval = setInterval(function() {
 	if (gameEnded&&!player.keepGoing) return;
 	ticking = true
 	let now = Date.now()
-	let diff = (now - player.time) / 1e3
+	diff = (now - player.time) / 1e3
 	if (player.offTime !== undefined) {
 		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
 		if (player.offTime.remain > 0) {

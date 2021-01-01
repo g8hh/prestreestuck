@@ -4,7 +4,7 @@ addLayer("aspTime", {
     row: 0,
     position: 0,
 
-    layerShown() { return true },
+    layerShown() { return !inChallenge("aspDoom", 12) },
     resource: "Time Power",
     baseAmount() { return player.points },
     baseResource: "points",
@@ -29,12 +29,17 @@ addLayer("aspTime", {
         if (hasUpgrade("aspMind", 12)) mult = mult.mul(tmp.aspMind.upgrades[12].effect)
         if (hasUpgrade("aspMind", 23)) mult = mult.mul(tmp.aspMind.upgrades[23].effect)
         if (hasUpgrade("aspHope", 22)) mult = mult.mul(tmp.aspHope.upgrades[22].effect)
+        if (hasUpgrade("aspHope", 33)) mult = mult.mul(tmp.aspHope.upgrades[33].effect)
+        if (hasUpgrade("aspHope", 52)) mult = mult.mul(tmp.aspHope.upgrades[52].effect)
         if (hasChallenge("aspRage", 12)) mult = mult.mul(tmp.aspRage.challenges[12].rewardEffect)
+        if (getBuyableAmount("aspLife", 12).gt(0)) mult = mult.mul(tmp.aspLife.buyables[12].effect)
+        mult = mult.mul(tmp.aspLight.buyables[12].effect)
         return mult
     },
     gainExp() {
         let mult = new Decimal(1)
-        if (inChallenge("aspRage", 12)) mult = mult.pow(1 / (challengeCompletions("aspRage", 12) + 2))
+        if (inChallenge("aspDoom", 11)) mult = mult.mul(0.75)
+        if (inChallenge("aspRage", 12)) mult = mult.mul(1 / (challengeCompletions("aspRage", 12) + 2))
         return mult
     },
 
@@ -52,6 +57,8 @@ addLayer("aspTime", {
                 ret = applyPolynomialSoftcap(ret, 1e36, 3)
                 ret = applyPolynomialSoftcap(ret, 1e144, 4)
                 ret = applyPolynomialSoftcap(ret, "1e720", 4)
+                if (challengeCompletions("aspDoom", 11) >= 2) ret = ret.pow(5)
+                if (challengeCompletions("aspDoom", 12) >= 4) ret = ret.pow(3)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -64,7 +71,8 @@ addLayer("aspTime", {
             effect() {
                 let ret = new Decimal(0)
                 for (var a = 11; a <= 16; a++) ret = ret.add(player.aspTime.buyables[a])
-                ret = ret.pow(ret.div(3500).add(1)).div(10).add(1)
+                ret = ret.pow(ret.min(4.13e10).div(3500).add(1)).div(10).add(1)
+                if (challengeCompletions("aspDoom", 11) >= 3) ret = ret.pow(2)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -83,6 +91,7 @@ addLayer("aspTime", {
             effect() {
                 let ret = player.aspSpace.points.div(1e10).add(1).pow(0.75)
                 ret = applyPolynomialSoftcap(ret, 1e6, 2)
+                if (challengeCompletions("aspDoom", 11) >= 5) ret = ret.pow(2)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -100,6 +109,7 @@ addLayer("aspTime", {
             effect() {
                 let ret = player.aspMind.points.add(1).pow(0.65)
                 ret = applyPolynomialSoftcap(ret, 1e6, 2)
+                if (challengeCompletions("aspDoom", 11) >= 6) ret = ret.pow(4)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -112,6 +122,7 @@ addLayer("aspTime", {
             effect() {
                 let ret = player.aspHeart.points.add(1).pow(0.65)
                 ret = applyPolynomialSoftcap(ret, 1e6, 2)
+                if (challengeCompletions("aspDoom", 11) >= 6) ret = ret.pow(4)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -125,7 +136,7 @@ addLayer("aspTime", {
         cols: 6,
         11: {
             cost(x) { return new Decimal(1.12).pow(x || getBuyableAmount(this.layer, this.id)).div(tmp.aspTime.buyables[21].effect).div(tmp.aspTime.buyables[22].effect) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).mul(tmp.aspBreath.buyables[11].effect).mul(tmp.aspBlood.buyables[11].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Multiplier"
@@ -139,13 +150,13 @@ addLayer("aspTime", {
                 let growth = 1.12
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player[this.layer].points = player[this.layer].points.sub(cost)
+                if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
         },
         12: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(15).div(tmp.aspTime.buyables[21].effect).div(tmp.aspTime.buyables[22].effect) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(2) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(2).mul(tmp.aspBreath.buyables[11].effect).mul(tmp.aspBlood.buyables[11].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Multiplier^2"
@@ -159,13 +170,13 @@ addLayer("aspTime", {
                 let growth = 1.2
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player[this.layer].points = player[this.layer].points.sub(cost)
+                if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
         },
         13: {
             cost(x) { return new Decimal(3).pow(x || getBuyableAmount(this.layer, this.id)).mul(200).div(tmp.aspTime.buyables[21].effect).div(tmp.aspTime.buyables[22].effect) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(3) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(3).mul(tmp.aspBreath.buyables[11].effect).mul(tmp.aspBlood.buyables[11].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Multiplier^3"
@@ -179,13 +190,13 @@ addLayer("aspTime", {
                 let growth = 3
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player[this.layer].points = player[this.layer].points.sub(cost)
+                if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
         },
         14: {
             cost(x) { return new Decimal(20).pow(x || getBuyableAmount(this.layer, this.id)).mul(15000).div(tmp.aspTime.buyables[21].effect).div(tmp.aspTime.buyables[22].effect) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(4) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(4).mul(tmp.aspBreath.buyables[11].effect).mul(tmp.aspBlood.buyables[11].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Multiplier^4"
@@ -199,13 +210,13 @@ addLayer("aspTime", {
                 let growth = 20
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player[this.layer].points = player[this.layer].points.sub(cost)
+                if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
         },
         15: {
             cost(x) { return new Decimal(120).pow(x || getBuyableAmount(this.layer, this.id)).mul(1.2e6).div(tmp.aspTime.buyables[21].effect).div(tmp.aspTime.buyables[22].effect) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(5) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(5).mul(tmp.aspBreath.buyables[11].effect).mul(tmp.aspBlood.buyables[11].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Multiplier^5"
@@ -219,13 +230,13 @@ addLayer("aspTime", {
                 let growth = 120
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player[this.layer].points = player[this.layer].points.sub(cost)
+                if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
         },
         16: {
             cost(x) { return new Decimal(413).pow(x || getBuyableAmount(this.layer, this.id)).mul(6.12e8).div(tmp.aspTime.buyables[21].effect).div(tmp.aspTime.buyables[22].effect) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(6) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(6).mul(tmp.aspBreath.buyables[11].effect).mul(tmp.aspBlood.buyables[11].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Multiplier^6"
@@ -239,7 +250,7 @@ addLayer("aspTime", {
                 let growth = 413
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player[this.layer].points = player[this.layer].points.sub(cost)
+                if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
         },
@@ -248,7 +259,7 @@ addLayer("aspTime", {
             effect(x) {
                 var eff = new Decimal(hasUpgrade("aspTime", 13) ? 612 : 413).pow(x || getBuyableAmount(this.layer, this.id))
                 if (hasUpgrade("aspSpace", 33)) eff = eff.pow(1.08)
-                return eff
+                return eff.pow(tmp.aspBreath.buyables[12].effect).pow(tmp.aspBlood.buyables[12].effect)
             },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
@@ -259,12 +270,15 @@ addLayer("aspTime", {
                     Req: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Power"
             },
             buy() {
+                if (hasMilestone("skaia", 6)) {
+                    var max = player.aspTime.points.mul(tmp.aspTime.buyables[22].effect).log(1e10).root(hasUpgrade("aspTime", 13) ? 1.55 : 1.75).sub(1).div(hasUpgrade("aspTime", 13) ? 0.175 : 0.2).floor().max(getBuyableAmount(this.layer, this.id))
+                    setBuyableAmount(this.layer, this.id, max)
+                } else setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 if (!hasUpgrade("aspMind", 21)) {
                     player.points = new Decimal(0)
                     player[this.layer].points = new Decimal(10)
                     for (var a = 11; a <= 16; a++) setBuyableAmount(this.layer, a, new Decimal(0))
                 }
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
         },
         22: {
@@ -272,7 +286,7 @@ addLayer("aspTime", {
             effect(x) {
                 var eff = new Decimal(612 * 413).pow(x || getBuyableAmount(this.layer, this.id))
                 if (hasUpgrade("aspSpace", 33)) eff = eff.pow(1.08)
-                return eff
+                return eff.pow(tmp.aspBreath.buyables[13].effect).pow(tmp.aspBlood.buyables[13].effect)
             },
             unlocked() { return hasUpgrade("aspTime", 15) },
             canAfford() { return player[this.layer].buyables[this.id - 1].gte(this.cost()) },
@@ -284,13 +298,14 @@ addLayer("aspTime", {
                     Req: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Boosters"
             },
             buy() {
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+
                 if (!hasUpgrade("aspMind", 23)) {
                     player.points = new Decimal(0)
                     player[this.layer].points = new Decimal(10)
                     for (var a = 11; a <= 16; a++) setBuyableAmount(this.layer, a, new Decimal(0))
                     for (var a = 21; a <= 21; a++) setBuyableAmount(this.layer, a, new Decimal(0))
                 }
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
         },
     },
@@ -320,6 +335,8 @@ addLayer("aspTime", {
         "main-display",
         "prestige-button",
         ["blank", "25px"],
+        ["display-text", () => "<h5 style='opacity:0.5'>Beginner tip: Hold T to automatically absorb Time Power</h5>"],
+        ["blank", "15px"],
         ["microtabs", "stuff"],
         ["blank", "35px"],
     ],

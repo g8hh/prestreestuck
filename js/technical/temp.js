@@ -37,6 +37,8 @@ function setupTemp() {
 
 	tmp.other = {
 		screenWidth: window.innerWidth,
+		lastPoints: player.points || new Decimal(0),
+		oomps: new Decimal(0),
     }
 	
 	temp = tmp
@@ -99,6 +101,8 @@ function updateTemp() {
 
 	tmp.other = {
 		screenWidth: window.innerWidth,
+		lastPoints: player.points || new Decimal(0),
+		oomps: player.points.div(tmp.other.lastPoints).log(10).div(diff) || new Decimal(0),
 	}
 
 }

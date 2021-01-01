@@ -25,18 +25,35 @@ function resizeCanvas() {
 
 var colors_theme
 
-function getSpirographX(t, offset = 0) { return (17 * Math.cos(t + offset) - 7 * Math.cos(17 / 7 * (t))) }
-function getSpirographY(t, offset = 0) { return (17 * Math.sin(t + offset) - 7 * Math.sin(17 / 7 * (t))) }
+function getSpirographX(t, offset = 0) { return 17 * Math.cos(t + offset) - 7 * Math.cos(17 / 7 * (t)) }
+function getSpirographY(t, offset = 0) { return 17 * Math.sin(t + offset) - 7 * Math.sin(17 / 7 * (t)) }
+
+var skyImgs = []
+for (var a = 0; a < 2; a++) {
+	skyImgs[a] = new Image();
+	skyImgs[a].src = "data/sky_" + a + ".png";
+}
 
 function drawTree() {
 	if (!retrieveCanvasData()) return;
+	ctx.imageSmoothingEnabled = false
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	if (hasUpgrade("skaia", 11)) {
+		var scale = Math.max(canvas.height / 250, canvas.width / 446)
+		var skyHeight = scale * 250
+		var skyWidth = scale * 446
+		ctx.drawImage(skyImgs[Math.floor(player.time / 15000) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
+		ctx.globalAlpha = (player.time / 15000) % 1;
+		ctx.drawImage(skyImgs[Math.floor(player.time / 15000 + 1) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
+		ctx.globalAlpha = 1;
+	}
+
 	for (layer in layers){
 		if (tmp[layer].layerShown == true && tmp[layer].branches){
-			for (branch in tmp[layer].branches)
-				{
-					drawTreeBranch(layer, tmp[layer].branches[branch])
-				}
+			for (branch in tmp[layer].branches) {
+				drawTreeBranch(layer, tmp[layer].branches[branch])
+			}
 		}
 	}
 
@@ -46,12 +63,13 @@ function drawTree() {
 	else if ((hasUpgrade("aspMind", 24) || (player.aspHope.unlocked && player.aspRage.unlocked)) && sDensity < 16) sDensity++
 	else if (sDensity > 0) sDensity--
 	if (sDensity > 0) {
+		if (!document.getElementById("skaia")) return
 		let skaia = document.getElementById("skaia").getBoundingClientRect();
 		let x = skaia.left + (skaia.width / 2) + document.body.scrollLeft;
 		let y = skaia.top + (skaia.height / 2) + document.body.scrollTop;
-		ctx.lineWidth = 5;
+		ctx.lineWidth = hasUpgrade("skaia", 11) ? 25 : 5;
 		ctx.beginPath()
-		ctx.strokeStyle = colors_theme[1] + sDensity.toString(16).padStart(2, "0")
+		ctx.strokeStyle = hasUpgrade("skaia", 11) ? "#38f43d" : colors_theme[1] + sDensity.toString(16).padStart(2, "0")
 		let step = Math.PI / 21
 		let offset = (player.time / 600000) % (Math.PI * 2)
 		ctx.moveTo(getSpirographX(0, offset) * 25 + x, getSpirographY(0, offset) * 25 + y)
@@ -60,6 +78,11 @@ function drawTree() {
 		}
 		ctx.stroke()
 	}
+
+	if (hasUpgrade("skaia", 11)) {
+		ctx.fillStyle = "#ffffff" + Math.max(Math.floor(255 - 25 * player.phaseTimer), 0).toString(16).padStart(2, "0")
+		ctx.fillRect(0, 0, canvas.width, canvas.height)
+    }
 }
 
 function drawTreeBranch(num1, data) { // taken from Antimatter Dimensions & adjusted slightly

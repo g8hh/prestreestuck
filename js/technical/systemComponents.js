@@ -103,7 +103,7 @@ var systemComponents = {
 		<h2  class="overlayThing" id="points">{{format(player.points)}}</h2>
 		<span v-if="player.points.lt('1e1e6')"  class="overlayThing"> {{modInfo.pointsName}}</span>
 		<br>
-		<span v-if="canGenPoints()"  class="overlayThing">({{format(getPointGen())}}/sec)</span>
+		<span v-if="canGenPoints()"  class="overlayThing">({{tmp.other.oomps.gt(10) ? format(tmp.other.oomps) + " OOMs" : format(getPointGen())}}/sec)</span>
 		<div v-for="thing in tmp.displayThings" class="overlayThing"><span v-if="thing" v-html="thing"></span></div>
 	</div>
 	`
@@ -113,7 +113,7 @@ var systemComponents = {
         template: `
         <div>
         <h2>{{modInfo.name}}</h2>
-		<p style='transform: scale(-1, -1)'>(<alternate>NOW WITH TROLL LANGUAGE SUPPORT</alternate>)</p>
+		<p style='transform: scale(-1, -1)'>(<alternate v-html="flavorTitle"></alternate>)</p>
         <h3>{{VERSION.withName}}</h3>
         <br>
         <span v-if="modInfo.author">
@@ -138,6 +138,7 @@ var systemComponents = {
         <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
         <a class="link" href="https://discord.gg/F3xveHV" target="_blank">The Modding Tree Discord<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(suggest everything and talk about how bad this mod is here)</h5></a><br>
         <a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree server<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(server of the person who made the original game)</h5></a><br>
+		<a class="link" href="finder.html" target="_blank">The Prestige Tree Modfinder<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(in case you're already sick of this)</h5></a><br>
 		<br><br>
         Time Played: {{ formatTime(player.timePlayed) }}<br><br>
         <h3>Hotkeys</h3><br>

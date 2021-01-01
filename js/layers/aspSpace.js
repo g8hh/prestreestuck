@@ -3,9 +3,9 @@ addLayer("aspSpace", {
     symbol: "<img src='data/space.png' style='width:calc(80% - 2px);height:calc(80% - 2px);margin:10%'></img>",
     row: 1,
     position: 0,
-    branches: ["aspTime"],
+    branches: ["aspTime", "aspLight"],
 
-    layerShown() { return true },
+    layerShown() { return !inChallenge("aspDoom", 12) },
     resource: "Space Power",
     baseAmount() { return player.points },
     baseResource: "points",
@@ -41,13 +41,18 @@ addLayer("aspSpace", {
         if (hasUpgrade("aspSpace", 31)) mult = mult.mul(tmp.aspSpace.upgrades[31].effect)
         if (hasUpgrade("aspMind", 13)) mult = mult.mul(tmp.aspMind.upgrades[13].effect)
         if (hasUpgrade("aspHope", 23)) mult = mult.mul(tmp.aspHope.upgrades[23].effect)
+        if (hasUpgrade("aspHope", 32)) mult = mult.mul(tmp.aspHope.upgrades[32].effect)
         if (hasChallenge("aspRage", 13)) mult = mult.mul(tmp.aspRage.challenges[13].rewardEffect)
+        if (getBuyableAmount("aspLife", 13).gt(0)) mult = mult.mul(tmp.aspLife.buyables[13].effect)
+        mult = mult.mul(tmp.aspLight.buyables[13].effect)
+        mult = mult.mul(tmp.aspBreath.buyables[14].effect)
         return mult
     },
     gainExp() {
         let mult = new Decimal(1)
-        if (inChallenge("aspRage", 13)) mult = mult.pow(1 / (challengeCompletions("aspRage", 13) + 4))
-        return new Decimal(1)
+        if (inChallenge("aspDoom", 11)) mult = mult.mul(0.75)
+        if (inChallenge("aspRage", 13)) mult = mult.mul(1 / (challengeCompletions("aspRage", 13) + 2))
+        return mult
     },
 
     upgrades: {
@@ -64,6 +69,7 @@ addLayer("aspSpace", {
                 ret = applyPolynomialSoftcap(ret, 1e36, 3)
                 ret = applyPolynomialSoftcap(ret, 1e144, 4)
                 ret = applyPolynomialSoftcap(ret, "1e720", 4)
+                if (challengeCompletions("aspDoom", 12) >= 6) ret = ret.pow(3)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -92,6 +98,7 @@ addLayer("aspSpace", {
                 ret = applyPolynomialSoftcap(ret, 1e36, 3)
                 ret = applyPolynomialSoftcap(ret, 1e144, 4)
                 ret = applyPolynomialSoftcap(ret, "1e720", 4)
+                if (challengeCompletions("aspDoom", 12) >= 7) ret = ret.pow(4)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -128,7 +135,7 @@ addLayer("aspSpace", {
             unlocked() { return true },
         },
         23: {
-            title: "<p style='transform: scale(-1, -1)'><alternate>NO I MEAN THE HOMESTCK SOMETHING</alternate>",
+            title: "<p style='transform: scale(-1, -1)'><alternate>NO I MEAN THE HOMESTUCK SOMETHING</alternate>",
             description: "Unspent Space Power boosts point gain.",
             cost: new Decimal(1e14),
             effect() {
@@ -138,6 +145,7 @@ addLayer("aspSpace", {
                 ret = applyPolynomialSoftcap(ret, 1e36, 3)
                 ret = applyPolynomialSoftcap(ret, 1e144, 4)
                 ret = applyPolynomialSoftcap(ret, "1e720", 4)
+                if (challengeCompletions("aspDoom", 12) >= 8) ret = ret.pow(4)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -166,6 +174,7 @@ addLayer("aspSpace", {
             cost: new Decimal(1e18),
             effect() {
                 let ret = player.aspTime.points.div(1e45).add(1).pow(0.1)
+                if (challengeCompletions("aspDoom", 12) >= 9) ret = ret.pow(3)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -253,7 +262,7 @@ addLayer("aspSpace", {
         cols: 4,
         11: {
             cost(x) { return new Decimal(5).pow((x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor()) },
-            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect) },
+            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect).mul(tmp.aspBreath.buyables[15].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(player.aspSpace.generatorTotals[this.id - 11], 0) + " (" + format(getBuyableAmount(this.layer, this.id), 0) + ")<br/>Space Generator"
@@ -263,14 +272,24 @@ addLayer("aspSpace", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Power"
             },
             buy() {
-                player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                if (hasUpgrade("aspHeart", 22) && hasUpgrade("aspHope", 41)) {
+                    let base = 1
+                    let growth = 5
+                    let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(max)
+                } else {
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                }
             },
         },
         12: {
             cost(x) { return new Decimal(200).pow((x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor()).mul(10) },
-            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect) },
+            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect).mul(tmp.aspBreath.buyables[15].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(player.aspSpace.generatorTotals[this.id - 11], 0) + " (" + format(getBuyableAmount(this.layer, this.id), 0) + ")<br/>Space Generator^2"
@@ -280,14 +299,24 @@ addLayer("aspSpace", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Power"
             },
             buy() {
-                player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                if (hasUpgrade("aspHeart", 22) && hasUpgrade("aspHope", 41)) {
+                    let base = 10
+                    let growth = 200
+                    let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(max)
+                } else {
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                }
             },
         },
         13: {
             cost(x) { return new Decimal(100000).pow((x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor()).mul(1000) },
-            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect) },
+            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect).mul(tmp.aspBreath.buyables[15].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(player.aspSpace.generatorTotals[this.id - 11], 0) + " (" + format(getBuyableAmount(this.layer, this.id), 0) + ")<br/>Space Generator^3"
@@ -297,14 +326,24 @@ addLayer("aspSpace", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Power"
             },
             buy() {
-                player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                if (hasUpgrade("aspHeart", 22) && hasUpgrade("aspHope", 41)) {
+                    let base = 1000
+                    let growth = 100000
+                    let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(max)
+                } else {
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                }
             },
         },
         14: {
             cost(x) { return new Decimal(2500000000).pow((x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor()).mul(1000000) },
-            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect) },
+            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect).mul(tmp.aspBreath.buyables[15].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(player.aspSpace.generatorTotals[this.id - 11], 0) + " (" + format(getBuyableAmount(this.layer, this.id), 0) + ")<br/>Space Generator^4"
@@ -314,14 +353,24 @@ addLayer("aspSpace", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Power"
             },
             buy() {
-                player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                if (hasUpgrade("aspHeart", 22) && hasUpgrade("aspHope", 41)) {
+                    let base = 1000000
+                    let growth = 2500000000
+                    let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(max)
+                } else {
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                }
             },
         },
         15: {
             cost(x) { return new Decimal(4.12e15).pow((x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor()).mul(1e12) },
-            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect) },
+            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect).mul(tmp.aspBreath.buyables[15].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(player.aspSpace.generatorTotals[this.id - 11], 0) + " (" + format(getBuyableAmount(this.layer, this.id), 0) + ")<br/>Space Generator^5"
@@ -331,14 +380,24 @@ addLayer("aspSpace", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Power"
             },
             buy() {
-                player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                if (hasUpgrade("aspHeart", 22) && hasUpgrade("aspHope", 41)) {
+                    let base = 1e12
+                    let growth = 4.12e15
+                    let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(max)
+                } else {
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                }
             },
         },
         16: {
             cost(x) { return new Decimal(6.12e30).pow((x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor()).mul(1e20) },
-            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect) },
+            effect(x) { return player.aspSpace.generatorTotals[this.id - 11].mul(Decimal.pow(2, (x || getBuyableAmount(this.layer, this.id)).div(hasUpgrade("aspHeart", 21) ? 1 : 10).floor())).mul(0.1).mul(tmp.aspSpace.buyables[21].effect).mul(tmp.aspBreath.buyables[15].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(player.aspSpace.generatorTotals[this.id - 11], 0) + " (" + format(getBuyableAmount(this.layer, this.id), 0) + ")<br/>Space Generator^6"
@@ -348,14 +407,24 @@ addLayer("aspSpace", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Power"
             },
             buy() {
-                player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                if (hasUpgrade("aspHeart", 22) && hasUpgrade("aspHope", 41)) {
+                    let base = 6.12e30
+                    let growth = 1e20
+                    let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(max)
+                } else {
+                    if (!hasUpgrade("aspHeart", 22)) player[this.layer].points = player[this.layer].points.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    player.aspSpace.generatorTotals[this.id - 11] = player.aspSpace.generatorTotals[this.id - 11].add(hasUpgrade("aspHeart", 21) ? 10 : 1)
+                }
             },
         },
         21: {
             cost(x) { return new Decimal(10).pow((x || getBuyableAmount(this.layer, this.id))).mul(1000) },
-            effect(x) { return Decimal.pow(1.08, (x || getBuyableAmount(this.layer, this.id))) },
+            effect(x) { return Decimal.pow(1.08, (x || getBuyableAmount(this.layer, this.id))).mul(tmp.aspBreath.buyables[16].effect) },
             canAfford() { return player[this.layer].space.gte(this.cost()) },
             unlocked() { return player.aspHeart.unlocked || player.aspMind.unlocked },
             title() {
@@ -366,8 +435,17 @@ addLayer("aspSpace", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy() {
-                player[this.layer].space = player[this.layer].space.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                if (hasUpgrade("aspHope", 41)) {
+                    let base = 1000
+                    let growth = 10
+                    let max = Decimal.affordGeometricSeries(player[this.layer].space, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    player[this.layer].space = player[this.layer].space.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                } else {
+                    player[this.layer].space = player[this.layer].space.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                }
             },
         },
     },
@@ -394,7 +472,7 @@ addLayer("aspSpace", {
         if (hasUpgrade("aspSpace", 22)) buyBuyable("aspTime", 21)
         if (hasUpgrade("aspSpace", 54)) buyBuyable("aspTime", 22)
 
-        
+
         if (hasUpgrade("aspSpace", 52)) {
             for (var a = 11; a <= 16; a++) buyBuyable("aspSpace", a)
             for (var a = 21; a <= 21; a++) buyBuyable("aspSpace", a)
@@ -422,7 +500,7 @@ addLayer("aspSpace", {
             if ((pLayer === "aspMind" && hasMilestone("aspMind", 4)) || (pLayer === "aspHeart" && hasMilestone("aspHeart", 4))) {
                 upgradeKeep.push(51, 52, 53, 54)
             }
-            if ((pLayer === "aspHope" && hasMilestone("aspHope", 0)) || (pLayer === "aspRage" && hasMilestone("aspRage", 0))) {
+            if ((pLayer === "aspHope" && hasMilestone("aspHope", 0)) || (pLayer === "aspRage" && hasMilestone("aspRage", 0)) || (pLayer === "aspDoom" && hasMilestone("aspDoom", 2)) || (layers[pLayer].row == 7 && hasMilestone("skaia", 4))) {
                 upgradeKeep = [11, 12, 13, 14, 21, 22, 23, 24, 31, 32, 33, 34, 51, 52, 53, 54]
             }
             layerDataReset("aspSpace", listKeep)

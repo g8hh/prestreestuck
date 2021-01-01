@@ -17,6 +17,6 @@ addNode("blank", {
 
 addLayer("tree-tab", {
     tabFormat: [["tree", [
-        ["aspHope", "aspMind", "aspTime", "skaia", "aspSpace", "aspHeart", "aspRage"],
+        ["aspBreath", "aspHope", "aspLife", "aspMind", "aspLight", "aspTime", "skaia", "aspSpace", "aspVoid", "aspHeart", "aspDoom", "aspRage", "aspBlood"],
     ]]]
 })

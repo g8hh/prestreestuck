@@ -5,7 +5,7 @@ addLayer("aspHeart", {
     position: 0,
     branches: ["aspSpace"],
 
-    layerShown() { return hasUpgrade("aspSpace", 41) || player.aspHeart.unlocked },
+    layerShown() { return (hasUpgrade("aspSpace", 41) || player.aspHeart.unlocked) && !inChallenge("aspDoom", 12) },
     resource: "Heart Power",
     baseAmount() { return player.points },
     baseResource: "points",
@@ -35,17 +35,17 @@ addLayer("aspHeart", {
         0: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>BOOSTING PRODUCTION</alternate></p>1 Heart Power",
             done() { return player[this.layer].best.gte(1) },
-            effectDescription: "You keep your first three odd Space upgrades on Heart Power absorb.",
+            effectDescription: "You keep your 1st, 3rd, and 5th Space upgrade on Heart Power absorb.",
         },
         1: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>A QUALITY OF LIFE MILESTONE</alternate></p>10 Heart Power",
             done() { return player[this.layer].best.gte(10) },
-            effectDescription: "You keep your second three odd Space upgrades on Heart Power absorb.",
+            effectDescription: "You keep your 7th, 9th, and 11th Space upgrade on Heart Power absorb.",
         },
         2: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>WHY ISNT THIS FIRST</alternate></p>100 Heart Power",
             done() { return player[this.layer].best.gte(100) },
-            effectDescription: "You keep your first six even Space upgrades on Heart Power absorb.",
+            effectDescription: "You keep your 2nd, 4th, 6th, 8th, 12th, 14th Space upgrade on Heart Power absorb.",
         },
         3: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>SUSPICIOUSLY SIMILAR MILESTONE</alternate></p>" + formatWhole(10000) + " Heart Power",
@@ -55,7 +55,7 @@ addLayer("aspHeart", {
         4: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>WORRY LESS ABOUT UPGRADES AGAIN</alternate></p>" + formatWhole(10000000) + " Heart Power",
             done() { return player[this.layer].best.gte(10000000) },
-            effectDescription: "You keep your forth row of Space upgrades on Heart Power absorb.",
+            effectDescription: "You keep your fourth row of Space upgrades on Heart Power absorb.",
         },
         5: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>OPEN THEE HEART</alternate></p>" + formatWhole(1e12) + " Heart Power",
@@ -78,7 +78,8 @@ addLayer("aspHeart", {
             cost: new Decimal(1e12),
             effect() {
                 let ret = player.points.div(1e240).pow(0.015).add(1).mul(100)
-                return ret
+                if (challengeCompletions("aspDoom", 12) >= 2) ret = ret.pow(2)
+                return ret.pow(tmp.aspBlood.buyables[18].effect).pow(tmp.aspBlood.buyables[19].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -89,7 +90,7 @@ addLayer("aspHeart", {
             cost: new Decimal(1e18),
             effect() {
                 let ret = player.aspTime.points.div(1e185).pow(0.02).add(1).mul(50)
-                return ret
+                return ret.pow(tmp.aspBlood.buyables[18].effect).pow(tmp.aspBlood.buyables[19].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -100,7 +101,7 @@ addLayer("aspHeart", {
             cost: new Decimal(1e25),
             effect() {
                 let ret = player.aspSpace.points.div(1e90).pow(0.03).add(1).mul(20)
-                return ret
+                return ret.pow(tmp.aspBlood.buyables[18].effect).pow(tmp.aspBlood.buyables[19].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
@@ -111,17 +112,23 @@ addLayer("aspHeart", {
             cost: new Decimal(1e33),
             effect() {
                 let ret = player.aspSpace.space.div(1e60).pow(0.03).add(1).mul(10)
-                return ret
+                return ret.pow(tmp.aspBlood.buyables[18].effect).pow(tmp.aspBlood.buyables[19].effect)
             },
             effectDisplay() { return "×" + format(this.effect()) },
             unlocked() { return true },
         },
         21: {
             title: "<p style='transform: scale(-1, -1)'><alternate>BETTER SCALING</alternate>",
-            description: "Space Generators act as if they're bought 10× when you only buy once. Requires a Heart reset.",
+            description: "Space Generators act as if they're bought 10× when you only buy once. Buying this does a forced Heart reset.",
             cost: new Decimal(1e17),
             unlocked() { return true },
             pay() { doReset("aspHeart", true) },
+        },
+        22: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>EVEN LESS JITTERING</alternate>",
+            description: "Time Generators and Space Multipliers don't take anything away.",
+            cost: new Decimal(1e25),
+            unlocked() { return true },
         },
     },
 
@@ -165,15 +172,15 @@ addLayer("aspHeart", {
             var listKeep = [];
             var upgradeKeep = [];
             var milestoneKeep = [];
-            if ((pLayer === "aspHope" && hasMilestone("aspHope", 0)) || (pLayer === "aspRage" && hasMilestone("aspRage", 0))) {
+            if ((pLayer === "aspHope" && hasMilestone("aspHope", 0)) || (pLayer === "aspRage" && hasMilestone("aspRage", 0)) || (pLayer === "aspDoom" && hasMilestone("aspDoom", 1)) || (layers[pLayer].row == 7 && hasMilestone("skaia", 1))) {
                 milestoneKeep.push("0", "1", "2", "3", "4", "5")
             }
-            if ((pLayer === "aspHope" && hasMilestone("aspHope", 2)) || (pLayer === "aspRage" && hasMilestone("aspRage", 2))) {
+            if ((pLayer === "aspHope" && hasMilestone("aspHope", 2)) || (pLayer === "aspRage" && hasMilestone("aspRage", 2)) || (pLayer === "aspDoom" && hasMilestone("aspDoom", 1)) || (layers[pLayer].row == 7 && hasMilestone("skaia", 1))) {
                 milestoneKeep.push("6")
-                upgradeKeep.push(11, 12, 13, 14, 21)
+                upgradeKeep.push(11, 12, 13, 14, 21, 22)
             }
             layerDataReset("aspHeart", listKeep)
-            player.aspHeart.milestones = milestoneKeep
+            if (!upgradeKeep.includes["milestones"]) player.aspHeart.milestones = milestoneKeep
             player.aspHeart.upgrades = upgradeKeep;
         }
     },
@@ -188,10 +195,14 @@ addLayer("aspHeart", {
         if (hasUpgrade("aspHeart", 13)) mult = mult.mul(tmp.aspHeart.upgrades[13].effect)
         if (hasUpgrade("aspHeart", 14)) mult = mult.mul(tmp.aspHeart.upgrades[13].effect)
         if (hasUpgrade("aspHope", 31)) mult = mult.mul(tmp.aspHope.upgrades[31].effect)
+        mult = mult.mul(tmp.aspLight.buyables[15].effect)
+        mult = mult.mul(tmp.aspBlood.buyables[17].effect)
         return mult
     },
     gainExp() {
-        return new Decimal(1)
+        let mult = new Decimal(1)
+        if (inChallenge("aspDoom", 11)) mult = mult.mul(0.75)
+        return mult
     },
 
     hotkeys: [
