@@ -27,12 +27,14 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.2.2",
+	num: "0.0.2.3",
 	name: "This is stupid^2",
 }
 
 let changelog = `<h1>Changelog</h1><br>
 	<h5 style="opacity:0.5">Tip: Click on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.2.3</h3><br>
+		Actually updated the endgame popup (finally).<br>
 	<h3>v0.0.2.2</h3><br>
 		Added a system that detects inconsistant version to prevent errors (kind of).<br>
 	<h3>v0.0.2.1</h3><br>
@@ -126,7 +128,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.aspBreath.buyables[26].gte(100) && player.aspBlood.buyables[26].gte(100)
 }
 
 
