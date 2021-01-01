@@ -27,12 +27,14 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.2.1",
+	num: "0.0.2.2",
 	name: "This is stupid^2",
 }
 
 let changelog = `<h1>Changelog</h1><br>
 	<h5 style="opacity:0.5">Tip: Click on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.2.2</h3><br>
+		Added a system that detects inconsistant version to prevent errors (kind of).<br>
 	<h3>v0.0.2.1</h3><br>
 		Fixed some bugs, here and there.<br>
 		Dropped the alpha thingy. This game is still in the development stage, it's just me wanting a shorter version name.<br>
