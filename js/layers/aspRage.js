@@ -170,9 +170,9 @@ addLayer("aspRage", {
             countsAs: [11, 12, 13, 14],
             unlocked() { if (player.aspLight.unlocked) return false; for (var a = 11; a <= 14; a++) if (player.aspRage.challenges[a] < 5) return false; return true },
             goalDescription() {
-                return format(new Decimal("1e40").pow((challengeCompletions(this.layer, this.id) + 1) ** 2)) + ' Points'
+                return format(1e34) + ' Points'
             },
-            canComplete() { return player.points.gte(new Decimal("1e40").pow((challengeCompletions(this.layer, this.id) + 1) ** 2)) },
+            canComplete() { return player.points.gte(1e34) },
             rewardDescription: "Unlocks an aspect layer.",
             onComplete() { buyMaxBuyable("skaia", 13) }
         },

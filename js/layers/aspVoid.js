@@ -5,7 +5,7 @@ addLayer("aspVoid", {
     position: 2,
     branches: [["aspLight", 3]],
 
-    layerShown() { return (hasMilestone("aspHope", 3) || player[this.layer].unlocked) && !inChallenge("aspDoom", 12) },
+    layerShown() { return (hasMilestone("aspLight", 3) || player[this.layer].unlocked) && !inChallenge("aspDoom", 12) },
     resource: "Void Power",
     baseAmount() { return player.points },
     baseResource: "points",

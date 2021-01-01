@@ -1,3 +1,5 @@
+var gameVer = "0.0.2.1";
+
 var player;
 var needCanvasUpdate = true;
 var gameEnded = false;
