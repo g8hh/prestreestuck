@@ -70,7 +70,7 @@ addLayer("aspHope", {
             effectDescription: "Gives you all Heart and Mind upgrades and their seventh milestone on Hope reset.",
         },
         3: {
-            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>RAGEFUL HOPE</alternate></p>21 Rage Essence",
+            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>RAGEFUL HOPE</alternate></p>21 Hope Essence",
             toggles: [["aspHope", "autoReset"]],
             done() { return player[this.layer].best.gte(21) },
             effectDescription: "Automatically do Rage resets.",

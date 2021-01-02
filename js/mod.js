@@ -27,16 +27,25 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.2.3",
+	num: "0.0.2.4",
 	name: "This is stupid^2",
 }
 
 let changelog = `<h1>Changelog</h1><br>
 	<h5 style="opacity:0.5">Tip: Click on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.2.4</h3><br>
+		Added a text that says how many layers there are left to unlock in the current act or until current endgame, or the current goal/endgame if there is none remaining.<br>
+		<spoiler>Life Power</spoiler> should no longer be able to go below zero anymore. This fixes some softlocks and NaN bugs.<br>
+		Fixed the <spoiler>BEGIN THE PLAN.</spoiler> upgrade being buyable before 22 <spoiler>Skaia levels</spoiler> despite being grayed out.<br>
+		Fixed the 20 <spoiler>Void Points</spoiler> milestone having the effect of the 1,000 <spoiler>Void Points</spoiler> milestone.<br>
+		Fixed the text of some places.<br>
+	<br>
 	<h3>v0.0.2.3</h3><br>
 		Actually updated the endgame popup (finally).<br>
+	<br>
 	<h3>v0.0.2.2</h3><br>
 		Added a system that detects inconsistant version to prevent errors (kind of).<br>
+	<br>
 	<h3>v0.0.2.1</h3><br>
 		Fixed some bugs, here and there.<br>
 		Dropped the alpha thingy. This game is still in the development stage, it's just me wanting a shorter version name.<br>
@@ -56,6 +65,9 @@ let changelog = `<h1>Changelog</h1><br>
 	<h2>v0.0.1</h2><br>
 		<h5 style="opacity:0.5">- This is stupid -</h5>
 		The beginning. Nothing is really changed at this point because this is the first version... <i>ever.</i><br>
+	<br>
+	<h5 style="font-family:'Comic Sans MS',cursive;font-size:10px;color:#f400ec">honestly i want to add a sbahj theme but the current theme api is too strict for that<br/>oh well</h5>
+	<br><br><br>
 `
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
@@ -123,7 +135,16 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	() => `<h2><br/>Act 0</h2><br/>- Genesis -`
+	function () {
+		var rem = 0
+		for (lys in LAYERS) {
+			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || !tmp[LAYERS[lys]].layerShown)) rem++
+		}
+		var acts = [
+			["Act 0", "Genesis", rem == 0 ? "Current endgame: 100 of each last Breath and Blood Synergism" : rem + " layers remaining"]
+		]
+		return `<h2><br/>${acts[player.act][0]}</h2><br/>- ${acts[player.act][1]} -<br/><h5 style='margin-top:5px;opacity:0.5'><i>(${acts[player.act][2]})</i></h5>`
+	}
 ]
 
 // Determines when the game "ends"

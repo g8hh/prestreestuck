@@ -179,10 +179,7 @@ addLayer("skaia", {
         cols: 1,
         11: {
             fullDisplay: "<h3>BEGIN THE PLAN.</h3><br/>Need Skaia Level 22",
-            cost: new Decimal(22),
-            currencyLocation() { return player[this.layer] },
-            currencyDisplayName: "Levels",
-            currencyInternalName: "level",
+            canAfford() { return player.skaia.level.gte(22) },
             pay() {
                 player.phaseTimer = 0
                 player.tab = "none"

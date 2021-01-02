@@ -60,7 +60,7 @@ addLayer("aspVoid", {
             display() {
                 let data = temp[this.layer].buyables[this.id]
                 let amount = getBuyableAmount(this.layer, this.id)
-                return "which are multiplying the base exponent of each Light researches by ×" + format(data.effect)
+                return "which are multiplying the base exponent of each Light Researches by ×" + format(data.effect)
             },
             buy() {
                 player[this.layer].researchExp = new Decimal(0)
@@ -81,7 +81,7 @@ addLayer("aspVoid", {
             display() {
                 let data = temp[this.layer].buyables[this.id]
                 let amount = getBuyableAmount(this.layer, this.id)
-                return "which are decreasing the scaling point of Hope Upgrades by " + format(data.effect)
+                return "which are decreasing the scaling point of Light Researches by " + format(data.effect)
             },
             buy() {
                 player[this.layer].researchExp = new Decimal(0)
@@ -127,7 +127,7 @@ addLayer("aspVoid", {
             player[this.layer].buyables[player[this.layer].currentResearch] = player[this.layer].buyables[player[this.layer].currentResearch].add(1)
             buyMaxBuyable("skaia", 15)
         }
-        if (hasMilestone(this.layer, 3))
+        if (hasMilestone(this.layer, 4))
             addPoints(this.layer, tmp[this.layer].resetGain.mul(delta).mul(0.1))
     },
 

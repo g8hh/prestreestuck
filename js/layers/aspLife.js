@@ -163,7 +163,7 @@ addLayer("aspLife", {
         }
         for (var a = 11; a <= 13; a++) {
             if (getBuyableAmount(this.layer, a).gt(0)) {
-                player[this.layer].points = player[this.layer].points.sub(tmp[this.layer].buyables[a].cost.mul(delta))
+                player[this.layer].points = player[this.layer].points.sub(tmp[this.layer].buyables[a].cost.mul(delta).max(0))
             }
         }
         if (hasMilestone(this.layer, 2))
