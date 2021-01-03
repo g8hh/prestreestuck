@@ -27,12 +27,16 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.2.4",
+	num: "0.0.2.5",
 	name: "This is stupid^2",
 }
 
 let changelog = `<h1>Changelog</h1><br>
 	<h5 style="opacity:0.5">Tip: Click on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.2.5</h3><br>
+		Adjusted the progress text.<br>
+		Fixed <spoiler>Life Power</spoiler> going below zero anymore (for real this time).<br>
+	<br>
 	<h3>v0.0.2.4</h3><br>
 		Added a text that says how many layers there are left to unlock in the current act or until current endgame, or the current goal/endgame if there is none remaining.<br>
 		<spoiler>Life Power</spoiler> should no longer be able to go below zero anymore. This fixes some softlocks and NaN bugs.<br>
@@ -138,7 +142,7 @@ var displayThings = [
 	function () {
 		var rem = 0
 		for (lys in LAYERS) {
-			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || !tmp[LAYERS[lys]].layerShown)) rem++
+			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && !inChallenge("aspDoom", 12)))) rem++
 		}
 		var acts = [
 			["Act 0", "Genesis", rem == 0 ? "Current endgame: 100 of each last Breath and Blood Synergism" : rem + " layers remaining"]

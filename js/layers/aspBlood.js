@@ -31,7 +31,7 @@ addLayer("aspBlood", {
     },
     effectDescription() {
         eff = this.effect();
-        return "which are giving " + format(eff.powerGain) + " Breath Power per second."
+        return "which are giving " + format(eff.powerGain) + " Blood Power per second."
     },
 
     type: "static",
@@ -60,7 +60,7 @@ addLayer("aspBlood", {
             display() {
                 return player[this.layer].buyables[this.id].gt(0) ?
                     "which are boosting all of your Time Multipliers' effects by ×" + format(tmp[this.layer].buyables[this.id].effect) :
-                    "Unlock for " + format(tmp[this.layer].buyables[this.id].cost) + " Breath Power"
+                    "Unlock for " + format(tmp[this.layer].buyables[this.id].cost) + " Blood Power"
             },
             buy() {
                 player[this.layer].power = player[this.layer].power.sub(this.cost())

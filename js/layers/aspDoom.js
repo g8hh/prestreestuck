@@ -162,7 +162,7 @@ addLayer("aspDoom", {
             rewardDescription() {
                 return [
                     "Automatically toggles the \"automatically toggles Hope and Rage Essence auto-reset\" toggle on.",
-                    "Starts with 412 levels of the first Void Enhancement.",
+                    "Starts with 413 levels of the first Void Enhancement.",
                     "Automatically turn all of the Life Blessing on. Well, we don't need to actually disable it atm.",
                     "All challenges completed!",
                 ][challengeCompletions(this.layer, this.id)]
@@ -178,7 +178,7 @@ addLayer("aspDoom", {
         if (hasMilestone(this.layer, 3))
             addPoints(this.layer, tmp[this.layer].resetGain.mul(delta).mul(0.05))
         if (challengeCompletions("aspDoom", 13) >= 1) player.aspLight.autoAuto = true
-        if (challengeCompletions("aspDoom", 13) >= 2) player.aspVoid.buyables[11] = player.aspVoid.buyables[11].max(412)
+        if (challengeCompletions("aspDoom", 13) >= 2) player.aspVoid.buyables[11] = player.aspVoid.buyables[11].max(413)
         if (challengeCompletions("aspDoom", 13) >= 3) for (var a = 11; a <= 13; a++) player.aspLife.buyables[a] = new Decimal(1)
     },
 
