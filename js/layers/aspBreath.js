@@ -4,7 +4,7 @@ addLayer("aspBreath", {
     row: 7,
     position: 0,
 
-    layerShown() { return challengeCompletions("aspDoom", 12) >= 11 || player[this.layer].unlocked },
+    layerShown() { return (challengeCompletions("aspDoom", 12) >= 11 || player[this.layer].unlocked) && !hasUpgrade("skaia", 12) },
     resource: "Breath Essence",
     baseAmount() { return player.points },
     baseResource: "points",
@@ -36,6 +36,7 @@ addLayer("aspBreath", {
 
     type: "static",
     requires: new Decimal("e53400000"),
+    canBuyMax() { return hasMilestone("skaia", 8) },
     base: new Decimal("e3900000"),
     exponent: 1.2,
     gainMult() {
@@ -76,7 +77,7 @@ addLayer("aspBreath", {
         },
         12: {
             cost(x) { return new Decimal(200) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(10).add(1).log(10).add(1) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(10).add(1).log(10).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Booster Synergizer"
@@ -100,7 +101,7 @@ addLayer("aspBreath", {
         },
         13: {
             cost(x) { return new Decimal(500) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(10).add(1).log(10).add(1) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(10).add(1).log(10).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Booster^2 Synergizer"
@@ -220,7 +221,7 @@ addLayer("aspBreath", {
         },
         18: {
             cost(x) { return new Decimal(750000) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(10).add(1).log(8).add(1) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(10).add(1).log(8).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mind Upgrade Synergizer"
@@ -244,7 +245,7 @@ addLayer("aspBreath", {
         },
         19: {
             cost(x) { return new Decimal(1e21) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(2).add(1).log(5).add(1) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(2).add(1).log(5).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mind Upgrade^2 Synergizer"
@@ -268,7 +269,7 @@ addLayer("aspBreath", {
         },
         20: {
             cost(x) { return new Decimal(1e31) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(20).add(1).log(20).add(1) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(20).add(1).log(20).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hope Upgrade Synergizer"
@@ -292,7 +293,7 @@ addLayer("aspBreath", {
         },
         21: {
             cost(x) { return new Decimal(1e51) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(1.2).add(1).log(1.2).add(1) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(1.2).add(1).log(1.2).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hope Upgrade^3 Synergizer"
@@ -316,7 +317,7 @@ addLayer("aspBreath", {
         },
         22: {
             cost(x) { return new Decimal(1e64) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(50).add(1).log(10).add(1) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(50).add(1).log(10).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hope Upgrade^6 Synergizer"
@@ -364,7 +365,7 @@ addLayer("aspBreath", {
         },
         24: {
             cost(x) { return new Decimal(1e100) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(1.12).add(1).log(1.12).add(1) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(1.12).add(1).log(1.12).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Light Discoveries^∞ Synergizer"
@@ -411,8 +412,8 @@ addLayer("aspBreath", {
             }
         },
         26: {
-            cost(x) { return new Decimal(1e180) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(100).add(1).log(50).add(1) },
+            cost(x) { return new Decimal(1e200) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(100).add(1).log(50).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Life Effect Synergizer"
@@ -429,6 +430,54 @@ addLayer("aspBreath", {
             style() {
                 if (player[this.layer].buyables[this.id].gte(1)) {
                     return { "background-color": "#a49787", "box-shadow": "inset 0px 0px 50px black" }
+                } else {
+                    return {}
+                }
+            }
+        },
+        27: {
+            cost(x) { return new Decimal(1e255) },
+            effect(x) { return applyPolynomialSoftcap((x || getBuyableAmount(this.layer, this.id)).max(1).pow(0.5), 1000000, 3) },
+            canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Breath Synergizer"
+            },
+            display() {
+                return player[this.layer].buyables[this.id].gt(0) ?
+                    "which are boosting all Breath Synergizers' gain by ×" + format(tmp[this.layer].buyables[this.id].effect) :
+                    "Unlock for " + format(tmp[this.layer].buyables[this.id].cost) + " Breath Power"
+            },
+            buy() {
+                player[this.layer].power = player[this.layer].power.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, new Decimal(1))
+            },
+            style() {
+                if (player[this.layer].buyables[this.id].gte(1)) {
+                    return { "background-color": "#4379e6", "box-shadow": "inset 0px 0px 50px black" }
+                } else {
+                    return {}
+                }
+            }
+        },
+        28: {
+            cost(x) { return new Decimal("1e565") },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(500000000).add(1).log(10).add(1) },
+            canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Breath Synergizer^2"
+            },
+            display() {
+                return player[this.layer].buyables[this.id].gt(0) ?
+                    "which are boosting all exponential effects on all Breath Synergizers by ×" + format(tmp[this.layer].buyables[this.id].effect) :
+                    "Unlock for " + format(tmp[this.layer].buyables[this.id].cost) + " Breath Power"
+            },
+            buy() {
+                player[this.layer].power = player[this.layer].power.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, new Decimal(1))
+            },
+            style() {
+                if (player[this.layer].buyables[this.id].gte(1)) {
+                    return { "background-color": "#4379e6", "box-shadow": "inset 0px 0px 50px black" }
                 } else {
                     return {}
                 }
@@ -491,6 +540,14 @@ addLayer("aspBreath", {
                     ["blank", "10px"],
                     ["row", [["buyable", 25], ["buyable", 26]]],
                     ["blank", "15px"],
+                    ["raw-html", `
+                        <div class="title-bar" style="background-color:#4379e6;color:black;">
+                            <h3><img src="data/breath.png" style="height:24px;width:24px;transform:translateY(5px)" /> Breath</h3>
+                        </div>
+                    `],
+                    ["blank", "10px"],
+                    ["row", [["buyable", 27], ["buyable", 28]]],
+                    ["blank", "15px"],
                 ]
             },
         },
@@ -498,9 +555,9 @@ addLayer("aspBreath", {
 
     update(delta) {
         player[this.layer].power = player[this.layer].power.add(tmp[this.layer].effect.powerGain.mul(delta))
-        for (var a = 11; a <= 26; a++) if (getBuyableAmount(this.layer, a).gt(0)) {
-            setBuyableAmount(this.layer, a, getBuyableAmount(this.layer, a).add(delta))
-            if (a > 11) setBuyableAmount(this.layer, a - 1, getBuyableAmount(this.layer, a - 1).add(getBuyableAmount(this.layer, a).mul(delta)))
+        for (var a = 11; a <= 28; a++) if (getBuyableAmount(this.layer, a).gt(0)) {
+            setBuyableAmount(this.layer, a, getBuyableAmount(this.layer, a).add(tmp.aspBreath.buyables[27].effect.mul(delta)))
+            if (a > 11) setBuyableAmount(this.layer, a - 1, getBuyableAmount(this.layer, a - 1).add(getBuyableAmount(this.layer, a).mul(tmp.aspBreath.buyables[27].effect).mul(delta)))
         }
         if (player[this.layer].autoAbsorb && canReset(this.layer)) doReset(this.layer)
     },

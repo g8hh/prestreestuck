@@ -5,7 +5,7 @@ addLayer("skaia", {
     position: 0,
     branches: [],
 
-    layerShown() { return hasUpgrade("aspMind", 24) || player.aspHope.unlocked || player.aspRage.unlocked },
+    layerShown() { return hasUpgrade("skaia", 12) || hasUpgrade("aspMind", 24) || player.aspHope.unlocked || player.aspRage.unlocked },
     resource: "Experience",
     type: "none",
     color: "#ffffff",
@@ -30,7 +30,8 @@ addLayer("skaia", {
     },
     effect() {
         return {
-            climbReq: player.skaia.level.pow(player.skaia.level.pow(0.03).div(2)).pow(player.skaia.level.sub(299).max(1).pow(0.15)).ceil(),
+            levelGain: hasUpgrade("skaia", 12) ? player.points.add(1).log(1e10).pow(0.001).div(100) : new Decimal(0),
+            climbReq: player.skaia.level.pow(player.skaia.level.pow(0.03).div(2)).pow(player.skaia.level.sub(299).max(1).pow(0.15)).pow(player.skaia.level.div(6120).max(1).pow(3.5)).ceil(),
             boondollarGain: hasMilestone("aspLife", 2) ? player.skaia.level.sub(20).max(1).pow(3).pow(player.skaia.level.sub(98).max(1).div(3).pow(0.35)) : new Decimal(0),
             boondollarBoost: applyPolynomialSoftcap(player.skaia.boondollars.max(1e10).div(1e10).pow(0.5), 1e10, 10)
         }
@@ -176,7 +177,7 @@ addLayer("skaia", {
 
     upgrades: {
         rows: 1,
-        cols: 1,
+        cols: 2,
         11: {
             fullDisplay: "<h3>BEGIN THE PLAN.</h3><br/>Need Skaia Level 22",
             canAfford() { return player.skaia.level.gte(22) },
@@ -185,6 +186,28 @@ addLayer("skaia", {
                 player.tab = "none"
             },
             unlocked() { return player.points.gte("1e2200") && !hasUpgrade(this.layer, this.id) },
+        },
+        12: {
+            fullDisplay: "<h3>REACH BEYOND THE CIRCLE.</h3><br/>Need " + format("ee413") + " points",
+            canAfford() { return player.points.gte("ee413") },
+            pay() {
+                player.phaseTimer = 0
+                player.tab = "none";
+
+                ["aspTime", "aspSpace", "aspMind", "aspHeart", "aspHope", "aspRage", "aspLight", "aspVoid", "aspLife", "aspDoom", "aspBlood", "aspBreath"].forEach(x => {
+                    layerDataReset(x)
+                    player[x].unlocked = false
+                })
+
+                player.points = new Decimal(1)
+                player.skaia.level = new Decimal(1)
+                player.skaia.points = new Decimal(0)
+                player.skaia.boondollars = new Decimal(0)
+                player.subtabs.skaia.stuff = "Meta"
+
+                player.aspects.unlocked = true
+            },
+            unlocked() { return player.points.gte("ee20") && !hasUpgrade(this.layer, this.id) },
         },
         21: {
             description: "Begin stock trading simulator.",
@@ -215,6 +238,9 @@ addLayer("skaia", {
         if (Number.isNaN(player.skaia.points.mag) || Number.isNaN(player.skaia.boondollars.mag)) {
             console.log(a)
             player.skaia.boondollars = new Decimal(0)
+        }
+        if (hasUpgrade("skaia", 12)) {
+            player.skaia.points = player.skaia.points.add(tmp.skaia.effect.levelGain.mul(delta))
         }
 
         if (hasUpgrade("skaia", 21)) {
@@ -281,6 +307,11 @@ addLayer("skaia", {
             done() { return player.aspBreath.best.gte(100) && player.aspBlood.best.gte(100) },
             effectDescription: "Absorbing Breath and Blood Essence no longer resets anything.",
         },
+        8: {
+            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>JUST A LITTLE BIT MORE</alternate></p>2000 Breath Essence & 2000 Blood Essence",
+            done() { return player.aspBreath.best.gte(2000) && player.aspBlood.best.gte(2000) },
+            effectDescription: "You can bulk absorb Breath and Blood Essence.",
+        },
     },
 
     bars: {
@@ -295,6 +326,7 @@ addLayer("skaia", {
     microtabs: {
         stuff: {
             "Echetasks": {
+                unlocked: () => !hasUpgrade("skaia", 12),
                 content: [
                     ["blank", "15px"],
                     "buyables",
@@ -351,12 +383,17 @@ addLayer("skaia", {
                     "milestones",
                 ]
             },
+            "Meta": {
+                unlocked: () => hasUpgrade("skaia", 12),
+                content: [
+                ]
+            },
         },
     },
 
     tabFormat: [
         ["display-text", () => "Skaia is currently in level <h2 style='color:white; text-shadow:white 0 0 10px'>" + formatWhole(player.skaia.level) + "</h2>"],
-        ["display-text", () => "<h5 style='opacity:0.5'>(which is equivalent of climbing " + formatWhole(player.skaia.level.sub(1)) + " Achievement Rungs on the Echeladder.)</h5>"],
+        ["display-text", () => "<h5 style='opacity:0.5'>(which is equivalent to climbing " + formatWhole(player.skaia.level.sub(1)) + " Achievement Rungs on the Echeladder.)</h5>"],
         ["display-text", () => "<br/>You currently have <h2 style='color:white; text-shadow:white 0 0 10px'>" + formatWhole(player.skaia.points.floor()) + "</h2> Echepoints"],
         ["display-text", () => "<h5 style='opacity:0.5'>and will need " + formatWhole(tmp.skaia.effect.climbReq) + " Echepoints to climb to the next rung.</h5>"],
         ["blank", "25px"],

@@ -27,12 +27,17 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.2.5",
-	name: "This is stupid^2",
+	num: "0.0.3",
+	name: "Another update yay",
 }
 
 let changelog = `<h1>Changelog</h1><br>
 	<h5 style="opacity:0.5">Tip: Click on a spoiler to reveal it.</h5><br>
+	<h2>v0.0.3</h2><br>
+		<h5 style="opacity:0.5">- Another update yay -</h5>
+		Added a meta aspect layer that mock-ups the previous twelves. You can access it when you completed all of the 12 aspect layers mentioned earlier.<br>
+		(also updated the modfinder to give it a new look. And yes, they are in the same repsitory so...)<br>
+	<br>
 	<h3>v0.0.2.5</h3><br>
 		Adjusted the progress text.<br>
 		Fixed <spoiler>Life Power</spoiler> going below zero anymore (for real this time).<br>
@@ -95,36 +100,42 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
 
-	if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
-	if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
+	if (!hasUpgrade("skaia", 12)) {
+		for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
 
-	if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
-	if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
-	if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
+		if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
+		if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
 
-	if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
-	if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
+		if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
+		if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
+		if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
 
-	if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
-	if (hasUpgrade("aspHope", 34)) gain = gain.mul(tmp.aspHope.upgrades[34].effect)
-	if (hasUpgrade("aspHope", 51)) gain = gain.mul(tmp.aspHope.upgrades[51].effect)
-	if (hasUpgrade("aspHope", 63)) gain = gain.mul(tmp.aspHope.upgrades[63].effect)
+		if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
+		if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
 
-	gain = gain.mul(tmp.aspHeart.effect.pointBoost)
-	gain = gain.mul(tmp.aspMind.effect.pointBoost)
-	gain = gain.mul(tmp.aspLife.effect.pointBoost)
-	gain = gain.mul(tmp.aspDoom.effect.pointBoost)
+		if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
+		if (hasUpgrade("aspHope", 34)) gain = gain.mul(tmp.aspHope.upgrades[34].effect)
+		if (hasUpgrade("aspHope", 51)) gain = gain.mul(tmp.aspHope.upgrades[51].effect)
+		if (hasUpgrade("aspHope", 63)) gain = gain.mul(tmp.aspHope.upgrades[63].effect)
 
-	gain = gain.mul(tmp.aspLight.buyables[11].effect)
+		gain = gain.mul(tmp.aspHeart.effect.pointBoost)
+		gain = gain.mul(tmp.aspMind.effect.pointBoost)
+		gain = gain.mul(tmp.aspLife.effect.pointBoost)
+		gain = gain.mul(tmp.aspDoom.effect.pointBoost)
 
-	if (getBuyableAmount("aspLife", 11).gt(0)) gain = gain.mul(tmp.aspLife.buyables[11].effect)
-	if (challengeCompletions("aspDoom", 11) >= 8) gain = gain.pow(1.05)
+		gain = gain.mul(tmp.aspLight.buyables[11].effect)
 
-	if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
-	if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
-	if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
+		if (getBuyableAmount("aspLife", 11).gt(0)) gain = gain.mul(tmp.aspLife.buyables[11].effect)
+		if (challengeCompletions("aspDoom", 11) >= 8) gain = gain.pow(1.05)
+
+		if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
+		if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
+		if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
+	} else {
+		gain = gain.mul(tmp.aspects.effect.pointBoost)
+    }
+
 
 	if (Number.isNaN(gain.mag)) gain = new Decimal(0)
 
@@ -144,8 +155,9 @@ var displayThings = [
 		for (lys in LAYERS) {
 			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && !inChallenge("aspDoom", 12)))) rem++
 		}
+		if (hasUpgrade("skaia", 12)) rem -= 12;
 		var acts = [
-			["Act 0", "Genesis", rem == 0 ? "Current endgame: 100 of each last Breath and Blood Synergism" : rem + " layers remaining"]
+			["Act 0", "Genesis", rem == 0 ? "Current endgame: " + format("ee220") + " points" : rem + " layers remaining"]
 		]
 		return `<h2><br/>${acts[player.act][0]}</h2><br/>- ${acts[player.act][1]} -<br/><h5 style='margin-top:5px;opacity:0.5'><i>(${acts[player.act][2]})</i></h5>`
 	}
@@ -153,7 +165,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.aspBreath.buyables[26].gte(100) && player.aspBlood.buyables[26].gte(100)
+	return hasUpgrade("skaia", 12) && player.points.gte("ee220")
 }
 
 

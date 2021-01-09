@@ -5,7 +5,7 @@ addLayer("aspRage", {
     position: 1,
     branches: [["aspMind", 2]],
 
-    layerShown() { return (hasUpgrade("aspMind", 24) || player.aspRage.unlocked) && !inChallenge("aspDoom", 12) },
+    layerShown() { return (hasUpgrade("aspMind", 24) || player.aspRage.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Rage Essence",
     baseAmount() { return player.aspMind.points },
     baseResource: "Mind Power",

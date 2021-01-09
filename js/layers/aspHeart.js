@@ -5,7 +5,7 @@ addLayer("aspHeart", {
     position: 0,
     branches: ["aspSpace"],
 
-    layerShown() { return (hasUpgrade("aspSpace", 41) || player.aspHeart.unlocked) && !inChallenge("aspDoom", 12) },
+    layerShown() { return (hasUpgrade("aspSpace", 41) || player.aspHeart.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Heart Power",
     baseAmount() { return player.points },
     baseResource: "points",
@@ -45,7 +45,7 @@ addLayer("aspHeart", {
         2: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>WHY ISNT THIS FIRST</alternate></p>100 Heart Power",
             done() { return player[this.layer].best.gte(100) },
-            effectDescription: "You keep your 2nd, 4th, 6th, 8th, 12th, 14th Space upgrade on Heart Power absorb.",
+            effectDescription: "You keep your 2nd, 4th, 6th, 8th, 10th, and 12th Space upgrade on Heart Power absorb.",
         },
         3: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>SUSPICIOUSLY SIMILAR MILESTONE</alternate></p>" + formatWhole(10000) + " Heart Power",

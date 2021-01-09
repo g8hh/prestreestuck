@@ -5,7 +5,7 @@ addLayer("aspHope", {
     position: 0,
     branches: [["aspHeart", 2]],
 
-    layerShown() { return (hasUpgrade("aspMind", 24) || player.aspHope.unlocked) && !inChallenge("aspDoom", 12) },
+    layerShown() { return (hasUpgrade("aspMind", 24) || player.aspHope.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Hope Essence",
     baseAmount() { return player.aspHeart.points },
     baseResource: "Heart Power",

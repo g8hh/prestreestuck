@@ -43,26 +43,19 @@ function drawTree() {
 		var scale = Math.max(canvas.height / 250, canvas.width / 446)
 		var skyHeight = scale * 250
 		var skyWidth = scale * 446
+		if (hasUpgrade("skaia", 12)) ctx.filter = 'hue-rotate(' + (player.timePlayed * 6.12) + 'deg)'; 
 		ctx.drawImage(skyImgs[Math.floor(player.time / 15000) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
 		ctx.globalAlpha = (player.time / 15000) % 1;
 		ctx.drawImage(skyImgs[Math.floor(player.time / 15000 + 1) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
 		ctx.globalAlpha = 1;
 	}
 
-	for (layer in layers){
-		if (tmp[layer].layerShown == true && tmp[layer].branches){
-			for (branch in tmp[layer].branches) {
-				drawTreeBranch(layer, tmp[layer].branches[branch])
-			}
-		}
-	}
-
-	ctx.strokeStyle = (tmp[layer].branches[branch])
+	if (hasUpgrade("skaia", 12)) ctx.filter = 'hue-rotate(' + -(player.timePlayed * 4.13) + 'deg)'; 
 
 	if ((player.aspHope.unlocked || player.aspRage.unlocked) && sDensity < 8) sDensity++
 	else if ((hasUpgrade("aspMind", 24) || (player.aspHope.unlocked && player.aspRage.unlocked)) && sDensity < 16) sDensity++
 	else if (sDensity > 0) sDensity--
-	if (sDensity > 0) {
+	if (sDensity > 0 || hasUpgrade("skaia", 12)) {
 		if (!document.getElementById("skaia")) return
 		let skaia = document.getElementById("skaia").getBoundingClientRect();
 		let x = skaia.left + (skaia.width / 2) + document.body.scrollLeft;
@@ -77,6 +70,16 @@ function drawTree() {
 			ctx.lineTo(getSpirographX(t, offset) * 25 + x, getSpirographY(t, offset) * 25 + y);
 		}
 		ctx.stroke()
+	}
+
+	ctx.filter = "none"
+
+	for (layer in layers) {
+		if (tmp[layer].layerShown == true && tmp[layer].branches) {
+			for (branch in tmp[layer].branches) {
+				drawTreeBranch(layer, tmp[layer].branches[branch])
+			}
+		}
 	}
 
 	if (hasUpgrade("skaia", 11)) {

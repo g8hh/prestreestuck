@@ -5,7 +5,7 @@ addLayer("aspDoom", {
     position: 1,
     branches: [["skaia", 3]],
 
-    layerShown() { return hasMilestone("aspLife", 4) || player[this.layer].unlocked },
+    layerShown() { return (hasMilestone("aspLife", 4) || player[this.layer].unlocked) && !hasUpgrade("skaia", 12) },
     resource: "Doom Power",
     baseAmount() { return player.points },
     baseResource: "points",
@@ -23,7 +23,7 @@ addLayer("aspDoom", {
     },
     effect() {
         var effs = {
-            pointBoost: applyPolynomialSoftcap(player.aspDoom.points.mul(10).add(1).pow(100), "1e413", 2).mul(tmp.aspBlood.buyables[26].effect)
+            pointBoost: applyPolynomialSoftcap(player.aspDoom.points.mul(10).add(1).pow(100), "1e413", 2).pow(tmp.aspBlood.buyables[26].effect)
         }
         return effs
     },

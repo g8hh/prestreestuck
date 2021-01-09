@@ -5,7 +5,7 @@ addLayer("aspSpace", {
     position: 0,
     branches: ["aspTime", "aspLight"],
 
-    layerShown() { return !inChallenge("aspDoom", 12) },
+    layerShown() { return !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Space Power",
     baseAmount() { return player.points },
     baseResource: "points",

@@ -5,7 +5,7 @@ addLayer("aspMind", {
     position: 1,
     branches: ["aspSpace"],
 
-    layerShown() { return (hasUpgrade("aspSpace", 41) || player.aspMind.unlocked) && !inChallenge("aspDoom", 12)  },
+    layerShown() { return (hasUpgrade("aspSpace", 41) || player.aspMind.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12)  },
     resource: "Mind Power",
     baseAmount() { return player.aspSpace.points },
     baseResource: "Space Power",

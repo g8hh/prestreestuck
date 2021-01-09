@@ -3,7 +3,8 @@ function applyPolynomialSoftcap(number, threshold, strength = new Decimal(2)) {
 	number = new Decimal(number)
 	threshold = new Decimal(threshold)
 	strength = new Decimal(strength)
-	return number.gte(threshold) ? number.mul(threshold.pow(strength.sub(1))).root(strength) : number
+	if (number.lt(threshold)) return number
+	return number.mul(threshold.pow(strength.sub(1))).root(strength)
 }
 
 function applyLogapolynomialSoftcap(number, threshold, strength = new Decimal(2)) {

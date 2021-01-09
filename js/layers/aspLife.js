@@ -5,7 +5,7 @@ addLayer("aspLife", {
     position: 1,
     branches: [["skaia", 3]],
 
-    layerShown() { return (hasUpgrade("skaia", 11) || player[this.layer].unlocked) && !inChallenge("aspDoom", 12) },
+    layerShown() { return (hasUpgrade("skaia", 11) || player[this.layer].unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Life Power",
     baseAmount() { return player.points },
     baseResource: "points",
@@ -23,7 +23,7 @@ addLayer("aspLife", {
     },
     effect() {
         var effs = {
-            pointBoost: player.aspLife.points.mul(125).add(1).pow(25).mul(tmp.aspBreath.buyables[26].effect),
+            pointBoost: player.aspLife.points.mul(125).add(1).pow(25).pow(tmp.aspBreath.buyables[26].effect),
             selfBoost: player.aspLife.points.add(1).pow(0.5),
             skaiaGain: player.aspLife.points.add(1).log(10).mul(2)
         }
