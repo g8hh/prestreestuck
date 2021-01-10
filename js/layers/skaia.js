@@ -188,8 +188,8 @@ addLayer("skaia", {
             unlocked() { return player.points.gte("1e2200") && !hasUpgrade(this.layer, this.id) },
         },
         12: {
-            fullDisplay: "<h3>REACH BEYOND THE CIRCLE.</h3><br/>Need " + format("ee413") + " points",
-            canAfford() { return player.points.gte("ee413") },
+            fullDisplay: "<h3>REACH BEYOND THE CIRCLE.</h3><br/>Need " + format("ee216") + " points",
+            canAfford() { return player.points.gte("ee216") },
             pay() {
                 player.phaseTimer = 0
                 player.tab = "none";

@@ -27,12 +27,15 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3",
+	num: "0.0.3.1",
 	name: "Another update yay",
 }
 
 let changelog = `<h1>Changelog</h1><br>
 	<h5 style="opacity:0.5">Tip: Click on a spoiler to reveal it.</h5><br>
+	<h2>v0.0.3.1</h2><br>
+		Reduced the requirements for the meta layer.<br>
+	<br>
 	<h2>v0.0.3</h2><br>
 		<h5 style="opacity:0.5">- Another update yay -</h5>
 		Added a meta aspect layer that mock-ups the previous twelves. You can access it when you completed all of the 12 aspect layers mentioned earlier.<br>
