@@ -27,12 +27,17 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.1",
-	name: "Another update yay",
+	num: "0.0.3.2",
+	name: "I was right",
 }
 
-let changelog = `<h1>Changelog</h1><br>
-	<h5 style="opacity:0.5">Tip: Click on a spoiler to reveal it.</h5><br>
+let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
+	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h2>v0.0.3.2</h2><br>
+		<h5 style="opacity:0.5">- I was right -</h5>
+		One new layer. Updated metadata. <spoiler>Skaia</spoiler> upgrades. Bumped endgame to e1e51,000 points.<br>
+		Note: This update changed the internal for the <spoiler>meta aspect layer</spoiler> to make more consistency with the other <spoiler>meta layers</spoiler>, that means it has to be reseted. You should be able to climb back to where you originally was quick.<br>
+	<br>
 	<h2>v0.0.3.1</h2><br>
 		Reduced the requirements for the meta layer.<br>
 	<br>
@@ -136,7 +141,7 @@ function getPointGen() {
 		if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
 		if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
 	} else {
-		gain = gain.mul(tmp.aspects.effect.pointBoost)
+		gain = gain.mul(tmp.metaAspects.effect.pointBoost)
     }
 
 
@@ -160,7 +165,7 @@ var displayThings = [
 		}
 		if (hasUpgrade("skaia", 12)) rem -= 12;
 		var acts = [
-			["Act 0", "Genesis", rem == 0 ? "Current endgame: " + format("ee220") + " points" : rem + " layers remaining"]
+			["Act 0", "Genesis", rem == 0 ? "Current endgame: " + format("ee51000") + " points" : rem + " layers remaining"]
 		]
 		return `<h2><br/>${acts[player.act][0]}</h2><br/>- ${acts[player.act][1]} -<br/><h5 style='margin-top:5px;opacity:0.5'><i>(${acts[player.act][2]})</i></h5>`
 	}
@@ -168,7 +173,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return hasUpgrade("skaia", 12) && player.points.gte("ee220")
+	return hasUpgrade("skaia", 12) && player.points.gte("ee51000")
 }
 
 

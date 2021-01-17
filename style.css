@@ -40,10 +40,10 @@
 #aspLife:hover { transform: translate(37.50px, -17.40px) scale(1.1, 1.1); }
 #aspDoom { position: absolute; transform: translate(-112.50px, 242.40px); }
 #aspDoom:hover { transform: translate(-112.50px, 242.40px) scale(1.1, 1.1); }
-#aspBreath { position: absolute; transform: translate(-37.50px, -37.50px); }
-#aspBreath:hover { transform: translate(-37.50px, -37.50px) scale(1.1, 1.1); }
-#aspBlood, #aspects { position: absolute; transform: translate(-37.50px, 262.50px); }
-#aspBlood:hover, #aspects:hover { transform: translate(-37.50px, 262.50px) scale(1.1, 1.1); }
+#aspBreath, #metaClasses { position: absolute; transform: translate(-37.50px, -37.50px); }
+#aspBreath:hover, #metaClasses:hover { transform: translate(-37.50px, -37.50px) scale(1.1, 1.1); }
+#aspBlood, #metaAspects { position: absolute; transform: translate(-37.50px, 262.50px); }
+#aspBlood:hover, #metaAspects:hover { transform: translate(-37.50px, 262.50px) scale(1.1, 1.1); }
 
 alternate {
 	font-family: Oblivion;

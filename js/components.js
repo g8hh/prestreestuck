@@ -1,4 +1,4 @@
-var compVer = "0.0.3.1";
+var compVer = "0.0.3.2";
 var app;
 
 function loadVue() {

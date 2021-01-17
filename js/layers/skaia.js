@@ -205,7 +205,7 @@ addLayer("skaia", {
                 player.skaia.boondollars = new Decimal(0)
                 player.subtabs.skaia.stuff = "Meta"
 
-                player.aspects.unlocked = true
+                player.metaAspects.unlocked = true
             },
             unlocked() { return player.points.gte("ee20") && !hasUpgrade(this.layer, this.id) },
         },
@@ -224,6 +224,90 @@ addLayer("skaia", {
             currencyDisplayName: "Boondollars",
             currencyInternalName: "boondollars",
             unlocked() { return hasUpgrade(this.layer, this.id - 1) && !hasUpgrade(this.layer, this.id) },
+        },
+        31: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>THATS NOT VERY CREATIVE</alternate>",
+            description: "Unlocks Classes",
+            cost: new Decimal("ee221"),
+            currencyLocation() { return player},
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return true },
+        },
+        32: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>CLASS POINTS SQUARED</alternate>",
+            description: "You gain Class Points faster based on your points.",
+            cost: new Decimal("ee300"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.points.add(1).log(10).add(1).log(10).sub(299).max(1).pow(2)
+                if (hasUpgrade("skaia", 35)) ret = ret.pow(upgradeEffect("skaia", 35))
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 31) },
+        },
+        33: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>CLASS POINTS CUBED</alternate>",
+            description: "You gain Class Points faster based on your Aspect Points.",
+            cost: Decimal.pow(10, Number.MAX_VALUE),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.metaAspects.points.add(1).log(10).sub(639).max(1).pow(2)
+                if (hasUpgrade("skaia", 36)) ret = ret.pow(upgradeEffect("skaia", 36))
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 31) },
+        },
+        34: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>CLASS POINTS TESSERACTED</alternate>",
+            description: "You gain Class Points faster based on your Class Points.",
+            cost: new Decimal("ee400"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.metaClasses.points.add(1).log(10).add(1).pow(2)
+                if (hasUpgrade("skaia", 37)) ret = ret.pow(upgradeEffect("skaia", 37))
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 31) },
+        },
+        35: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>CLASS POINTS SQUARED SQUARED</alternate>",
+            effect: new Decimal(Math.log(3) / Math.log(2)),
+            description: "Sierpinski triangles (^" + format(Math.log(3) / Math.log(2), 3) + ") the effect of the upgrade above this.",
+            cost: new Decimal("ee925"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 32) && hasUpgrade("skaia", 33) && hasUpgrade("skaia", 34) },
+        },
+        36: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>CLASS POINTS CUBED SQUARED</alternate>",
+            effect: new Decimal(Math.log(4) / Math.log(3)),
+            description: "Koch curves (^" + format(Math.log(4) / Math.log(3), 3) + ") the effect of the upgrade above this.",
+            cost: new Decimal("ee21000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 32) && hasUpgrade("skaia", 33) && hasUpgrade("skaia", 34) },
+        },
+        37: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>CLASS POINTS TESSERACTED SQUARED</alternate>",
+            effect: new Decimal(Math.log(20) / Math.log(3)),
+            description: "Menger sponges (^" + format(Math.log(20) / Math.log(3), 3) + ") the effect of the upgrade above this.",
+            cost: new Decimal("ee12770"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 32) && hasUpgrade("skaia", 33) && hasUpgrade("skaia", 34) },
         },
     },
 
@@ -386,6 +470,12 @@ addLayer("skaia", {
             "Meta": {
                 unlocked: () => hasUpgrade("skaia", 12),
                 content: [
+                    ["blank", "15px"],
+                    ["display-text", () => "Your points are giving you " + format(tmp.skaia.effect.levelGain.mul(60)) + " Echepoints per minute."],
+                    ["blank", "15px"],
+                    ["upgrade", "31"],
+                    ["row", [["upgrade", "32"], ["upgrade", "33"], ["upgrade", "34"]]],
+                    ["row", [["upgrade", "35"], ["upgrade", "36"], ["upgrade", "37"]]],
                 ]
             },
         },

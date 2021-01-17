@@ -1,4 +1,4 @@
-addLayer("aspects", {
+addLayer("metaAspects", {
     name: "Aspects",
     symbol: "<h3 style='color:#e5b9ff;font-size:40px'>A</h3>",
     row: 8,
@@ -11,10 +11,10 @@ addLayer("aspects", {
 
     effect() {
         var effs = {
-            pointBoost: Decimal.pow(player.aspects.points.min(1e9), player.aspects.points.pow(0.5)),
+            pointBoost: Decimal.pow(player.metaAspects.points.min(1e9), player.metaAspects.points.pow(0.5)),
             selfGain: new Decimal(1)
         }
-        for (var a = 1; a <= 12; a++) effs.selfGain = effs.selfGain.mul(tmp.aspects.buyables[a * 10 + 1].effect)
+        for (var a = 1; a <= 12; a++) effs.selfGain = effs.selfGain.mul(tmp.metaAspects.buyables[a * 10 + 1].effect)
         effs.selfGain = effs.selfGain.sub(1)
         return effs
     },
@@ -25,7 +25,7 @@ addLayer("aspects", {
 
     startData() {
         return {
-            unlocked: false,
+            unlocked: true,
             points: new Decimal(1),
             autoBuyerTime: 0,
         }
@@ -35,11 +35,12 @@ addLayer("aspects", {
         rows: 1,
         cols: 1,
         11: {
-            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(10).pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(10).pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -50,11 +51,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal(10).pow(nerf)
-                let growth = new Decimal(10).pow(nerf)
-                let max = Decimal.affordGeometricSeries(player.points, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal(10)
+                let growth = new Decimal(10)
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -66,8 +68,8 @@ addLayer("aspects", {
             }
         },
         12: {
-            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Shards"
@@ -77,7 +79,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(100000)
+                let base = new Decimal(100000).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = 100
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -93,8 +95,8 @@ addLayer("aspects", {
             }
         },
         13: {
-            cost(x) { return new Decimal(100000).pow(x || getBuyableAmount(this.layer, this.id)).mul(10000000) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(100000).pow(x || getBuyableAmount(this.layer, this.id)).mul(10000000).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Essence"
@@ -104,7 +106,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(10000000)
+                let base = new Decimal(10000000).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = 100000
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -120,11 +122,12 @@ addLayer("aspects", {
             }
         },
         21: {
-            cost(x) { return new Decimal("e10000").pow(x || getBuyableAmount(this.layer, this.id)).mul("e100000").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("e10000").pow(x || getBuyableAmount(this.layer, this.id)).mul("e100000").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -135,11 +138,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("e100000").pow(nerf)
-                let growth = new Decimal("e10000").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("e100000")
+                let growth = new Decimal("e10000")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -151,8 +155,8 @@ addLayer("aspects", {
             }
         },
         22: {
-            cost(x) { return new Decimal(1e6).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e16) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e6).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e16).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Space Shards"
@@ -162,7 +166,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e16)
+                let base = new Decimal(1e16).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e6)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -178,8 +182,8 @@ addLayer("aspects", {
             }
         },
         23: {
-            cost(x) { return new Decimal(1e7).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e21) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e7).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e21).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Space Essence"
@@ -189,7 +193,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e21)
+                let base = new Decimal(1e21).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e7)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -205,11 +209,12 @@ addLayer("aspects", {
             }
         },
         31: {
-            cost(x) { return new Decimal("ee14").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee14").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee14").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee14").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -220,11 +225,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee14").pow(nerf)
-                let growth = new Decimal("ee14").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee14")
+                let growth = new Decimal("ee14")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -236,8 +242,8 @@ addLayer("aspects", {
             }
         },
         32: {
-            cost(x) { return new Decimal(1e8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e32) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e32).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mind Shards"
@@ -247,7 +253,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e32)
+                let base = new Decimal(1e32).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e8)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -263,8 +269,8 @@ addLayer("aspects", {
             }
         },
         33: {
-            cost(x) { return new Decimal(1e10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e40) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e40).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mind Essence"
@@ -274,7 +280,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e40)
+                let base = new Decimal(1e40).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e10)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -290,11 +296,12 @@ addLayer("aspects", {
             }
         },
         41: {
-            cost(x) { return new Decimal("ee31").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee32").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee31").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee32").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -305,11 +312,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee32").pow(nerf)
-                let growth = new Decimal("ee31").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee32")
+                let growth = new Decimal("ee31")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -321,8 +329,8 @@ addLayer("aspects", {
             }
         },
         42: {
-            cost(x) { return new Decimal(1e15).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e75) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e15).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e75).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Heart Shards"
@@ -332,7 +340,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e75)
+                let base = new Decimal(1e75).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e15)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -348,8 +356,8 @@ addLayer("aspects", {
             }
         },
         43: {
-            cost(x) { return new Decimal(1e20).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e90) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e20).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e90).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Heart Essence"
@@ -359,7 +367,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e90)
+                let base = new Decimal(1e90).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e20)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -375,11 +383,12 @@ addLayer("aspects", {
             }
         },
         51: {
-            cost(x) { return new Decimal("ee46").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee46").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee45").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee45").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -390,11 +399,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee46").pow(nerf)
-                let growth = new Decimal("ee46").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee45")
+                let growth = new Decimal("ee45")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -406,8 +416,8 @@ addLayer("aspects", {
             }
         },
         52: {
-            cost(x) { return new Decimal(1e18).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e100) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e18).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e100).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hope Shards"
@@ -417,7 +427,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e100)
+                let base = new Decimal(1e100).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e18)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -433,8 +443,8 @@ addLayer("aspects", {
             }
         },
         53: {
-            cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e120) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e120).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hope Essence"
@@ -444,7 +454,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e120)
+                let base = new Decimal(1e120).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e25)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -460,11 +470,12 @@ addLayer("aspects", {
             }
         },
         61: {
-            cost(x) { return new Decimal("ee62").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee63").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee59").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee60").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -475,11 +486,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee63").pow(nerf)
-                let growth = new Decimal("ee62").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee60")
+                let growth = new Decimal("ee59")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -491,8 +503,8 @@ addLayer("aspects", {
             }
         },
         62: {
-            cost(x) { return new Decimal(1e18).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e140) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e18).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e140).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rage Shards"
@@ -502,7 +514,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e140)
+                let base = new Decimal(1e140).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e18)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -518,8 +530,8 @@ addLayer("aspects", {
             }
         },
         63: {
-            cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e160) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e160).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rage Essence"
@@ -529,7 +541,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e160)
+                let base = new Decimal(1e160).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e25)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -545,11 +557,12 @@ addLayer("aspects", {
             }
         },
         71: {
-            cost(x) { return new Decimal("ee85").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee85").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee85").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee85").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -560,11 +573,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee85").pow(nerf)
-                let growth = new Decimal("ee85").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee85")
+                let growth = new Decimal("ee85")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -576,8 +590,8 @@ addLayer("aspects", {
             }
         },
         72: {
-            cost(x) { return new Decimal(1e20).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e185) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e20).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e185).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Light Shards"
@@ -587,7 +601,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e185)
+                let base = new Decimal(1e185).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e20)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -603,8 +617,8 @@ addLayer("aspects", {
             }
         },
         73: {
-            cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e215) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e215).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Light Essence"
@@ -614,7 +628,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e215)
+                let base = new Decimal(1e215).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e25)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -630,11 +644,12 @@ addLayer("aspects", {
             }
         },
         81: {
-            cost(x) { return new Decimal("ee101").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee102").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee101").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee102").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -645,11 +660,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee102").pow(nerf)
-                let growth = new Decimal("ee101").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee102")
+                let growth = new Decimal("ee101")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -661,8 +677,8 @@ addLayer("aspects", {
             }
         },
         82: {
-            cost(x) { return new Decimal(1e20).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e210) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e20).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e210).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Void Shards"
@@ -672,7 +688,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e210)
+                let base = new Decimal(1e210).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e20)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -688,8 +704,8 @@ addLayer("aspects", {
             }
         },
         83: {
-            cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e230) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e230).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Void Essence"
@@ -699,7 +715,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e230)
+                let base = new Decimal(1e230).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e25)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -715,11 +731,12 @@ addLayer("aspects", {
             }
         },
         91: {
-            cost(x) { return new Decimal("ee128").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee128").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee128").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee128").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -730,11 +747,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee128").pow(nerf)
-                let growth = new Decimal("ee128").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee128")
+                let growth = new Decimal("ee128")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -746,8 +764,8 @@ addLayer("aspects", {
             }
         },
         92: {
-            cost(x) { return new Decimal(1e24).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e256) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e24).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e256).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Life Shards"
@@ -757,7 +775,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e256)
+                let base = new Decimal(1e256).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e24)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -773,8 +791,8 @@ addLayer("aspects", {
             }
         },
         93: {
-            cost(x) { return new Decimal(1e32).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e280) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e32).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e280).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Life Essence"
@@ -784,7 +802,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e280)
+                let base = new Decimal(1e280).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e32)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -800,11 +818,12 @@ addLayer("aspects", {
             }
         },
         101: {
-            cost(x) { return new Decimal("ee149").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee150").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee149").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee150").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -815,11 +834,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee150").pow(nerf)
-                let growth = new Decimal("ee149").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee150")
+                let growth = new Decimal("ee149")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -831,8 +851,8 @@ addLayer("aspects", {
             }
         },
         102: {
-            cost(x) { return new Decimal(1e30).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e300) },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e30).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e300).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Doom Shards"
@@ -842,7 +862,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal(1e300)
+                let base = new Decimal(1e300).div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e30)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -858,8 +878,8 @@ addLayer("aspects", {
             }
         },
         103: {
-            cost(x) { return new Decimal(1e35).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e315") },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e35).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e315").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Doom Essence"
@@ -869,7 +889,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal("1e315")
+                let base = new Decimal("1e315").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e35)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -885,11 +905,12 @@ addLayer("aspects", {
             }
         },
         111: {
-            cost(x) { return new Decimal("ee172").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee172").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee172").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee172").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -900,11 +921,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee172").pow(nerf)
-                let growth = new Decimal("ee172").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee172")
+                let growth = new Decimal("ee172")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -916,8 +938,8 @@ addLayer("aspects", {
             }
         },
         112: {
-            cost(x) { return new Decimal(1e35).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e350") },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e35).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e350").div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Breath Shards"
@@ -927,7 +949,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal("1e350")
+                let base = new Decimal("1e350").div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e35)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -943,8 +965,8 @@ addLayer("aspects", {
             }
         },
         113: {
-            cost(x) { return new Decimal(1e40).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e370") },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e40).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e370").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Breath Essence"
@@ -954,7 +976,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal("1e370")
+                let base = new Decimal("1e370").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e40)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -970,11 +992,12 @@ addLayer("aspects", {
             }
         },
         121: {
-            cost(x) { return new Decimal("ee198").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee199").pow(buyableEffect(this.layer, this.id - 1 + 2)) },
+            cost(x) { return new Decimal("ee197").pow(x || getBuyableAmount(this.layer, this.id)).mul("ee198").pow(buyableEffect(this.layer, this.id - 1 + 2)).root(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).root(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1) },
             effect(x) {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
-                return eff
+                for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 4 ** (a ** 2))
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -985,11 +1008,12 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2)
-                let base = new Decimal("ee199").pow(nerf)
-                let growth = new Decimal("ee198").pow(nerf)
-                let max = player.points.div(base).log(growth).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                let base = new Decimal("ee198")
+                let growth = new Decimal("ee197")
+                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
                 let cost = this.cost(max)
+                if (Number.isNaN(max.mag)) return;
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             },
             style() {
@@ -1001,8 +1025,8 @@ addLayer("aspects", {
             }
         },
         122: {
-            cost(x) { return new Decimal(1e40).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e400") },
-            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip() },
+            cost(x) { return new Decimal(1e40).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e400").div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1) },
+            effect(x) { return new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(0.4).recip().div(tmp.metaClasses.buyables[16].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[18].effect[(this.id - 2) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Blood Shards"
@@ -1012,7 +1036,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal("1e400")
+                let base = new Decimal("1e400").div(tmp.metaClasses.buyables[15].effect[(this.id - 2) / 10] || 1).div(tmp.metaClasses.buyables[17].effect[(this.id - 2) / 10] || 1)
                 let growth = new Decimal(1e40)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -1028,8 +1052,8 @@ addLayer("aspects", {
             }
         },
         123: {
-            cost(x) { return new Decimal(1e40).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e420") },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4) },
+            cost(x) { return new Decimal(1e40).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e420").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Blood Essence"
@@ -1039,7 +1063,7 @@ addLayer("aspects", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Aspect Points"
             },
             buy() {
-                let base = new Decimal("1e420")
+                let base = new Decimal("1e420").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1)
                 let growth = new Decimal(1e40)
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -1293,7 +1317,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#55142a", }
                 } else {
                     return {}
                 }
@@ -1308,7 +1332,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#55142a", }
                 } else {
                     return {}
                 }
@@ -1323,7 +1347,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#55142a", }
                 } else {
                     return {}
                 }
@@ -1338,7 +1362,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#55142a", }
                 } else {
                     return {}
                 }
@@ -1353,7 +1377,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#55142a", }
                 } else {
                     return {}
                 }
@@ -1368,7 +1392,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#ffde55", }
                 } else {
                     return {}
                 }
@@ -1383,7 +1407,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#ffde55", }
                 } else {
                     return {}
                 }
@@ -1398,7 +1422,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#ffde55", }
                 } else {
                     return {}
                 }
@@ -1413,7 +1437,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#ffde55", }
                 } else {
                     return {}
                 }
@@ -1428,7 +1452,7 @@ addLayer("aspects", {
             unlocked() { return true },
             style() {
                 if (player.points.gte(this.cost) && !hasUpgrade(this.layer, this.id)) {
-                    return { "background-color": "#00923d", }
+                    return { "background-color": "#ffde55", }
                 } else {
                     return {}
                 }
@@ -2070,14 +2094,14 @@ addLayer("aspects", {
     },
 
     update(delta) {
-        if (hasUpgrade("skaia", 12)) player.aspects.points = player.aspects.points.add(tmp.aspects.effect.selfGain.mul(delta))
+        if (hasUpgrade("skaia", 12)) player.metaAspects.points = player.metaAspects.points.add(tmp.metaAspects.effect.selfGain.mul(delta))
 
         player[this.layer].autoBuyerTime += delta
         if (player[this.layer].autoBuyerTime >= 1) {
             for (var a = 1; a <= 12; a++) {
-                if (hasUpgrade("aspects", a * 10 + 1)) buyBuyable("aspects", a * 10 + 1)
-                if (hasUpgrade("aspects", a * 10 + 3)) buyBuyable("aspects", a * 10 + 2)
-                if (hasUpgrade("aspects", a * 10 + 5)) buyBuyable("aspects", a * 10 + 3)
+                if (hasUpgrade("metaAspects", a * 10 + 1)) buyBuyable("metaAspects", a * 10 + 1)
+                if (hasUpgrade("metaAspects", a * 10 + 3)) buyBuyable("metaAspects", a * 10 + 2)
+                if (hasUpgrade("metaAspects", a * 10 + 5)) buyBuyable("metaAspects", a * 10 + 3)
             }
             player[this.layer].autoBuyerTime = 0
         }
@@ -2089,9 +2113,5 @@ addLayer("aspects", {
         ["blank", "25px"],
         ["microtabs", "stuff"],
         ["blank", "35px"],
-    ],
-
-    hotkeys: [
-        { key: "r", description: "R: Absorb Breath Essence", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
 })

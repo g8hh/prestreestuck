@@ -124,7 +124,7 @@ addLayer("aspLife", {
         1: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>EXTREMELY WONDERFUL COLOR SCHEME</alternate></p>2 Life Power",
             done() { return player[this.layer].best.gte(2) },
-            effectDescription: "Always keeps all of your Light Discoveries have 350 levels or more.",
+            effectDescription: "Keeps 350 levels of each Light Discovery on resets.",
         },
         2: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>NOW WE JUST HAVE TO WAIT</alternate></p>5 Life Power",

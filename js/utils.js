@@ -68,10 +68,11 @@ function sumValues(x) {
 	return x.reduce((a, b) => Decimal.add(a, b))
 }
 
-function format(decimal, precision=2, precision2=3) {
+function format(decimal, precision = 2, precision2 = 3) {
 	decimal = new Decimal(decimal)
 	if (isNaN(decimal.sign)||isNaN(decimal.layer)||isNaN(decimal.mag)) {
 		player.hasNaN = true;
+		// throw new Error();
 		return "NaN"
 	}
 	if (decimal.sign<0) return "-"+format(decimal.neg(), precision)
