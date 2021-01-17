@@ -536,7 +536,7 @@ addLayer("metaClasses", {
             },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
-                return "Muse Power"
+                return "Lord Power"
             },
             display() {
                 var ret = "which are boosting all Active Classes effects based on your Class Points.<br/><br/><h3>Current effects:</h3>"

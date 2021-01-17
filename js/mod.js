@@ -27,12 +27,15 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.2",
+	num: "0.0.3.3",
 	name: "I was right",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h2>v0.0.3.3</h2><br>
+		Fixed having two <spoiler>Muse Powers</spoiler>.<br>
+		Used <span style="font-family:'Courier Prime', monospace">Courier Prime</span> as a fallback font if you somehow don't have Courier New installed on your device.<br>
 	<h2>v0.0.3.2</h2><br>
 		<h5 style="opacity:0.5">- I was right -</h5>
 		One new layer. Updated metadata. <spoiler>Skaia</spoiler> upgrades. Bumped endgame to e1e51,000 points.<br>
