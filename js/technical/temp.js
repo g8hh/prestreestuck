@@ -103,7 +103,7 @@ function updateTemp() {
 
 	var pp = player.points;
 	var lp = tmp.other.lastPoints || new Decimal(0);
-	while (pp.div(lp).log(10).div(diff).gte("100") && tmp.other.oompsMag <= 5) {
+	if (pp.gt(lp)) while (pp.div(lp).log(10).div(diff).gte("100") && tmp.other.oompsMag <= 5 && lp.gt(0)) {
 		pp = pp.log(10)
 		lp = lp.log(10)
 		tmp.other.oomps = pp.sub(lp).div(diff)

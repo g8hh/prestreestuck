@@ -27,21 +27,26 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.3",
+	num: "0.0.3.4",
 	name: "I was right",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
-	<h2>v0.0.3.3</h2><br>
+	<h3>v0.0.3.4</h2><br>
+		Rebalanced the <spoiler>Class Points</spoiler> section.<br>
+		Bumped the endgame requrements to ee81,000 points.<br>
+    <br>
+	<h3>v0.0.3.3</h2><br>
 		Fixed having two <spoiler>Muse Powers</spoiler>.<br>
 		Used <span style="font-family:'Courier Prime', monospace">Courier Prime</span> as a fallback font if you somehow don't have Courier New installed on your device.<br>
+    <br>
 	<h2>v0.0.3.2</h2><br>
 		<h5 style="opacity:0.5">- I was right -</h5>
-		One new layer. Updated metadata. <spoiler>Skaia</spoiler> upgrades. Bumped endgame to e1e51,000 points.<br>
+		One new layer. Updated metadata. <spoiler>Skaia</spoiler> upgrades. Bumped endgame to ee51,000 points.<br>
 		Note: This update changed the internal for the <spoiler>meta aspect layer</spoiler> to make more consistency with the other <spoiler>meta layers</spoiler>, that means it has to be reseted. You should be able to climb back to where you originally was quick.<br>
 	<br>
-	<h2>v0.0.3.1</h2><br>
+	<h3>v0.0.3.1</h3><br>
 		Reduced the requirements for the meta layer.<br>
 	<br>
 	<h2>v0.0.3</h2><br>
@@ -168,7 +173,7 @@ var displayThings = [
 		}
 		if (hasUpgrade("skaia", 12)) rem -= 12;
 		var acts = [
-			["Act 0", "Genesis", rem == 0 ? "Current endgame: " + format("ee51000") + " points" : rem + " layers remaining"]
+			["Act 0", "Genesis", rem == 0 ? "Current endgame: " + format("ee81000") + " points" : rem + " layers remaining"]
 		]
 		return `<h2><br/>${acts[player.act][0]}</h2><br/>- ${acts[player.act][1]} -<br/><h5 style='margin-top:5px;opacity:0.5'><i>(${acts[player.act][2]})</i></h5>`
 	}
@@ -176,7 +181,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return hasUpgrade("skaia", 12) && player.points.gte("ee51000")
+	return hasUpgrade("skaia", 12) && player.points.gte("ee81000")
 }
 
 
@@ -190,5 +195,6 @@ function maxTickLength() {
 
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
-function fixOldSave(oldVersion){
+function fixOldSave(oldVersion) {
+	if (player.tab == "aspects") player.tab = "metaAspects";
 }

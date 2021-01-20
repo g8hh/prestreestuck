@@ -30,7 +30,7 @@ addLayer("metaClasses", {
         rows: 1,
         cols: 4,
         11: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).mul(100000).pow((x || getBuyableAmount(this.layer, this.id))) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).mul(90000).pow((x || getBuyableAmount(this.layer, this.id))) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
@@ -68,7 +68,7 @@ addLayer("metaClasses", {
             }
         },
         12: { 
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(250000).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(200000).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
@@ -106,7 +106,7 @@ addLayer("metaClasses", {
             }
         },
         13: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1000000).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(800000).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
@@ -410,7 +410,7 @@ addLayer("metaClasses", {
             }
         },
         21: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e25).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e23).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
@@ -446,7 +446,7 @@ addLayer("metaClasses", {
             }
         },
         22: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e37).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(2.16e26).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
@@ -486,7 +486,7 @@ addLayer("metaClasses", {
             }
         },
         23: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e45).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e31).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
@@ -522,7 +522,7 @@ addLayer("metaClasses", {
             }
         },
         24: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(6.12e50).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(2.16e51).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
