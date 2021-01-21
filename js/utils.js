@@ -42,7 +42,7 @@ function exponentialFormat(num, precision, mantissa = true) {
 	}
 	if (mantissa)
 		return m.toStringWithDecimalPlaces(precision) + "e" + (e.gte(10000) ? commaFormat(e, 0) : e.toStringWithDecimalPlaces(0))
-	else return "e" + format(e, precision)
+	else return "e" + exponentialFormat(e, 3)
 }
 
 function commaFormat(num, precision) {
@@ -68,10 +68,11 @@ function sumValues(x) {
 	return x.reduce((a, b) => Decimal.add(a, b))
 }
 
-function format(decimal, precision=2, precision2=3) {
+function format(decimal, precision = 2, precision2 = 3) {
 	decimal = new Decimal(decimal)
 	if (isNaN(decimal.sign)||isNaN(decimal.layer)||isNaN(decimal.mag)) {
 		player.hasNaN = true;
+		// throw new Error();
 		return "NaN"
 	}
 	if (decimal.sign<0) return "-"+format(decimal.neg(), precision)
@@ -79,9 +80,16 @@ function format(decimal, precision=2, precision2=3) {
 	if (decimal.gte("eeeee9")) {
 		var slog = decimal.slog()
 		if (slog.gte(1e9)) return "F" + format(slog.floor())
-		else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
+		else return commaFormat(Decimal.pow(10, slog.sub(slog.floor())), precision2) + "F" + commaFormat(slog.floor(), 0)
 	}
-	else if (decimal.gte("ee6")) return exponentialFormat(decimal, 0, false)
+	else if (decimal.gte("ee6")) {
+		var slog = 0;
+		while (decimal.gte(1e6)) {
+			decimal = decimal.log10()
+			slog += 1
+        }
+		return "".padEnd(slog, "e") + commaFormat(decimal, decimal.gte(1000) ? 0 : precision2) 
+	}
 	else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
 	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision2)
 	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)

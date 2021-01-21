@@ -40,10 +40,10 @@
 #aspLife:hover { transform: translate(37.50px, -17.40px) scale(1.1, 1.1); }
 #aspDoom { position: absolute; transform: translate(-112.50px, 242.40px); }
 #aspDoom:hover { transform: translate(-112.50px, 242.40px) scale(1.1, 1.1); }
-#aspBreath { position: absolute; transform: translate(-37.50px, -37.50px); }
-#aspBreath:hover { transform: translate(-37.50px, -37.50px) scale(1.1, 1.1); }
-#aspBlood, #aspects { position: absolute; transform: translate(-37.50px, 262.50px); }
-#aspBlood:hover, #aspects:hover { transform: translate(-37.50px, 262.50px) scale(1.1, 1.1); }
+#aspBreath, #metaClasses { position: absolute; transform: translate(-37.50px, -37.50px); }
+#aspBreath:hover, #metaClasses:hover { transform: translate(-37.50px, -37.50px) scale(1.1, 1.1); }
+#aspBlood, #metaAspects { position: absolute; transform: translate(-37.50px, 262.50px); }
+#aspBlood:hover, #metaAspects:hover { transform: translate(-37.50px, 262.50px) scale(1.1, 1.1); }
 
 alternate {
 	font-family: Oblivion;
@@ -129,7 +129,7 @@ spoiler {
 
 h1, h2, h3, b, input {
 	display: inline;
-	font-family: "Courier New", "Lucida Console", monospace
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace
 }
 
 
@@ -143,7 +143,7 @@ h1, h2, h3, b, input {
 	border-radius: 50%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
-	font-family: "Courier New", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
@@ -159,7 +159,7 @@ h1, h2, h3, b, input {
 	border-radius: 33%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
-	font-family: "Courier New", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
@@ -278,7 +278,7 @@ h1, h2, h3, b, input {
 
 .tabButton {
 	background-color: transparent;
-	font-family: "Courier New", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	color: var(--color);
 	font-size: 20px;
 	cursor: pointer;
@@ -450,7 +450,7 @@ a {
 	font-size: 20px;
 	color: #41f5f5;
 	cursor: pointer;
-	font-family: "Courier New", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	-webkit-text-stroke-width: 1px;
 	-webkit-text-stroke-color: #02f2f2;
 	text-decoration: none;
