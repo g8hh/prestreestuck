@@ -84,7 +84,7 @@ function format(decimal, precision = 2, precision2 = 3) {
 	}
 	else if (decimal.gte("ee6")) {
 		var slog = 0;
-		while (decimal.gte(1e6)) {
+		while (decimal.gte(1e9)) {
 			decimal = decimal.log10()
 			slog += 1
         }

@@ -11,7 +11,7 @@ addLayer("metaAspects", {
 
     effect() {
         var effs = {
-            pointBoost: Decimal.pow(player.metaAspects.points.min(1e9), player.metaAspects.points.pow(0.5)),
+            pointBoost: applyLogapolynomialSoftcap(Decimal.pow(player.metaAspects.points.min(1e9), player.metaAspects.points.pow(0.5)), "ee100000", 2),
             selfGain: new Decimal(1)
         }
         for (var a = 1; a <= 12; a++) effs.selfGain = effs.selfGain.mul(tmp.metaAspects.buyables[a * 10 + 1].effect)
@@ -40,6 +40,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -47,17 +49,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal(10)
-                let growth = new Decimal(10)
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal(10)
+                    let growth = new Decimal(10)
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -127,6 +131,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -134,17 +140,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Space Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("e100000")
-                let growth = new Decimal("e10000")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("e100000")
+                    let growth = new Decimal("e10000")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -214,6 +222,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -221,17 +231,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mind Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee14")
-                let growth = new Decimal("ee14")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee14")
+                    let growth = new Decimal("ee14")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -301,6 +313,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -308,17 +322,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Heart Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee32")
-                let growth = new Decimal("ee31")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee32")
+                    let growth = new Decimal("ee31")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -388,6 +404,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -395,17 +413,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hope Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee45")
-                let growth = new Decimal("ee45")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee45")
+                    let growth = new Decimal("ee45")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -475,6 +495,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -482,17 +504,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rage Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee60")
-                let growth = new Decimal("ee59")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee60")
+                    let growth = new Decimal("ee59")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -562,6 +586,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -569,17 +595,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Light Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee85")
-                let growth = new Decimal("ee85")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee85")
+                    let growth = new Decimal("ee85")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -649,6 +677,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -656,17 +686,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Void Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee102")
-                let growth = new Decimal("ee101")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee102")
+                    let growth = new Decimal("ee101")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -736,6 +768,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -743,17 +777,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Life Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee128")
-                let growth = new Decimal("ee128")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee128")
+                    let growth = new Decimal("ee128")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -823,6 +859,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -830,17 +868,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Doom Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee150")
-                let growth = new Decimal("ee149")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee150")
+                    let growth = new Decimal("ee149")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -910,6 +950,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -917,17 +959,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Breath Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee172")
-                let growth = new Decimal("ee172")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee172")
+                    let growth = new Decimal("ee172")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -997,6 +1041,8 @@ addLayer("metaAspects", {
                 var eff = new Decimal(1).add(x || getBuyableAmount(this.layer, this.id)).pow(buyableEffect(this.layer, this.id - 1 + 3))
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (a * 7), 2)
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 4 ** (a ** 2))
+                eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
+                eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
                 return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
             },
             canAfford() { return player.points.gte(this.cost()) },
@@ -1004,17 +1050,19 @@ addLayer("metaAspects", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Blood Power"
             },
             display() {
-                return "which are boosting your Aspect Point gain by +" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
+                return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " points"
             },
             buy() {
-                let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
-                let base = new Decimal("ee198")
-                let growth = new Decimal("ee197")
-                let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
-                let cost = this.cost(max)
-                if (Number.isNaN(max.mag)) return;
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                if (!hasUpgrade("skaia", 38)) {
+                    let nerf = buyableEffect(this.layer, this.id - 1 + 2).div(tmp.metaClasses.buyables[11].effect[(this.id - 1) / 10] || 1).div(tmp.metaClasses.buyables[14].effect[(this.id - 1) / 10] || 1)
+                    let base = new Decimal("ee198")
+                    let growth = new Decimal("ee197")
+                    let max = player.points.div(base).log(growth).div(nerf).sub(getBuyableAmount(this.layer, this.id)).add(1).max(0).floor()
+                    let cost = this.cost(max)
+                    if (Number.isNaN(max.mag)) return;
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style() {
                 if (this.canAfford()) {
@@ -2105,11 +2153,34 @@ addLayer("metaAspects", {
             }
             player[this.layer].autoBuyerTime = 0
         }
+        if (hasUpgrade("skaia", 38)) {
+            for (var a = 1; a <= 12; a++) {
+                var mult = tmp.metaClasses.buyables[11].effect[a].mul(tmp.metaClasses.buyables[14].effect[a]).div(tmp.metaAspects.buyables[a * 10 + 2].effect)
+                player.metaAspects.buyables[a * 10 + 1] = player.metaAspects.buyables[a * 10 + 1].add(player.metaAspects.points.pow(0.512).mul(mult).mul(delta))
+            }
+        }
+        var uniBonus = hasUpgrade("skaia", 42) ? upgradeEffect("skaia", 42) : 1
+        var uniScale = hasUpgrade("skaia", 46) ? 4 : 0
+        var skaia48eff = hasUpgrade("skaia", 48) ? 4 : 1
+        if (hasUpgrade("skaia", 39)) {
+            for (var a = 1; a <= 12; a++) {
+                var bonus = tmp.metaClasses.buyables[15].effect[a].log(10).add(tmp.metaClasses.buyables[17].effect[a].log("e100"))
+                player.metaAspects.buyables[a * 10 + 2] = player.metaAspects.buyables[a * 10 + 2].max(player.metaAspects.points.log(10 - uniScale).div((a + 1) / 2).add(bonus).mul(uniBonus))
+            }
+        }
+        if (hasUpgrade("skaia", 40)) {
+            for (var a = 1; a <= 12; a++) {
+                var bonus = tmp.metaClasses.buyables[19].effect[a].log("e100").add(tmp.metaClasses.buyables[21].effect[a].log("e100")).mul(skaia48eff)
+                player.metaAspects.buyables[a * 10 + 3] = player.metaAspects.buyables[a * 10 + 3].max(player.metaAspects.points.log(8 - uniScale).div((a + 1) / 2).add(bonus).mul(uniBonus))
+            }
+        }
     },
 
     tabFormat: [
         "main-display",
         "prestige-button",
+        ["blank", "25px"],
+        ["display-text", () => "You are getting " + format(tmp.metaAspects.effect.selfGain) + " Aspect Points per second."],
         ["blank", "25px"],
         ["microtabs", "stuff"],
         ["blank", "35px"],

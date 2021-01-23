@@ -1,4 +1,4 @@
-var systemVer = "0.0.3.4";
+var systemVer = "0.0.3.5";
 
 var systemComponents = {
 	'tab-buttons': {

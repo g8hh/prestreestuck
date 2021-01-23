@@ -27,12 +27,17 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.4",
+	num: "0.0.3.5",
 	name: "I was right",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.3.5</h2><br>
+		Added more <spoiler>Skaia upgrades</spoiler>.<br>
+		Bumped endgame to ee16,000,000 (note: the <spoiler>Unlock Prospit/Derse</spoiler> upgrades currently does nothing).<br>
+		Note: your <spoiler>Aspect and Class layers</spoiler> will be reset if you have more than ee100,000 points due to inflation. You still have your ee100,000 points though, so climbing back shouldn't be a problem.<br>
+    <br>
 	<h3>v0.0.3.4</h2><br>
 		Rebalanced the <spoiler>Class Points</spoiler> section.<br>
 		Bumped the endgame requrements to ee81,000 points.<br>
@@ -173,7 +178,7 @@ var displayThings = [
 		}
 		if (hasUpgrade("skaia", 12)) rem -= 12;
 		var acts = [
-			["Act 0", "Genesis", rem == 0 ? "Current endgame: " + format("ee81000") + " points" : rem + " layers remaining"]
+			["Act 0", "Genesis", rem == 0 ? "Current endgame: " + format("ee16000000") + " points" : rem + " layers remaining"]
 		]
 		return `<h2><br/>${acts[player.act][0]}</h2><br/>- ${acts[player.act][1]} -<br/><h5 style='margin-top:5px;opacity:0.5'><i>(${acts[player.act][2]})</i></h5>`
 	}
@@ -181,7 +186,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return hasUpgrade("skaia", 12) && player.points.gte("ee81000")
+	return hasUpgrade("skaia", 12) && player.points.gte("ee16000000")
 }
 
 
@@ -196,5 +201,13 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion) {
+	console.log("Loaded old version from" + oldVersion)
 	if (player.tab == "aspects") player.tab = "metaAspects";
+	if (oldVersion <= "0.0.3.4" && player.points.gte("ee100000")) {
+		player.points = new Decimal("ee100000");
+		player.skaia.points = new Decimal(0);
+		player.skaia.level = new Decimal(1);
+		layerDataReset("metaAspects");
+		layerDataReset("metaClasses");
+    }
 }
