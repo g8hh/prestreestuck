@@ -1,4 +1,4 @@
-var compVer = "0.0.3.5";
+var compVer = "0.0.3.6";
 var app;
 
 function loadVue() {
@@ -412,6 +412,24 @@ function loadVue() {
 			<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellAll && !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false)" v-on:click="run(tmp[layer].buyables[data].sellAll, tmp[layer].buyables[data])"
 				v-bind:class="{ longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked }">{{tmp[layer].buyables.sellAllText ? tmp[layer].buyables.sellAllText : "Sell All"}}</button>
 	`
+	})
+
+	Vue.component('signs-holder', {
+		props: ['layer', 'data'],
+		computed: {
+			key() { return this.$vnode.key }
+		},
+		template: `
+		<div class="instant" style="width:516px;height:516px;overflow:scroll;scrollbar-width:none;">
+			<div style="height:1200px;margin:0;" v-bind:style="{'width': 1200 + (hasUpgrade('skaia', 55) ? 300 : 0) + (hasUpgrade('skaia', 60) ? 100 : 0) + 'px'}">
+				<div v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
 	})
 
 

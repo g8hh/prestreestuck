@@ -1,21 +1,26 @@
 addLayer("metaAspects", {
     name: "Aspects",
-    symbol: "<h3 style='color:#e5b9ff;font-size:40px'>A</h3>",
+    symbol: "A",
     row: 8,
     position: 0,
 
     layerShown() { return hasUpgrade("skaia", 12) },
     resource: "Aspect Points",
-    color: "#2e0149",
+    color: "#e5b9ff",
     type: "none",
 
     effect() {
         var effs = {
             pointBoost: applyLogapolynomialSoftcap(Decimal.pow(player.metaAspects.points.min(1e9), player.metaAspects.points.pow(0.5)), "ee100000", 2),
-            selfGain: new Decimal(1)
+            selfGain: new Decimal(1),
+            globalPowerBoost: new Decimal(1),
         }
         for (var a = 1; a <= 12; a++) effs.selfGain = effs.selfGain.mul(tmp.metaAspects.buyables[a * 10 + 1].effect)
         effs.selfGain = effs.selfGain.sub(1)
+
+        if (hasMilestone("metaProspit", 1)) effs.globalPowerBoost = effs.globalPowerBoost.mul(tmp.metaProspit.milestones[1].effect)
+        if (hasMilestone("metaDerse", 1)) effs.globalPowerBoost = effs.globalPowerBoost.mul(tmp.metaDerse.milestones[1].effect)
+
         return effs
     },
     effectDescription() {
@@ -42,7 +47,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -100,7 +105,7 @@ addLayer("metaAspects", {
         },
         13: {
             cost(x) { return new Decimal(100000).pow(x || getBuyableAmount(this.layer, this.id)).mul(10000000).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Essence"
@@ -133,7 +138,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -191,7 +196,7 @@ addLayer("metaAspects", {
         },
         23: {
             cost(x) { return new Decimal(1e7).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e21).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Space Essence"
@@ -224,7 +229,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -282,7 +287,7 @@ addLayer("metaAspects", {
         },
         33: {
             cost(x) { return new Decimal(1e10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e40).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mind Essence"
@@ -315,7 +320,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -373,7 +378,7 @@ addLayer("metaAspects", {
         },
         43: {
             cost(x) { return new Decimal(1e20).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e90).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Heart Essence"
@@ -406,7 +411,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -464,7 +469,7 @@ addLayer("metaAspects", {
         },
         53: {
             cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e120).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hope Essence"
@@ -497,7 +502,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -555,7 +560,7 @@ addLayer("metaAspects", {
         },
         63: {
             cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e160).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rage Essence"
@@ -588,7 +593,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -646,7 +651,7 @@ addLayer("metaAspects", {
         },
         73: {
             cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e215).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Light Essence"
@@ -679,7 +684,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -737,7 +742,7 @@ addLayer("metaAspects", {
         },
         83: {
             cost(x) { return new Decimal(1e25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e230).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Void Essence"
@@ -770,7 +775,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -828,7 +833,7 @@ addLayer("metaAspects", {
         },
         93: {
             cost(x) { return new Decimal(1e32).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e280).div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Life Essence"
@@ -861,7 +866,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -919,7 +924,7 @@ addLayer("metaAspects", {
         },
         103: {
             cost(x) { return new Decimal(1e35).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e315").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Doom Essence"
@@ -952,7 +957,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 2)
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -1010,7 +1015,7 @@ addLayer("metaAspects", {
         },
         113: {
             cost(x) { return new Decimal(1e40).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e370").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Breath Essence"
@@ -1043,7 +1048,7 @@ addLayer("metaAspects", {
                 for (var a = 1; a <= 8; a++) eff = applyPolynomialSoftcap(eff, "e" + (100 * a ** 2), 4 ** (a ** 2))
                 eff = applyLogapolynomialSoftcap(eff, "e25000", 2)
                 eff = applyLogapolynomialSoftcap(eff, "e500000", 4)
-                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10])
+                return eff.mul(tmp.metaClasses.buyables[12].effect[(this.id - 1) / 10]).mul(tmp.metaClasses.buyables[13].effect[(this.id - 1) / 10]).mul(tmp.metaAspects.effect.globalPowerBoost)
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
@@ -1101,7 +1106,7 @@ addLayer("metaAspects", {
         },
         123: {
             cost(x) { return new Decimal(1e40).pow(x || getBuyableAmount(this.layer, this.id)).mul("1e420").div(tmp.metaClasses.buyables[19].effect[(this.id - 3) / 10] || 1).div(tmp.metaClasses.buyables[21].effect[(this.id - 3) / 10] || 1) },
-            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1) },
+            effect(x) { return new Decimal(1).add((x || getBuyableAmount(this.layer, this.id).div(2))).pow(0.4).mul(tmp.metaClasses.buyables[20].effect[(this.id - 3) / 10] || 1).mul(tmp.metaClasses.buyables[22].effect[(this.id - 3) / 10] || 1).mul(tmp.metaProspit.buyables[(this.id - 3) / 10 + 10].effect).mul(tmp.metaDerse.buyables[(this.id - 3) / 10 + 10].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Blood Essence"
@@ -2165,13 +2170,13 @@ addLayer("metaAspects", {
         if (hasUpgrade("skaia", 39)) {
             for (var a = 1; a <= 12; a++) {
                 var bonus = tmp.metaClasses.buyables[15].effect[a].log(10).add(tmp.metaClasses.buyables[17].effect[a].log("e100"))
-                player.metaAspects.buyables[a * 10 + 2] = player.metaAspects.buyables[a * 10 + 2].max(player.metaAspects.points.log(10 - uniScale).div((a + 1) / 2).add(bonus).mul(uniBonus))
+                player.metaAspects.buyables[a * 10 + 2] = player.metaAspects.buyables[a * 10 + 2].max(player.metaAspects.points.log(10 - uniScale).div((a + 1) / 2).add(bonus).mul(uniBonus).mul(a == 1 && hasUpgrade("skaia", 54) ? 2 : 1))
             }
         }
         if (hasUpgrade("skaia", 40)) {
             for (var a = 1; a <= 12; a++) {
                 var bonus = tmp.metaClasses.buyables[19].effect[a].log("e100").add(tmp.metaClasses.buyables[21].effect[a].log("e100")).mul(skaia48eff)
-                player.metaAspects.buyables[a * 10 + 3] = player.metaAspects.buyables[a * 10 + 3].max(player.metaAspects.points.log(8 - uniScale).div((a + 1) / 2).add(bonus).mul(uniBonus))
+                player.metaAspects.buyables[a * 10 + 3] = player.metaAspects.buyables[a * 10 + 3].max(player.metaAspects.points.log(8 - uniScale).div((a + 1) / 2).add(bonus).mul(uniBonus).mul(a == 1 && hasUpgrade("skaia", 54) ? 2 : 1))
             }
         }
     },

@@ -27,12 +27,19 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.5",
-	name: "I was right",
+	num: "0.0.3.6",
+	name: "Massive Slowdown",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h2>v0.0.3.6</h2><br>
+		<h5 style="opacity:0.5">- Massive Slowdown -</h5>
+		Added two new layers, each has over 144(!) new things that you can buy. Gosh that will be very laggy.<br>
+		More <spoiler>Skaia upgrades</spoiler> becuase why not?<br>
+		Decided not to bump the endgame because I accidently bumped it too much. Content should span until you get your first <spoiler>Gold sign</spoiler> in the new two layers.<br>
+		<h5 style="opacity:0.5"><br/><spoiler>(also the title of the new 244 "things" might not be trully accurate to their actual Homestuck-canony-thingy names so i guess you can report it to me if you want to fix something idk oh well)</spoiler></h5>
+	<br>
 	<h3>v0.0.3.5</h2><br>
 		Added more <spoiler>Skaia upgrades</spoiler>.<br>
 		Bumped endgame to ee16,000,000 (note: the <spoiler>Unlock Prospit/Derse</spoiler> upgrades currently does nothing).<br>

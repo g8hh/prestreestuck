@@ -3,7 +3,7 @@
 	<link rel="shortcut icon" href="data/favicon.png" />
 
 	<title>The Prestreestuck</title>
-	<meta name="description" content="When you try to mix Homestuck with The Prestige Tree together. 15 layers and very huge numbers. Don't say we didn't warn you.">
+	<meta name="description" content="When you try to mix Homestuck with The Prestige Tree together. 17 layers and very huge numbers. Don't say we didn't warn you.">
 
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<link rel="stylesheet" type="text/css" href="popup.css" />
@@ -33,6 +33,8 @@
 
 	<script type="text/javascript" src="js/layers/metaAspects.js"></script>
 	<script type="text/javascript" src="js/layers/metaClasses.js"></script>
+	<script type="text/javascript" src="js/layers/metaProspit.js"></script>
+	<script type="text/javascript" src="js/layers/metaDerse.js"></script>
 
 	<script type="text/javascript" src="js/technical/temp.js"></script>
 	<script type="text/javascript" src="js/game.js"></script>
@@ -42,13 +44,14 @@
 
 </head>
 <body onload="load()">
+
 	<div id="app">
 		<canvas id="treeCanvas" class="canvas" v-if="!(gameEnded && !player.keepGoing)"></canvas>
 
 		<div v-if="false" id="loadingSection" class="fullWidth" style="z-index:2147483647;background-color:var(--background)">
 			<div>
 				<h1>The Prestreestuck</h1><br />
-				<h2>v0.0.3.5</h2>
+				<h2>v0.0.3.6</h2>
 			</div>
 			<div>
 				<h3>Loading...</h3>
@@ -60,14 +63,14 @@
 		</div>
 		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.screenWidth >= 1000 && player.tab!='none' && !(gameEnded && !player.keepGoing)"></div>
 
-		<div v-if="VERSION.num != '0.0.3.5' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
+		<div v-if="VERSION.num != '0.0.3.6' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
 			<br>
 			<h2>The game is currently being updated.</h2><br />
 			If you can see this message, that means the game has detected inconsistent version number between files.<br />
 			This can be caused by the website currently being updated and not ready yet or there is an error causing the files to be read incorrectly.<br />
 			Please try again later, or if this screen has been up for more than 30 minutes, please contact the mod author.<br />
 			<br>
-			index.js version: 0.0.3.5<br />
+			index.js version: 0.0.3.6<br />
 			mod.js version: {{VERSION.num}}<br />
 			game.js version: {{gameVer}}<br />
 			components.js version: {{compVer}}<br />

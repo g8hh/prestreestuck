@@ -1,12 +1,12 @@
 addLayer("metaClasses", {
     name: "Classes",
-    symbol: "<h3 style='color:#cfc4ff;font-size:40px'>C</h3>",
+    symbol: "C",
     row: 8,
     position: 1,
 
     layerShown() { return hasUpgrade("skaia", 31) },
     resource: "Class Points",
-    color: "#020d65",
+    color: "#cfc4ff",
     type: "none",
 
     startData() {
@@ -23,7 +23,12 @@ addLayer("metaClasses", {
         if (hasUpgrade("skaia", 32)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[32].effect)
         if (hasUpgrade("skaia", 33)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[33].effect)
         if (hasUpgrade("skaia", 34)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[34].effect)
+        if (hasUpgrade("skaia", 51)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[51].effect)
+        if (hasUpgrade("skaia", 58) && !hasUpgrade("skaia", 64)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[58].effect)
+        if (hasMilestone("metaProspit", 0)) eff.pointGain = eff.pointGain.mul(tmp.metaProspit.milestones[0].effect)
+        if (hasMilestone("metaDerse", 0)) eff.pointGain = eff.pointGain.mul(tmp.metaDerse.milestones[0].effect)
         eff.pointGain = applyPolynomialSoftcap(eff.pointGain, "e100", 2)
+        if (hasUpgrade("skaia", 58) && hasUpgrade("skaia", 64)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[58].effect)
         return eff
     },
 
@@ -62,7 +67,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -100,7 +105,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -136,7 +141,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -172,7 +177,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -210,7 +215,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -246,7 +251,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -284,7 +289,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -322,7 +327,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -361,7 +366,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -404,7 +409,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -440,7 +445,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -480,14 +485,14 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
             }
         },
         23: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e31).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(3)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e31).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2.325)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
@@ -516,14 +521,14 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "width": "250px", "color": "white" }
+                    return { "height": "320px", "width": "250px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px", "width": "250px" }
                 }
             }
         },
         24: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(2.16e51).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(3)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(2.16e51).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2.325)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
@@ -552,7 +557,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "width": "250px", "color": "white" }
+                    return { "height": "320px", "width": "250px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px", "width": "250px" }
                 }
@@ -583,7 +588,7 @@ addLayer("metaClasses", {
 
     tabFormat: [
         "main-display",
-        ["display-text", () => "All of your Class Powers are giving you " + format(tmp[this.layer].effect.pointGain) + " Class Points per second."],
+        ["display-text", () => "All of your Class Powers are giving you " + format(tmp.metaClasses.effect.pointGain) + " Class Points per second."],
         "prestige-button",
         ["blank", "35px"],
         ["microtabs", "stuff"],

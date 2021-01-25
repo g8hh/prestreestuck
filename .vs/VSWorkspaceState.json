@@ -4,9 +4,8 @@
     "\\data",
     "\\js",
     "\\js\\Demo",
-    "\\js\\layers",
-    "\\js\\technical"
+    "\\js\\layers"
   ],
-  "SelectedNode": "\\js\\layers\\skaia.js",
+  "SelectedNode": "\\js\\components.js",
   "PreviewInSolutionExplorer": false
 }

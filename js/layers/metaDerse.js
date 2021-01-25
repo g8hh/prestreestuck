@@ -1,36 +1,28 @@
-var prospitSigns = [
-    /*          | Time      | Space    | Mind     | Heart    | Hope       | Rage       | Light     | Void          | Life      | Doom       | Breath   | Blood      */
-    /* Rust    */ "Arist",    "Argo",    "Arra",    "Arlo",    "Arnius",    "Aricorn",   "Arpio",    "Arittanius",   "Arsci",    "Armino",    "Arus",    "Arcer",
-    /* Bronze  */ "Taurist",  "Taurgo",  "Taurra",  "Taurlo",  "Taurnius",  "Tauricorn", "Taurpio",  "Taurittanius", "Taursci",  "Taurmino",  "Taurus",  "Taurcer",
-    /* Gold    */ "Gemrist",  "Gemgo",   "Gemra",   "Gemlo",   "Gemnius",   "Gemicorn",  "Gempio",   "Gemittanius",  "Gemsci",   "Gemino",    "Gemus",   "Gemcer",
-    /* Lime    */ "Canrist",  "Cango",   "Canra",   "Canlo",   "Cannius",   "Canicorn",  "Canpio",   "Canittanius",  "Cansci",   "Camino",    "Canus",   "Cancer", // <--- hold up a sec
-    /* Olive   */ "Lerist",   "Lego",    "Lera",    "Lelo",    "Lenius",    "Leicorn",   "Lepio",    "Leittanius",   "Lesci",    "Lemino",    "Leus",    "Lecer",
-    /* Jade    */ "Virist",   "Virgo",   "Virra",   "Virlo",   "Virnius",   "Viricorn",  "Virpio",   "Virittanius",  "Virsci",   "Virmino",   "Virus",   "Vircer",
-    /* Teal    */ "Librist",  "Ligo",    "Libra",   "Liblo",   "Libnius",   "Libicorn",  "Lipio",    "Libittanius",  "Libsci",   "Limino",    "Libus",   "Licer",
-    /* Blue    */ "Scorist",  "Scorgo",  "Scorra",  "Scorlo",  "Scornius",  "Scoricorn", "Scorpio",  "Scorittanius", "Scorsci",  "Scormino",  "Scorus",  "Scorcer",
-    /* Indigo  */ "Sagirist", "Sagigo",  "Sagira",  "Sagilo",  "Saginius",  "Sagicorn",  "Sagipio",  "Sagittanius",  "Sagisci",  "Sagimino",  "Sagius",  "Sagicer",
-    /* Purple  */ "Caprist",  "Caprigo", "Caprira", "Caprilo", "Caprinius", "Capricorn", "Capripio", "Caprittanius", "Caprisci", "Caprimino", "Caprius", "Capricer",
-    /* Violet  */ "Aquarist", "Aquago",  "Aquara",  "Aqualo",  "Aquanius",  "Aquicorn",  "Aquapio",  "Aquittanius",  "Aquasci",  "Aquamino",  "Aquius",  "Aquacer",
-    /* Fuchsia */ "Pirist",   "Pigo",    "Pira",    "Pilo",    "Pinius",    "Picorn",    "Pipio",    "Pittanius",    "Pisci",    "Pimino",    "Pius",    "Picer",
+var derseSigns = [
+    /*          | Time      | Space    | Mind     | Heart    | Hope       | Rage       | Light     | Void          | Life       | Doom       | Breath   | Blood      */
+    /* Rust    */ "Aries",    "Arga",    "Arza",    "Aro",     "Arrius",    "Ariborn",   "Arpia",    "Arittarius",   "Arsces",    "Armini",    "Arun",    "Arcen",
+    /* Bronze  */ "Tauries",  "Taurga",  "Taurza",  "Tauro",   "Taurrius",  "Tauriborn", "Taurpia",  "Taurittarius", "Taursces",  "Taurmini",  "Taurun",  "Taurcen",
+    /* Gold    */ "Gemries",  "Gemga",   "Gemza",   "Gemo",    "Gemrius",   "Gemiborn",  "Gempia",   "Gemittarius",  "Gemsces",   "Gemini",    "Gemun",   "Gemcen",
+    /* Lime    */ "Canries",  "Canga",   "Canza",   "Cano",    "Canrius",   "Caniborn",  "Canpia",   "Canittarius",  "Cansces",   "Camini",    "Canun",   "Cancen",
+    /* Olive   */ "Leries",   "Lega",    "Leza",    "Leo",     "Lerius",    "Leiborn",   "Lepia",    "Leittarius",   "Lesces",    "Lemini",    "Leun",    "Lecen",
+    /* Jade    */ "Viries",   "Virga",   "Virza",   "Viro",    "Virrius",   "Viriborn",  "Virpia",   "Virittarius",  "Virsces",   "Virmini",   "Virun",   "Vircen",
+    /* Teal    */ "Libries",  "Liga",    "Libza",   "Libo",    "Librius",   "Libiborn",  "Lipia",    "Libittarius",  "Libsces",   "Limini",    "Libun",   "Licen",
+    /* Blue    */ "Scories",  "Scorga",  "Scorza",  "Scoro",   "Scorrius",  "Scoriborn", "Scorpia",  "Scorittarius", "Scorsces",  "Scormini",  "Scorun",  "Scorcen",
+    /* Indigo  */ "Sagiries", "Sagiga",  "Sagiza",  "Sagio",   "Sagirius",  "Sagiborn",  "Sagipia",  "Sagittarius",  "Sagisces",  "Sagimini",  "Sagiun",  "Sagicen",
+    /* Purple  */ "Capries",  "Capriga", "Capriza", "Caprio",  "Capririus", "Capriborn", "Capripia", "Caprittarius", "Caprisces", "Caprimini", "Capriun", "Capricen",
+    /* Violet  */ "Aquaries", "Aquaga",  "Aquaza",  "Aquo",    "Aquarius",  "Aquiborn",  "Aquapia",  "Aquittarius",  "Aquasces",  "Aquamini",  "Aquiun",  "Aquacen",
+    /* Fuchsia */ "Piries",   "Piga",    "Piza",    "Pio",     "Pirius",    "Piborn",    "Pipia",    "Pittarius",    "Pisces",    "Pimini",    "Piun",    "Picen",
 ]
 
-function getHemospectrumName(pos) {
-    return ["Rust", "Bronze", "Gold", "Lime", "Olive", "Jade", "Teal", "Blue", "Indigo", "Purple", "Violet", "Fuchsia"][pos]
-}
-
-function getHemospectrum(pos) {
-    return ["#c91a00", "#c97800", "#b1ad00", "#99b81e", "#598a00", "#00a862", "#00a0a6", "#00528b", "#0046e9", "#60219b", "#9d229b", "#a71b5b"][pos]
-}
-
-addLayer("metaProspit", {
-    name: "Prospit",
-    symbol: "P",
+addLayer("metaDerse", {
+    name: "Derse",
+    symbol: "D",
     row: 10,
     position: 1,
 
     layerShown() { return hasUpgrade("skaia", 31) && hasUpgrade("skaia", 49) },
-    resource: "Prospit Points",
-    color: "#ffff01",
+    resource: "Derse Points",
+    color: "#ff40fe",
 
     type: "static",
     baseResource: "Class Points",
@@ -53,8 +45,8 @@ addLayer("metaProspit", {
             popGain: player[this.layer].points.pow(player[this.layer].points.mul(3).sqrt()),
         }
 
-        if (hasUpgrade("skaia", 56)) e.popGain = e.popGain.mul(player.metaDerse.population.add(1).log(10).add(1))
-        if (hasUpgrade("skaia", 57)) e.popGain = e.popGain.mul(player.metaDerse.points.add(1).pow(2.5))
+        if (hasUpgrade("skaia", 56)) e.popGain = e.popGain.mul(player.metaProspit.population.add(1).log(10).add(1))
+        if (hasUpgrade("skaia", 57)) e.popGain = e.popGain.mul(player.metaProspit.points.add(1).pow(2.5))
         if (hasUpgrade("skaia", 59)) e.popGain = e.popGain.mul(player[this.layer].population.add(1).log(10).add(1).pow(1.2))
         if (hasUpgrade("skaia", 61)) e.popGain = e.popGain.mul(tmp.skaia.upgrades[61].effect)
 
@@ -62,7 +54,7 @@ addLayer("metaProspit", {
     },
     effectDescription() {
         eff = this.effect();
-        return "which are giving you " + format(eff.popGain) + " Prospitians per second."
+        return "which are giving you " + format(eff.popGain) + " Dersites per second."
     },
 
     startData() {
@@ -80,18 +72,18 @@ addLayer("metaProspit", {
             var index = 11 + (sign - 0)
             c[index] = {}
             c[index].title = function () {
-                return format(getBuyableAmount("metaProspit", this.id), 0) + "<br/>" + prospitSigns[this.id - 11]
+                return format(getBuyableAmount("metaDerse", this.id), 0) + "<br/>" + derseSigns[this.id - 11]
             }
             c[index].display = function () {
-                var bought = getBuyableAmount("metaProspit", this.id).gt(0)
+                var bought = getBuyableAmount("metaDerse", this.id).gt(0)
                 return bought ? "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to<br/>" +
-                    (this.id < 23 ? ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"][this.id - 11] + " Essence" : prospitSigns[this.id - 23] + " gain") + "."
-                    : "Cost: " + format(this.cost) + " Prospitians"
+                    (this.id < 23 ? ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"][this.id - 11] + " Essence" : derseSigns[this.id - 23] + " gain") + "."
+                    : "Cost: " + format(this.cost) + " Dersites"
             }
             c[index].cost = cost
             c[index].style = function () {
-                var bought = getBuyableAmount("metaProspit", this.id).gt(0)
-                var hc = getHemospectrum(Math.floor((this.id - 11) / 12))
+                var bought = getBuyableAmount("metaDerse", this.id).gt(0)
+                var hc = this.id == 58 ? "#adabac" : getHemospectrum(Math.floor((this.id - 11) / 12))
                 return {
                     "width": "100px", "height": "100px", "margin": "0", "font-size": "50%",
                     "color": bought ? hc : "",
@@ -127,8 +119,8 @@ addLayer("metaProspit", {
             }
             c[index].display = function () {
                 var obj = tmp[this.layer].buyables[this.id]
-                return "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to all<br/>" +
-                    getHemospectrumName(this.id - 156) + " sign gains<br/>Requires: " + format(this.cost()) + " Prospitians"
+                return"which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to all<br/>" +
+                    getHemospectrumName(this.id - 156) + " sign gains<br/>Requires: " + format(this.cost()) + " Dersites"
             }
             c[index].baseCost = cost
             c[index].cost = function () {
@@ -158,18 +150,16 @@ addLayer("metaProspit", {
 
             cost = cost.mul(1.5 ** ((a + 1) ** 2.25 * 6))
         }
-
         return c;
     })(),
-
     milestones: (() => {
-        var m = {  }
+        var m = {}
         var cost = new Decimal(25)
         for (var index = 0; index < 12; index++) {
             m[index] = {}
             m[index].unlocked = () => hasUpgrade("skaia", 55)
             m[index].requirementDescription = function () {
-                return "<h3 style='font-size:12px'>Prospitian " + getHemospectrumName(this.id) + " Symphony</h3>"
+                return "<h3 style='font-size:12px'>Dersite " + getHemospectrumName(this.id) + " Symphony</h3>"
             }
             m[index].done = function () {
                 for (var a = this.id * 12 + 11; a < this.id * 12 + 23; a++) if (getBuyableAmount(this.layer, a).lte(0)) return false
@@ -210,17 +200,17 @@ addLayer("metaProspit", {
                 ][this.id]
                 return eff
             },
-            m[index].style = function () {
-                var owned = hasMilestone(this.layer, this.id)
-                var hc = getHemospectrum(this.id)
-                return {
-                    "width": "296px", "height": "96px", "margin": "0", "padding": "0", "border-radius": "25px 0 0 25px", "font-size": "60%", "vertical-align": "middle",
-                    "border": owned ? "2px solid " + hc + "3f" : "2px solid #0000002f",
-                    "color": owned ? "#000000af" : "",
-                    "background-color": owned ? hc + "af" : "",
-                    "box-shadow": owned ? "inset 0 0 25px " + hc : "",
+                m[index].style = function () {
+                    var owned = hasMilestone(this.layer, this.id)
+                    var hc = getHemospectrum(this.id)
+                    return {
+                        "width": "296px", "height": "96px", "margin": "0", "padding": "0", "border-radius": "25px 0 0 25px", "font-size": "60%", "vertical-align": "middle",
+                        "border": owned ? "2px solid " + hc + "3f" : "2px solid #0000002f",
+                        "color": owned ? "#000000af" : "",
+                        "background-color": owned ? hc + "af" : "",
+                        "box-shadow": owned ? "inset 0 0 25px " + hc : "",
+                    }
                 }
-            }
         }
         return m;
     })(),
@@ -264,7 +254,7 @@ addLayer("metaProspit", {
         "main-display",
         "prestige-button",
         ["blank", "15px"],
-        ["display-text", () => "Prospit is currently having <h2 style='color:#ffff01;text-shadow:#ffff01 0 0 10px'>" + formatWhole(player.metaProspit.population) + "</h2> Prospitians."],
+        ["display-text", () => "Derse is currently having <h2 style='color:#ff40fe;text-shadow:#ff40fe 0 0 10px'>" + formatWhole(player.metaDerse.population) + "</h2> Dersites."],
         ["blank", "15px"],
         ["microtabs", "stuff"],
         ["blank", "35px"],
