@@ -172,6 +172,7 @@ addLayer("metaProspit", {
                 return "<h3 style='font-size:12px'>Prospitian " + getHemospectrumName(this.id) + " Symphony</h3>"
             }
             m[index].done = function () {
+                if (!hasUpgrade("skaia", 55)) return false;
                 for (var a = this.id * 12 + 11; a < this.id * 12 + 23; a++) if (getBuyableAmount(this.layer, a).lte(0)) return false
                 return true
             }
@@ -215,6 +216,7 @@ addLayer("metaProspit", {
                 var hc = getHemospectrum(this.id)
                 return {
                     "width": "296px", "height": "96px", "margin": "0", "padding": "0", "border-radius": "25px 0 0 25px", "font-size": "60%", "vertical-align": "middle",
+                    "display": hasUpgrade("skaia", 55) ? "" : "none", 
                     "border": owned ? "2px solid " + hc + "3f" : "2px solid #0000002f",
                     "color": owned ? "#000000af" : "",
                     "background-color": owned ? hc + "af" : "",
