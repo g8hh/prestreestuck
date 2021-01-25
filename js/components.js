@@ -1,4 +1,4 @@
-var compVer = "0.0.3.6.2";
+var compVer = "0.0.3.6.3";
 var app;
 
 function loadVue() {
@@ -420,7 +420,7 @@ function loadVue() {
 			key() { return this.$vnode.key }
 		},
 		template: `
-		<div class="instant" style="width:516px;height:516px;overflow:scroll;scrollbar-width:none;">
+		<div class="instant" style="width:516px;height:516px;overflow:scroll;">
 			<div style="height:1200px;margin:0;" v-bind:style="{'width': 1200.001 + (hasUpgrade('skaia', 55) ? 300 : 0) + (hasUpgrade('skaia', 60) ? 100 : 0) + 'px'}">
 				<div v-for="(item, index) in data">
 					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
