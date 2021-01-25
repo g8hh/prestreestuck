@@ -20,7 +20,7 @@ addLayer("metaDerse", {
     row: 10,
     position: 1,
 
-    layerShown() { return hasUpgrade("skaia", 31) && hasUpgrade("skaia", 49) },
+    layerShown() { return hasUpgrade("skaia", 31) && hasUpgrade("skaia", 50) },
     resource: "Derse Points",
     color: "#ff40fe",
 
