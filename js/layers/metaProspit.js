@@ -80,9 +80,11 @@ addLayer("metaProspit", {
             var index = 11 + (sign - 0)
             c[index] = {}
             c[index].title = function () {
+                if (player.tab != this.layer) return
                 return format(getBuyableAmount("metaProspit", this.id), 0) + "<br/>" + prospitSigns[this.id - 11]
             }
             c[index].display = function () {
+                if (player.tab != this.layer) return
                 var bought = getBuyableAmount("metaProspit", this.id).gt(0)
                 return bought ? "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to<br/>" +
                     (this.id < 23 ? ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"][this.id - 11] + " Essence" : prospitSigns[this.id - 23] + " gain") + "."

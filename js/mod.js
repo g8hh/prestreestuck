@@ -27,7 +27,7 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.6.3",
+	num: "0.0.3.6.4",
 	name: "Massive Slowdown",
 }
 
