@@ -1,12 +1,12 @@
 addLayer("metaClasses", {
-    name: "Classes", 
-    symbol: "<h3 style='color:#cfc4ff;font-size:40px'>C</h3>",
+    name: "Classes",
+    symbol: "C",
     row: 8,
     position: 1,
 
     layerShown() { return hasUpgrade("skaia", 31) },
     resource: "Class Points",
-    color: "#020d65",
+    color: "#cfc4ff",
     type: "none",
 
     startData() {
@@ -23,6 +23,12 @@ addLayer("metaClasses", {
         if (hasUpgrade("skaia", 32)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[32].effect)
         if (hasUpgrade("skaia", 33)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[33].effect)
         if (hasUpgrade("skaia", 34)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[34].effect)
+        if (hasUpgrade("skaia", 51)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[51].effect)
+        if (hasUpgrade("skaia", 58) && !hasUpgrade("skaia", 64)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[58].effect)
+        if (hasMilestone("metaProspit", 0)) eff.pointGain = eff.pointGain.mul(tmp.metaProspit.milestones[0].effect)
+        if (hasMilestone("metaDerse", 0)) eff.pointGain = eff.pointGain.mul(tmp.metaDerse.milestones[0].effect)
+        eff.pointGain = applyPolynomialSoftcap(eff.pointGain, "e100", 2)
+        if (hasUpgrade("skaia", 58) && hasUpgrade("skaia", 64)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[58].effect)
         return eff
     },
 
@@ -48,6 +54,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Rogue Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are decreasing all Aspect Powers costs based on other Aspect Powers that's not themselves.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -61,13 +68,13 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
             }
         },
-        12: { 
+        12: {
             cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(200000).pow((x || getBuyableAmount(this.layer, this.id)).add(1)) },
             effect(x) {
                 var eff = {}
@@ -86,6 +93,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Thief Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are boosting all Aspect Powers effects based on other Aspect Powers that's not themselves, after the softcaps.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -99,7 +107,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -122,6 +130,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Heir Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are boosting all Aspect Powers effects based on themselves, after the softcaps.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -135,7 +144,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -158,6 +167,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Maid Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are decreasing all Aspect Powers costs based on themselves.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -171,7 +181,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -196,6 +206,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Page Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are decreasing all Aspect Shards costs based on other Aspect Shards that's not themselves.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -209,7 +220,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -232,6 +243,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Knight Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are boosting all Aspect Shards effects based on themselves.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -245,7 +257,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -270,6 +282,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Seer Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are decreasing all Aspect Shards costs based on all Aspect Powers, with their own being thrice as effective.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -283,7 +296,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -308,6 +321,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Mage Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are boosting all Aspect Shards effects based on all Aspect Powers, but their own aspect is only as half as effective.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -321,7 +335,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -347,6 +361,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Slyph Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are decreasing all Aspect Essence costs based on all Aspect Powers, with their own aspect also gets a bonus based on its Aspect Shards.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -360,7 +375,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -390,6 +405,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Witch Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are boosting all Aspect Essence effects based on all Aspect Shards, with their own aspect also gets a bonus based on its Aspect Power.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -403,7 +419,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -426,6 +442,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Bard Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are decrasing all Aspect Essence costs based on their own Aspect Power, but the effect fluctuates over time.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -439,7 +456,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
@@ -466,6 +483,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Prince Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are boosting all Aspect Essence effects based on the Aspect Essence of their counterpart aspect.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -479,23 +497,23 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "color": "white" }
+                    return { "height": "320px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px" }
                 }
             }
         },
         23: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e31).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(1e31).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2.325)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
-                eff[11] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(2).pow(amt)
-                eff[14] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.85).pow(amt)
-                eff[15] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.5).pow(amt)
-                eff[17] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.5).pow(amt)
-                eff[19] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.2).pow(amt)
-                eff[21] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.4).pow(amt)
+                eff[11] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(2).sub(1).mul(amt).add(1)
+                eff[14] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.85).sub(1).mul(amt).add(1)
+                eff[15] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.5).sub(1).mul(amt).add(1)
+                eff[17] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.5).sub(1).mul(amt).add(1)
+                eff[19] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.2).sub(1).mul(amt).add(1)
+                eff[21] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.4).sub(1).mul(amt).add(1)
                 return eff
             },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
@@ -503,6 +521,7 @@ addLayer("metaClasses", {
                 return "Muse Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are boosting all Passive Classes effects based on your Class Points.<br/><br/><h3>Current effects:</h3>"
                 for (thing in tmp[this.layer].buyables[this.id].effect) {
                     ret += "<br/>" + tmp.metaClasses.buyables[thing].title.replace('<h5>Passive</h5>', '') + ": ^" + format(tmp[this.layer].buyables[this.id].effect[thing])
@@ -515,21 +534,21 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "width": "250px", "color": "white" }
+                    return { "height": "320px", "width": "250px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px", "width": "250px" }
                 }
             }
         },
         24: {
-            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(2.16e51).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2)) },
+            cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(1).mul(2.16e51).pow((x || getBuyableAmount(this.layer, this.id)).add(1).pow(2.325)) },
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
-                eff[12] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.2).pow(amt)
-                eff[13] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.15).pow(amt)
-                eff[16] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.3).pow(amt)
-                eff[18] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.5).pow(amt)
+                eff[12] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.2).sub(1).mul(amt).add(1)
+                eff[13] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.15).sub(1).mul(amt).add(1)
+                eff[16] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.3).sub(1).mul(amt).add(1)
+                eff[18] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.5).sub(1).mul(amt).add(1)
                 eff[20] = player.metaClasses.points.add(1).log(10).div(10).add(1).log(10).mul(amt).add(1).pow(0.3)
                 eff[22] = player.metaClasses.points.add(1).log(10).div(10).add(1).log(10).mul(amt).add(1).pow(0.5)
                 return eff
@@ -539,6 +558,7 @@ addLayer("metaClasses", {
                 return "Lord Power"
             },
             display() {
+                if (player.tab != this.layer) return
                 var ret = "which are boosting all Active Classes effects based on your Class Points.<br/><br/><h3>Current effects:</h3>"
                 for (thing in tmp[this.layer].buyables[this.id].effect) {
                     ret += "<br/>" + tmp.metaClasses.buyables[thing].title.replace('<h5>Active</h5>', '') + ": " + (thing == 20 || thing == 22 ? "×" : "^") + format(tmp[this.layer].buyables[this.id].effect[thing])
@@ -551,7 +571,7 @@ addLayer("metaClasses", {
             },
             style() {
                 if (this.canAfford()) {
-                    return { "height": "320px", "width": "250px", "color": "white" }
+                    return { "height": "320px", "width": "250px", "color": "white", "background-color": "#020d65" }
                 } else {
                     return { "height": "320px", "width": "250px" }
                 }
@@ -582,7 +602,7 @@ addLayer("metaClasses", {
 
     tabFormat: [
         "main-display",
-        ["display-text", () => "All of your Class Powers are giving you " + format(tmp[this.layer].effect.pointGain) + " Class Points per second."],
+        ["display-text", () => "All of your Class Powers are giving you " + format(tmp.metaClasses.effect.pointGain) + " Class Points per second."],
         "prestige-button",
         ["blank", "35px"],
         ["microtabs", "stuff"],

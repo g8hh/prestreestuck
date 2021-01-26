@@ -20,10 +20,10 @@
 #skaia { position: absolute; transform: translate(-37.50px, 112.50px); }
 #skaia:hover { transform: translate(-37.50px, 112.50px) scale(1.1, 1.1); }
 
-#aspTime { position: absolute; transform: translate(112.50px, 112.50px); }
-#aspTime:hover { transform: translate(112.50px, 112.50px) scale(1.1, 1.1); }
-#aspSpace { position: absolute; transform: translate(-187.50px, 112.50px); }
-#aspSpace:hover { transform: translate(-187.50px, 112.50px) scale(1.1, 1.1); }
+#aspTime, #metaDerse { position: absolute; transform: translate(112.50px, 112.50px); }
+#aspTime:hover, #metaDerse:hover { transform: translate(112.50px, 112.50px) scale(1.1, 1.1); }
+#aspSpace, #metaProspit { position: absolute; transform: translate(-187.50px, 112.50px); }
+#aspSpace:hover, #metaProspit:hover { transform: translate(-187.50px, 112.50px) scale(1.1, 1.1); }
 #aspHeart { position: absolute; transform: translate(92.40px, 187.50px); }
 #aspHeart:hover { transform: translate(92.40px, 187.50px) scale(1.1, 1.1); }
 #aspMind { position: absolute; transform: translate(-167.40px, 37.50px); }
@@ -44,6 +44,15 @@
 #aspBreath:hover, #metaClasses:hover { transform: translate(-37.50px, -37.50px) scale(1.1, 1.1); }
 #aspBlood, #metaAspects { position: absolute; transform: translate(-37.50px, 262.50px); }
 #aspBlood:hover, #metaAspects:hover { transform: translate(-37.50px, 262.50px) scale(1.1, 1.1); }
+
+#metaAspects {
+	color: #e5b9ff !important;
+	background-color: #2e0149 !important;
+}
+#metaClasses {
+	color: #cfc4ff !important;
+	background-color: #020d65 !important;
+}
 
 alternate {
 	font-family: Oblivion;
