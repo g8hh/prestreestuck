@@ -8,7 +8,7 @@ addLayer("aspHope", {
     layerShown() { return (hasUpgrade("aspMind", 24) || player.aspHope.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Hope Essence",
     baseAmount() { return player.aspHeart.points },
-    baseResource: "心力量",
+    baseResource: "心灵力量",
     color: "#ffde55",
     resetDescription: "Absorb ",
 
