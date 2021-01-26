@@ -37,13 +37,12 @@ var cnItems = {
     '': '',
     '': '',
     '': '',
-    '': '',
-    '': '',
-    '': '',
-    '': '',
-    '': '',
-    '': '',
-    '': '',
+    'You currently have': '你当前有',
+    'Unlocks Classes': '解锁类',
+    'THATS NOT VERY CREATIVE': '那不是很创意',
+    'Skaia is currently in level': '斯卡亚现在处于水平状态',
+    'Meta': '元',
+    'Echepoints': '回切点',
     'made by ducdat': '由ducdat制作',
     'BUT WHY THOUGH': '但是为什么要思想',
     'T: Absorb Time Power': 'T: 吸取时间的力量',
@@ -192,6 +191,7 @@ var cnExcludeWhole = [
     /^x?\d+(\.\d+)?[A-Za-z%]{0,2}(\s.C)?\s*$/, //12.34K,23.4 °C
     /^x?\d+(\.\d+)?(e[+\-]?\d+)?\s*$/, //12.34e+4
     /^\s*$/, //纯空格
+    /^(.+)直到下一个回切点$/, //纯空格
     /^\d+(\.\d+)?[A-Za-z]{0,2}.?\(?([+\-]?(\d+(\.\d+)?[A-Za-z]{0,2})?)?$/, //12.34M (+34.34K
     /^(\d+(\.\d+)?[A-Za-z]{0,2}\/s)?.?\(?([+\-]?\d+(\.\d+)?[A-Za-z]{0,2})?\/s\stot$/, //2.74M/s (112.4K/s tot
     /^\d+(\.\d+)?(e[+\-]?\d+)?.?\(?([+\-]?(\d+(\.\d+)?(e[+\-]?\d+)?)?)?$/, //2.177e+6 (+4.01+4
@@ -211,9 +211,12 @@ var cnRegReplace = new Map([
     [/^requires ([\d\.]+) more research points$/, '需要$1个研究点'],
     [/^(\d+) Royal points$/, '$1 皇家点数'],
     [/^(\d+) layers remaining$/, '$1 层剩余'],
+    [/^and will need 15 Echepoints to climb to the next rung.$/, '并且需要$1个回切点才能爬到下一个梯级。'],
     [/^Cost: (\d+) RP$/, '成本：$1 皇家点数'],
     [/^([\d\.]+)\/sec$/, '$1\/秒'],
+    [/^which is equivalent to climbing (.+) Achievement Rungs on the Echeladder.$/, '这相当于攀登了$1个成就阶梯。'],
     [/^Next at (.+) points$/, '下一个在 $1 点'],
+    [/^Cost: (.+) points\n(.+)$/, '成本: $1 点'],
     [/^(.+)Try reloading the page, and if it don't help, contact the mod author!\n(.+)$/, '尝试重新加载页面，如果没有帮助，请联系mod作者!'],
     [/^which are boosting your point gain by (.+).\n(.+)Cost: (.+) Time Power$/, '从而使您的点数增加$1。\n$2成本：$3 时间力量'],
     [/^which are making all Time Multipliers (.+) cheaper.\n(.+)Req: (.+) Time Power$/, '从而使全部时间倍数便宜$1。\n$2需要：$3 时间力量'],

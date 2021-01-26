@@ -750,7 +750,7 @@ addLayer("skaia", {
                 unlocked: () => hasUpgrade("skaia", 12),
                 content: [
                     ["blank", "15px"],
-                    ["display-text", () => "Your points are giving you " + format(tmp.skaia.effect.levelGain.mul(60)) + " Echepoints per minute."],
+                    ["display-text", () => "你的点数每分钟给你 " + format(tmp.skaia.effect.levelGain.mul(60)) + " 回切点."],
                     ["blank", "15px"],
                     ["upgrade", "31"],
                     ["row", [["upgrade", "32"], ["upgrade", "33"], ["upgrade", "34"]]],
@@ -781,7 +781,7 @@ addLayer("skaia", {
         ["blank", "25px"],
         ["bar", "echeprogress"],
         ["blank", "5px"],
-        ["display-text", () => tmp.skaia.effect.climbReq.gte(10000) ? "" : "<h5>" + format((player.skaia.points % 1) * 100) + "% until next Echepoint"],
+        ["display-text", () => tmp.skaia.effect.climbReq.gte(10000) ? "" : "<h5>" + format((player.skaia.points % 1) * 100) + "% 直到下一个回切点"],
         ["blank", "25px"],
         "upgrades",
         ["microtabs", "stuff"],
