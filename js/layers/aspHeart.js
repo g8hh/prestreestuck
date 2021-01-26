@@ -8,7 +8,7 @@ addLayer("aspHeart", {
     layerShown() { return (hasUpgrade("aspSpace", 41) || player.aspHeart.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Heart Power",
     baseAmount() { return player.points },
-    baseResource: "points",
+    baseResource: "点",
     color: "#55142a",
     resetDescription: "Absorb ",
         

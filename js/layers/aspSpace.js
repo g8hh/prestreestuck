@@ -8,7 +8,7 @@ addLayer("aspSpace", {
     layerShown() { return !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Space Power",
     baseAmount() { return player.points },
-    baseResource: "points",
+    baseResource: "点",
     color: "#000000",
     resetDescription: "Absorb ",
 

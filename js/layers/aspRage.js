@@ -8,7 +8,7 @@ addLayer("aspRage", {
     layerShown() { return (hasUpgrade("aspMind", 24) || player.aspRage.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Rage Essence",
     baseAmount() { return player.aspMind.points },
-    baseResource: "Mind Power",
+    baseResource: "风力量",
     color: "#520c61",
     resetDescription: "Absorb ",
 
@@ -108,7 +108,7 @@ addLayer("aspRage", {
             },
             unlocked() { return challengeCompletions(this.layer, this.id - 1) },
             goalDescription() {
-                return format(new Decimal(1e3).pow((challengeCompletions(this.layer, this.id) + 1)).pow(tmp.aspRage.challenges[14].rewardEffect)) + ' Time Power'
+                return format(new Decimal(1e3).pow((challengeCompletions(this.layer, this.id) + 1)).pow(tmp.aspRage.challenges[14].rewardEffect)) + ' 时间力量'
             },
             canComplete() { return player.aspTime.points.gte(new Decimal(1e3).pow((challengeCompletions(this.layer, this.id) + 1)).pow(tmp.aspRage.challenges[14].rewardEffect)) },
             rewardEffect() {

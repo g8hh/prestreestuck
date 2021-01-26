@@ -7,7 +7,7 @@ addLayer("aspBreath", {
     layerShown() { return (challengeCompletions("aspDoom", 12) >= 11 || player[this.layer].unlocked) && !hasUpgrade("skaia", 12) },
     resource: "Breath Essence",
     baseAmount() { return player.points },
-    baseResource: "points",
+    baseResource: "点",
     color: "#4379e6",
     resetDescription: "Absorb ",
     branches: [["aspTime", 3], ["aspSpace", 3], ["aspMind", 3], ["aspLight", 3], ["aspHope", 3], ["aspLife", 3]],

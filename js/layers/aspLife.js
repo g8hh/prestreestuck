@@ -8,7 +8,7 @@ addLayer("aspLife", {
     layerShown() { return (hasUpgrade("skaia", 11) || player[this.layer].unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Life Power",
     baseAmount() { return player.points },
-    baseResource: "points",
+    baseResource: "点",
     color: "#a49787",
     resetDescription: "Absorb ",
 

@@ -33,7 +33,7 @@ addLayer("metaProspit", {
     color: "#ffff01",
 
     type: "static",
-    baseResource: "Class Points",
+    baseResource: "类点数",
     resetDescription: "Abolish your aspect and class progress to get ",
     baseAmount() { return player.metaClasses.points },
     requires: new Decimal(1e130),

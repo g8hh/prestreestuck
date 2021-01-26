@@ -51,7 +51,7 @@ addLayer("metaAspects", {
             },
             canAfford() { return player.points.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Power"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>时间力量"
             },
             display() {
                 return "which are boosting your Aspect Point gain by ×" + format(tmp[this.layer].buyables[this.id].effect.sub(1)) + ".\n\

@@ -8,7 +8,7 @@ addLayer("aspDoom", {
     layerShown() { return (hasMilestone("aspLife", 4) || player[this.layer].unlocked) && !hasUpgrade("skaia", 12) },
     resource: "Doom Power",
     baseAmount() { return player.points },
-    baseResource: "points",
+    baseResource: "点",
     color: "#306800",
     resetDescription: "Absorb ",
 

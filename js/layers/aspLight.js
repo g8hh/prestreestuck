@@ -8,7 +8,7 @@ addLayer("aspLight", {
     layerShown() { return (hasChallenge("aspRage", 15) || player[this.layer].unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Light Power",
     baseAmount() { return player.aspSpace.points },
-    baseResource: "Space Power",
+    baseResource: "空间力量",
     color: "#f0840c",
     resetDescription: "Absorb ",
 

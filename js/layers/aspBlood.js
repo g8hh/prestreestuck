@@ -7,7 +7,7 @@ addLayer("aspBlood", {
     layerShown() { return (challengeCompletions("aspDoom", 12) >= 11 || player[this.layer].unlocked) && !hasUpgrade("skaia", 12) },
     resource: "Blood Essence",
     baseAmount() { return player.points },
-    baseResource: "points",
+    baseResource: "点",
     color: "#3e1601",
     resetDescription: "Absorb ",
     branches: [["aspTime", 3], ["aspSpace", 3], ["aspVoid", 3], ["aspHeart", 3], ["aspDoom", 3], ["aspRage", 3]],

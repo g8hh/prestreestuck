@@ -8,7 +8,7 @@ addLayer("aspVoid", {
     layerShown() { return (hasMilestone("aspLight", 3) || player[this.layer].unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Void Power",
     baseAmount() { return player.points },
-    baseResource: "points",
+    baseResource: "点",
     color: "#104ea2",
     resetDescription: "Absorb ",
 

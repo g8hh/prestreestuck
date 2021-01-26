@@ -8,7 +8,7 @@ addLayer("aspMind", {
     layerShown() { return (hasUpgrade("aspSpace", 41) || player.aspMind.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12)  },
     resource: "Mind Power",
     baseAmount() { return player.aspSpace.points },
-    baseResource: "Space Power",
+    baseResource: "空间力量",
     color: "#00923d",
     resetDescription: "Absorb ",
 
