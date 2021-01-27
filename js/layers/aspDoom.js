@@ -88,7 +88,7 @@ addLayer("aspDoom", {
             },
             unlocked() { return true },
             goalDescription() {
-                return format(["1e4950", "1e5500", "1e7500", "1e9350", "e13000", "e15500", "e19300", "e27000", "e43500", Decimal.dInf][challengeCompletions(this.layer, this.id)]) + ' points'
+                return format(["1e4950", "1e5500", "1e7500", "1e9350", "e13000", "e15500", "e19300", "e27000", "e43500", Decimal.dInf][challengeCompletions(this.layer, this.id)]) + ' 点'
             },
             canComplete() { return player.points.gte(["1e4950", "1e5500", "1e7500", "1e9350", "e13000", "e15500", "e19300", "e27000", "e43500", Decimal.dInf][challengeCompletions(this.layer, this.id)]) },
             rewardEffect() {
@@ -119,7 +119,7 @@ addLayer("aspDoom", {
             },
             unlocked() { return challengeCompletions("aspDoom", 11) >= 9 },
             goalDescription() {
-                return format(["e39000", "e52500", "e2250000", "e2425000", "e4075000", "e5375000", "e5645000", "e5950000", "e13025000", "e28275000", "e53395000", Decimal.dInf][challengeCompletions(this.layer, this.id)]) + ' points'
+                return format(["e39000", "e52500", "e2250000", "e2425000", "e4075000", "e5375000", "e5645000", "e5950000", "e13025000", "e28275000", "e53395000", Decimal.dInf][challengeCompletions(this.layer, this.id)]) + ' 点'
             },
             canComplete() { return player.points.gte(["e39000", "e52500", "e2250000", "e2425000", "e4075000", "e5375000", "e5645000", "e5950000", "e13025000", "e28275000", "e53395000", Decimal.dInf][challengeCompletions(this.layer, this.id)]) },
             rewardEffect() {
@@ -152,7 +152,7 @@ addLayer("aspDoom", {
             },
             unlocked() { return challengeCompletions("aspDoom", 11) >= 9 },
             goalDescription() {
-                return format(["e47500", "e59200", "e82100", Decimal.dInf][challengeCompletions(this.layer, this.id)]) + ' points'
+                return format(["e47500", "e59200", "e82100", Decimal.dInf][challengeCompletions(this.layer, this.id)]) + ' 点'
             },
             canComplete() { return player.points.gte(["e47500", "e59200", "e82100", Decimal.dInf][challengeCompletions(this.layer, this.id)]) },
             rewardEffect() {

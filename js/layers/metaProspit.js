@@ -29,11 +29,11 @@ addLayer("metaProspit", {
     position: 1,
 
     layerShown() { return hasUpgrade("skaia", 31) && hasUpgrade("skaia", 49) },
-    resource: "Prospit Points",
+    resource: "Prospit Point",
     color: "#ffff01",
 
     type: "static",
-    baseResource: "类点数",
+    baseResource: "阶级点数",
     resetDescription: "Abolish your aspect and class progress to get ",
     baseAmount() { return player.metaClasses.points },
     requires: new Decimal(1e130),

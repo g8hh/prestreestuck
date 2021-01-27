@@ -85,7 +85,7 @@ addLayer("aspRage", {
             },
             unlocked() { return true },
             goalDescription() {
-                return format((1e25 * 1e25 ** challengeCompletions(this.layer, this.id)) ** tmp.aspRage.challenges[14].rewardEffect) + ' points'
+                return format((1e25 * 1e25 ** challengeCompletions(this.layer, this.id)) ** tmp.aspRage.challenges[14].rewardEffect) + ' 点'
             },
             canComplete() { return player.points.gte((1e25 * 1e25 ** challengeCompletions(this.layer, this.id)) ** tmp.aspRage.challenges[14].rewardEffect) },
             rewardEffect() {
@@ -150,7 +150,7 @@ addLayer("aspRage", {
             },
             unlocked() { return challengeCompletions(this.layer, this.id - 1) },
             goalDescription() {
-                return format(new Decimal("1e600")) + ' Points'
+                return format(new Decimal("1e600")) + ' 点'
             },
             canComplete() { return player.points.gte(new Decimal("1e600")) },
             rewardEffect() {
@@ -170,7 +170,7 @@ addLayer("aspRage", {
             countsAs: [11, 12, 13, 14],
             unlocked() { if (player.aspLight.unlocked) return false; for (var a = 11; a <= 14; a++) if (player.aspRage.challenges[a] < 5) return false; return true },
             goalDescription() {
-                return format(1e34) + ' Points'
+                return format(1e34) + ' 点'
             },
             canComplete() { return player.points.gte(1e34) },
             rewardDescription: "Unlocks an aspect layer.",
