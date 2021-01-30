@@ -51,7 +51,7 @@
 		<div v-if="false" id="loadingSection" class="fullWidth" style="z-index:2147483647;background-color:var(--background)">
 			<div>
 				<h1>The Prestreestuck</h1><br />
-				<h2>v0.0.3.6.4</h2>
+				<h2>v0.0.3.7</h2>
 			</div>
 			<div>
 				<h3>Loading...</h3>
@@ -63,14 +63,14 @@
 		</div>
 		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.screenWidth >= 1000 && player.tab!='none' && !(gameEnded && !player.keepGoing)"></div>
 
-		<div v-if="VERSION.num != '0.0.3.6.4' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
+		<div v-if="VERSION.num != '0.0.3.7' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
 			<br>
 			<h2>The game is currently being updated.</h2><br />
 			If you can see this message, that means the game has detected inconsistent version number between files.<br />
 			This can be caused by the website currently being updated and not ready yet or there is an error causing the files to be read incorrectly.<br />
 			Please try again later, or if this screen has been up for more than 30 minutes, please contact the mod author.<br />
 			<br>
-			index.js version: 0.0.3.6.4<br />
+			index.js version: 0.0.3.7<br />
 			mod.js version: {{VERSION.num}}<br />
 			game.js version: {{gameVer}}<br />
 			components.js version: {{compVer}}<br />
@@ -82,6 +82,13 @@
 			<br>
 			<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
 			<h3 v-html="modInfo.winText"></h3><br>
+			Developer's note: At this point I wouldn't want to continue developing the game anymore, due to it being way too laggy to continue adding more gameplay.
+			But here's a catch: the "game" I mentioned earlier is just the act 0, so welcome to the beginning of the end of act 0, I guess.
+			This game might still get updated, that is, unless I no longer be interested in it. My future plans might be too large for my programming capacity, such as the animation to replace this endscreen, or a completely playable version of Sburb* in the game.
+			I won't be guranteed that those will be finish in a reasonable amount of time, or at all. If you want to help me, be free to contact me about it, or fork this game on GitHub and go wild with it**. But for this time, goodbye and see you again.<br><br>
+			<h5 style="opacity:0,5">*The actual game might not be truly accurate to the actual Sburb found in the webcomic Homestuck. That is, it does not have the capacity to end the world or any, due to reasons.</h5><br>
+			<h5 style="opacity:0,5">**But please don't steal the game, or say the entirety of it is made by you though, it's rude, and nobody wants you to do that.</h5><br>
+			<br>
 			<h3>Please check the Discord to see if there are new content updates!</h3><br><br>
 			<div v-if="!player.timePlayedReset">It took you {{formatTime(player.timePlayed)}} to beat the game.</div>
 			<br>
