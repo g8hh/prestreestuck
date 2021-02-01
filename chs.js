@@ -129,7 +129,7 @@ var cnItems = {
     'Absorb +': '吸收 +',
     'Beginner tip: Hold T to automatically absorb Time Power': '初学者提示：按住T可自动吸收时间能量',
     'You have': '你有',
-    'The Prestreestuck': '神之声望树',
+    'The Prestreestuck': '创世声望树',
     'The Modding Tree Discord': '改装树Discord',
     'The game is currently being updated.': '游戏正在更新中。',
     'Please check the Discord to see if there are new content updates!': '请检查Discord，看看是否有新的内容更新！',
