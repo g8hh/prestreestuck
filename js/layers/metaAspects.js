@@ -11,12 +11,17 @@ addLayer("metaAspects", {
 
     effect() {
         var effs = {
-            pointBoost: applyLogapolynomialSoftcap(Decimal.pow(player.metaAspects.points.min(1e9), player.metaAspects.points.pow(0.5)), "ee100000", 2),
+            pointBoost: applyLogapolynomialSoftcap(Decimal.pow(player.metaAspects.points.min(1e9), applyLogapolynomialSoftcap(player.metaAspects.points.pow(0.5), "ee10", 2)), "ee100000", 2),
             selfGain: new Decimal(1),
             globalPowerBoost: new Decimal(1),
         }
         for (var a = 1; a <= 12; a++) effs.selfGain = effs.selfGain.mul(tmp.metaAspects.buyables[a * 10 + 1].effect)
         effs.selfGain = effs.selfGain.sub(1)
+
+        if (hasMilestone("metaDerse", 5)) effs.selfGain = effs.selfGain.pow(tmp.metaDerse.milestones[5].effect)
+        if (hasMilestone("metaProspit", 5)) effs.selfGain = effs.selfGain.pow(tmp.metaProspit.milestones[5].effect)
+
+        if (hasUpgrade("skaia", 76)) effs.selfGain = effs.selfGain.pow(upgradeEffect("skaia", 76))
 
         if (hasMilestone("metaProspit", 1)) effs.globalPowerBoost = effs.globalPowerBoost.mul(tmp.metaProspit.milestones[1].effect)
         if (hasMilestone("metaDerse", 1)) effs.globalPowerBoost = effs.globalPowerBoost.mul(tmp.metaDerse.milestones[1].effect)
@@ -2164,7 +2169,7 @@ addLayer("metaAspects", {
                 player.metaAspects.buyables[a * 10 + 1] = player.metaAspects.buyables[a * 10 + 1].add(player.metaAspects.points.pow(0.512).mul(mult).mul(delta))
             }
         }
-        var uniBonus = hasUpgrade("skaia", 42) ? upgradeEffect("skaia", 42) : 1
+        var uniBonus = (hasUpgrade("skaia", 42) ? upgradeEffect("skaia", 42) : new Decimal(1)).mul(hasUpgrade("skaia", 62) ? upgradeEffect("skaia", 62) : new Decimal(1))
         var uniScale = hasUpgrade("skaia", 46) ? 4 : 0
         var skaia48eff = hasUpgrade("skaia", 48) ? 4 : 1
         if (hasUpgrade("skaia", 39)) {

@@ -209,6 +209,28 @@ addLayer("skaia", {
             },
             unlocked() { return player.points.gte("ee20") && !hasUpgrade(this.layer, this.id) },
         },
+        13: {
+            fullDisplay: "<h3>INFLATE.</h3><br/>Need " + format("eeee1111") + " points<br/>(PS: Might contains flashing lights.)",
+            canAfford() { return player.points.gte("eeee1111") },
+            pay() {
+                player.phaseTimer = 0
+                player.tab = "none";
+
+                ["metaAspects", "metaClasses", "metaProspit", "metaDerse"].forEach(x => {
+                    layerDataReset(x)
+                    player[x].unlocked = false
+                })
+
+                player.points = new Decimal(1)
+                player.skaia.level = new Decimal(1)
+                player.skaia.points = new Decimal(0)
+                player.skaia.boondollars = new Decimal(0)
+                player.subtabs.skaia.stuff = "Meta"
+
+                player.skaia.upgrades = ["13"]
+            },
+            unlocked() { return hasUpgrade("skaia", 90) },
+        },
         21: {
             description: "Begin stock trading simulator.",
             cost: new Decimal(1e6),
@@ -248,6 +270,9 @@ addLayer("skaia", {
                 if (hasUpgrade("skaia", 43)) ret = ret.mul(player.skaia.level.add(1).pow(hasUpgrade("skaia", 47) ? 2 : 0.25))
                 if (hasUpgrade("skaia", 44)) ret = ret.pow(upgradeEffect("skaia", 44))
                 if (hasUpgrade("skaia", 45)) ret = ret.pow(upgradeEffect("skaia", 45))
+
+                if (hasMilestone("metaDerse", 6)) ret = ret.pow(tmp.metaDerse.milestones[6].effect)
+                if (hasMilestone("metaProspit", 6)) ret = ret.pow(tmp.metaProspit.milestones[6].effect)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -267,6 +292,9 @@ addLayer("skaia", {
                 if (hasUpgrade("skaia", 43)) ret = ret.mul(player.skaia.level.add(1).pow(hasUpgrade("skaia", 47) ? 2 : 0.25))
                 if (hasUpgrade("skaia", 44)) ret = ret.pow(upgradeEffect("skaia", 44))
                 if (hasUpgrade("skaia", 45)) ret = ret.pow(upgradeEffect("skaia", 45))
+
+                if (hasMilestone("metaDerse", 6)) ret = ret.pow(tmp.metaDerse.milestones[6].effect)
+                if (hasMilestone("metaProspit", 6)) ret = ret.pow(tmp.metaProspit.milestones[6].effect)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -286,6 +314,9 @@ addLayer("skaia", {
                 if (hasUpgrade("skaia", 43)) ret = ret.mul(player.skaia.level.add(1).pow(hasUpgrade("skaia", 47) ? 2 : 0.25))
                 if (hasUpgrade("skaia", 44)) ret = ret.pow(upgradeEffect("skaia", 44))
                 if (hasUpgrade("skaia", 45)) ret = ret.pow(upgradeEffect("skaia", 45))
+
+                if (hasMilestone("metaDerse", 6)) ret = ret.pow(tmp.metaDerse.milestones[6].effect)
+                if (hasMilestone("metaProspit", 6)) ret = ret.pow(tmp.metaProspit.milestones[6].effect)
                 return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
@@ -361,7 +392,12 @@ addLayer("skaia", {
         42: {
             title: "<p style='transform: scale(-1, -1)'><alternate>PROGRESSION SQUARED</alternate>",
             effect() {
-                return player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.35)
+                var ret = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.35)
+                if (hasMilestone("metaDerse", 7)) ret = ret.mul(tmp.metaDerse.milestones[7].effect)
+                if (hasMilestone("metaProspit", 7)) ret = ret.mul(tmp.metaProspit.milestones[7].effect)
+                if (hasMilestone("metaDerse", 8)) ret = ret.mul(tmp.metaDerse.milestones[8].effect)
+                if (hasMilestone("metaProspit", 8)) ret = ret.mul(tmp.metaProspit.milestones[8].effect)
+                return ret
             },
             effectDisplay() { return "×" + format(this.effect()) },
             description: "Shard and Essence replacements are stronger based on Class Points.",
@@ -385,7 +421,10 @@ addLayer("skaia", {
             title: "<p style='transform: scale(-1, -1)'><alternate>CLASS POINTS INFINITED PENTERACTED</alternate>",
             description: "Boosts all of the second upgrade row effect, based on Aspect Points, including the above upgrade's effect.",
             effect() {
-                return player.metaAspects.points.add(1).slog().div(10).add(1)
+                var ret = player.metaAspects.points.add(1).slog().div(10).add(1)
+                if (hasMilestone("metaDerse", 7)) ret = ret.mul(tmp.metaDerse.milestones[7].effect)
+                if (hasMilestone("metaProspit", 7)) ret = ret.mul(tmp.metaProspit.milestones[7].effect)
+                return ret
             },
             effectDisplay() { return "^" + format(this.effect()) },
             cost: new Decimal("ee441122"),
@@ -578,6 +617,32 @@ addLayer("skaia", {
             unlocked() { return hasUpgrade("skaia", 55) && hasUpgrade("skaia", 56) && hasUpgrade("skaia", 57) && hasUpgrade("skaia", 58) },
             style: { "width": "160px", "height": "160px" },
         },
+        62: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>TOO MANY PHONIES</alternate>",
+            description: "Boosts the Aspect Shards and Aspect Essences replacements based on Prospitians and Dersites.",
+            cost: new Decimal("ee5100000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.metaProspit.population.mul(player.metaDerse.population).add(1).log(1000).add(1)
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 59) && hasUpgrade("skaia", 60) && hasUpgrade("skaia", 61) },
+            style: { "width": "160px", "height": "160px" },
+        },
+        63: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>NOT A SYMPHONY</alternate>",
+            description: "Buying Class Power gives you 15 levels instead of 1, except for the last two special classes. Also does a Lunar Sway reset.",
+            cost: new Decimal("ee6000000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 59) && hasUpgrade("skaia", 60) && hasUpgrade("skaia", 61) },
+            onPurchase() { doReset("metaDerse", true) },
+            style: { "width": "160px", "height": "160px" },
+        },
         64: {
             title: "<p style='transform: scale(-1, -1)'><alternate>SYMPHONYCEPTION</alternate>",
             description: "Places the last upgrade in the row two times above this after the softcap.",
@@ -588,13 +653,307 @@ addLayer("skaia", {
             unlocked() { return hasUpgrade("skaia", 59) && hasUpgrade("skaia", 60) && hasUpgrade("skaia", 61) },
             style: { "width": "160px", "height": "160px" },
         },
+        65: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>AMPLIFYMPHONY</alternate>",
+            description: "Prospit Point and Derse Point effects scale better.",
+            cost: new Decimal("ee7200000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 62) && hasUpgrade("skaia", 63) && hasUpgrade("skaia", 64) },
+        },
+        66: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>DIVIDEPHONY</alternate>",
+            description: "Prospitian count plus 1 divides the Derse Point requirement and vice versa.",
+            cost: new Decimal("ee9250000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 62) && hasUpgrade("skaia", 63) && hasUpgrade("skaia", 64) },
+        },
+        67: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>AMPLIFYMPHONIER<</alternate>",
+            description: "Prospit and Derse Point effects scale even better, if you have the first upgrade of this layer.",
+            cost: new Decimal("ee10000000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 62) && hasUpgrade("skaia", 63) && hasUpgrade("skaia", 64) },
+        },
+        68: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>COSTPHONY</alternate>",
+            description: "Prospit Points plus 1 hepteracted divides the Derse Point requirement and vice versa.",
+            cost: new Decimal("ee7825000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 62) && hasUpgrade("skaia", 63) && hasUpgrade("skaia", 64) },
+        },
+        69: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE ONE</alternate>",
+            description: "Lunar Sway abolishments no longer resets anything.",
+            cost: new Decimal("eee30"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 65) && hasUpgrade("skaia", 66) && hasUpgrade("skaia", 67) && hasUpgrade("skaia", 68) },
+        },
+        70: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE TWO</alternate>",
+            description: "Autobuys Sway Sign rows if they have at least 5 Abolishments.",
+            cost: new Decimal("eee18"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 65) && hasUpgrade("skaia", 66) && hasUpgrade("skaia", 67) && hasUpgrade("skaia", 68) },
+        },
+        71: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE THREE</alternate>",
+            description: "Filling the Echebar also doubles you current level.",
+            cost: new Decimal("eee12"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 65) && hasUpgrade("skaia", 66) && hasUpgrade("skaia", 67) && hasUpgrade("skaia", 68) },
+        },
+        72: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE FOUR</alternate>",
+            description: "Autobuys Class Powers.",
+            cost: new Decimal("eee24"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 65) && hasUpgrade("skaia", 66) && hasUpgrade("skaia", 67) && hasUpgrade("skaia", 68) },
+        },
+        73: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE FIVE</alternate>",
+            description: "Lunar Sway Sign abolishments no longer resets anything.",
+            cost: new Decimal("eee200"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 69) && hasUpgrade("skaia", 70) && hasUpgrade("skaia", 71) && hasUpgrade("skaia", 72) },
+        },
+        74: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE SIX</alternate>",
+            description: "Boosts Jade Symphony effect from Lunar Sway layers based on current points.",
+            cost: new Decimal("eee350"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = Decimal.pow10(player.points.add(1).log10().add(1).log10().add(1).log10().pow(0.5))
+                if (hasUpgrade("skaia", 77)) ret = ret.pow(2)
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 69) && hasUpgrade("skaia", 70) && hasUpgrade("skaia", 71) && hasUpgrade("skaia", 72) },
+        },
+        75: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE SEVEN</alternate>",
+            description: "Gold and Olive Symphony effects are squared.",
+            cost: new Decimal("eee500"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 69) && hasUpgrade("skaia", 70) && hasUpgrade("skaia", 71) && hasUpgrade("skaia", 72) },
+        },
+        76: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE EIGHT</alternate>",
+            description: "Boosts Aspect Point gain based on Prospitians and Dersites.",
+            cost: new Decimal("eee675"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.metaProspit.population.mul(player.metaDerse.population).div(1e200).max(1).pow(3)
+                if (hasUpgrade("skaia", 77)) ret = ret.pow(2)
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 73) && hasUpgrade("skaia", 74) && hasUpgrade("skaia", 75) },
+        },
+        77: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE NINE</alternate>",
+            description: "All effects from Boosts Upgrades that're next to this one are boosted.",
+            cost: new Decimal("eee900"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 73) && hasUpgrade("skaia", 74) && hasUpgrade("skaia", 75) },
+        },
+        78: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE TEN</alternate>",
+            description: "Boosts Prospit and Derse effects based on their amount, after the softcap.",
+            cost: new Decimal("eee1111"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.metaProspit.points.mul(player.metaDerse.points).pow(2.5)
+                if (hasUpgrade("skaia", 77)) ret = ret.pow(2)
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 76) && hasUpgrade("skaia", 77) },
+        },
+        79: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE ELEVEN</alternate>",
+            description: "Boosts Prospit and Derse effects based on points, after the softcap.",
+            cost: new Decimal("eee1500"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = Decimal.pow(10, player.points.add(1).log10().add(1).log10().add(1).log10().sub("1500").max(0).pow(0.5))
+                if (hasUpgrade("skaia", 81)) ret = ret.pow(upgradeEffect("skaia", 81))
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 78) },
+        },
+        80: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE TWELVE</alternate>",
+            description: "All effects of the “True” signs (Aries, Taurus, etc.) are tesseracted.",
+            cost: new Decimal("eee1750"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 79) },
+        },
+        81: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE THIRTEEN</alternate>",
+            description: "Skaia levels boosts the upgrade two times above this one.",
+            cost: new Decimal("eee1875"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.skaia.level.div("e500").max(1).log10().add(1).pow(0.1)
+                if (hasUpgrade("skaia", 82)) ret = ret.mul(upgradeEffect("skaia", 82))
+                return ret
+            },
+            effectDisplay() { return "^" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 80) },
+        },
+        82: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE FOURTEEN</alternate>",
+            description: "Skaia levels boosts the upgrade above this one.",
+            cost: new Decimal("eee2300"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.skaia.level.div("e612").max(1).log10().add(1).pow(0.05)
+                if (hasUpgrade("skaia", 83)) ret = ret.mul(upgradeEffect("skaia", 83))
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 81) },
+        },
+        83: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE FIFTEEN</alternate>",
+            description: "Skaia levels boosts the upgrade above this one, again.",
+            cost: new Decimal("eee2500"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.skaia.level.div("e680").max(1).log10().add(1).pow(0.05)
+                if (hasUpgrade("skaia", 84)) ret = ret.mul(upgradeEffect("skaia", 84))
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 82) },
+        },
+        84: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE SIXTEEN</alternate>",
+            description: "Skaia levels boosts the upgrade above this one, yet again.",
+            cost: new Decimal("eee3000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.skaia.level.div("e800").max(1).log10().add(1).pow(0.01)
+                if (hasUpgrade("skaia", 85)) ret = ret.mul(upgradeEffect("skaia", 85))
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 83) },
+        },
+        85: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE SIXTEEN</alternate>",
+            description: "Skaia levels boosts the upgrade above this one... really?",
+            cost: new Decimal("eee3300"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = player.skaia.level.div("e900").max(1).log10().add(1).pow(0.01)
+                if (hasUpgrade("skaia", 86)) ret = ret.mul(upgradeEffect("skaia", 86))
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 84) },
+        },
+        86: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE SEVENTEEN</alternate>",
+            description: "All previous “Skaia levels” upgrades boost the upgrade above this one.",
+            cost: new Decimal("eee3600"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            effect() {
+                let ret = upgradeEffect("skaia", 82).mul(upgradeEffect("skaia", 83)).mul(upgradeEffect("skaia", 84)).mul(upgradeEffect("skaia", 85)).log(1e10).add(1)
+                if (hasUpgrade("skaia", 87)) ret = ret.pow(2)
+                return ret
+            },
+            effectDisplay() { return "×" + format(this.effect()) },
+            unlocked() { return hasUpgrade("skaia", 85) },
+        },
+        87: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE EIGHTEEN</alternate>",
+            description: "Squares the effect of the previous upgrade.",
+            cost: new Decimal("eee4000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 86) },
+        },
+        88: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE NINETEEN</alternate>",
+            description: "Automatically do Lunay Sway abolishments.",
+            cost: new Decimal("eee5000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 87) },
+        },
+        89: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>INFLATION UPGRADE TWENTY</alternate>",
+            description: "Automatically do Lunay Sway Class abolishments.",
+            cost: new Decimal("eee7000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 87) },
+        },
+        90: {
+            title: "<p style='transform: scale(-1, -1)'><alternate>IT IS JUST THE BEGINNING</alternate>",
+            description: "Increase Skaia level multiplier from 2 to 1.000e10.",
+            cost: new Decimal("eee10000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "points",
+            currencyInternalName: "points",
+            unlocked() { return hasUpgrade("skaia", 87) },
+        },
     },
 
     update(delta) {
         player.phaseTimer += delta
         if (player.skaia.points.gt(tmp.skaia.effect.climbReq)) {
             player.skaia.points = player.skaia.points.sub(tmp.skaia.effect.climbReq)
-            player.skaia.level = player.skaia.level.add(hasUpgrade("skaia", 52) ? 100 : 1)
+            player.skaia.level = player.skaia.level.add(hasUpgrade("skaia", 52) ? 100 : 1).mul(hasUpgrade("skaia", 71) ? (hasUpgrade("skaia", 90) ? 1e10 : 2) : 1)
         }
         player.skaia.boondollars = player.skaia.boondollars.add(tmp.skaia.effect.boondollarGain.mul(delta)).div(player.skaia.boondollars.add(1).log(10).sub(9).max(1).pow(0.05).pow(delta))
 
@@ -768,6 +1127,24 @@ addLayer("skaia", {
                     ["row", [["upgrade", "55"], ["upgrade", "56"], ["upgrade", "57"], ["upgrade", "58"]]],
                     ["row", [["upgrade", "59"], ["upgrade", "60"], ["upgrade", "61"]]],
                     ["row", [["upgrade", "62"], ["upgrade", "63"], ["upgrade", "64"]]],
+                    ["row", [["upgrade", "65"], ["upgrade", "66"], ["upgrade", "67"], ["upgrade", "68"]]],
+                    ["row", [["upgrade", "69"], ["upgrade", "70"], ["upgrade", "71"], ["upgrade", "72"]]],
+                    ["row", [["upgrade", "73"], ["upgrade", "74"], ["upgrade", "75"]]],
+                    ["row", [["upgrade", "76"], ["upgrade", "77"]]],
+                    ["row", [["upgrade", "78"]]],
+                    ["row", [["upgrade", "79"]]],
+                    ["row", [["upgrade", "80"]]],
+                    ["row", [["upgrade", "81"]]],
+                    ["row", [["upgrade", "82"]]],
+                    ["row", [["upgrade", "83"]]],
+                    ["row", [["upgrade", "84"]]],
+                    ["row", [["upgrade", "85"]]],
+                    ["row", [["upgrade", "86"]]],
+                    ["row", [["upgrade", "87"]]],
+                    ["row", [["upgrade", "88"]]],
+                    ["row", [["upgrade", "89"]]],
+                    ["row", [["upgrade", "90"]]],
+                    ["row", [["upgrade", "13"]]],
                 ]
             },
         },

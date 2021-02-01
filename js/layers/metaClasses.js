@@ -29,6 +29,8 @@ addLayer("metaClasses", {
         if (hasMilestone("metaDerse", 0)) eff.pointGain = eff.pointGain.mul(tmp.metaDerse.milestones[0].effect)
         eff.pointGain = applyPolynomialSoftcap(eff.pointGain, "e100", 2)
         if (hasUpgrade("skaia", 58) && hasUpgrade("skaia", 64)) eff.pointGain = eff.pointGain.mul(tmp.skaia.upgrades[58].effect)
+
+        eff.pointGain = applyLogapolynomialSoftcap(eff.pointGain, "e300", 5)
         return eff
     },
 
@@ -64,7 +66,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -103,7 +105,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -140,7 +142,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -177,7 +179,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -216,7 +218,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -253,7 +255,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -292,7 +294,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -331,7 +333,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -371,7 +373,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -415,7 +417,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -452,7 +454,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -493,7 +495,7 @@ addLayer("metaClasses", {
             },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(hasUpgrade("skaia", 63) ? 12 : 1))
             },
             style() {
                 if (this.canAfford()) {
@@ -508,12 +510,17 @@ addLayer("metaClasses", {
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
-                eff[11] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(2).sub(1).mul(amt).add(1)
-                eff[14] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.85).sub(1).mul(amt).add(1)
-                eff[15] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.5).sub(1).mul(amt).add(1)
-                eff[17] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.5).sub(1).mul(amt).add(1)
-                eff[19] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.2).sub(1).mul(amt).add(1)
-                eff[21] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.4).sub(1).mul(amt).add(1)
+
+                var mul = new Decimal(1)
+                if (hasMilestone("metaDerse", 9)) mul = mul.mul(tmp.metaDerse.milestones[9].effect)
+                if (hasMilestone("metaProspit", 9)) mul = mul.mul(tmp.metaProspit.milestones[9].effect)
+
+                eff[11] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(2).sub(1).mul(amt).add(1).mul(mul)
+                eff[14] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.85).sub(1).mul(amt).add(1).mul(mul)
+                eff[15] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.5).sub(1).mul(amt).add(1).mul(mul)
+                eff[17] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.5).sub(1).mul(amt).add(1).mul(mul)
+                eff[19] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.2).sub(1).mul(amt).add(1).mul(mul)
+                eff[21] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.4).sub(1).mul(amt).add(1).mul(mul)
                 return eff
             },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
@@ -545,12 +552,17 @@ addLayer("metaClasses", {
             effect(x) {
                 var eff = {}
                 var amt = applyPolynomialSoftcap(getBuyableAmount(this.layer, this.id), 6, 2)
-                eff[12] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.2).sub(1).mul(amt).add(1)
-                eff[13] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.15).sub(1).mul(amt).add(1)
-                eff[16] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.3).sub(1).mul(amt).add(1)
-                eff[18] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.5).sub(1).mul(amt).add(1)
-                eff[20] = player.metaClasses.points.add(1).log(10).div(10).add(1).log(10).mul(amt).add(1).pow(0.3)
-                eff[22] = player.metaClasses.points.add(1).log(10).div(10).add(1).log(10).mul(amt).add(1).pow(0.5)
+
+                var mul = new Decimal(1)
+                if (hasMilestone("metaDerse", 10)) mul = mul.mul(tmp.metaDerse.milestones[10].effect)
+                if (hasMilestone("metaProspit", 10)) mul = mul.mul(tmp.metaProspit.milestones[10].effect)
+
+                eff[12] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.2).sub(1).mul(amt).add(1).mul(mul)
+                eff[13] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.15).sub(1).mul(amt).add(1).mul(mul)
+                eff[16] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(1.3).sub(1).mul(amt).add(1).mul(mul)
+                eff[18] = player.metaClasses.points.add(1).log(10).div(10).add(1).pow(0.5).sub(1).mul(amt).add(1).mul(mul)
+                eff[20] = player.metaClasses.points.add(1).log(10).div(10).add(1).log(10).mul(amt).add(1).pow(0.3).mul(mul)
+                eff[22] = player.metaClasses.points.add(1).log(10).div(10).add(1).log(10).mul(amt).add(1).pow(0.5).mul(mul)
                 return eff
             },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
@@ -581,6 +593,10 @@ addLayer("metaClasses", {
 
     update(delta) {
         addPoints(this.layer, tmp[this.layer].effect.pointGain.mul(delta))
+
+        if (hasUpgrade("skaia", 72)) {
+            for (var a = 11; a <= 24; a++) buyBuyable(this.layer, a)
+        }
     },
 
     microtabs: {
