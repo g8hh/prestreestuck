@@ -51,7 +51,7 @@
 		<div v-if="false" id="loadingSection" class="fullWidth" style="z-index:2147483647;background-color:var(--background)">
 			<div>
 				<h1>The Prestreestuck</h1><br />
-				<h2>v0.0.3.7</h2>
+				<h2>v0.0.3.7.1</h2>
 			</div>
 			<div>
 				<h3>Loading...</h3>
@@ -63,14 +63,14 @@
 		</div>
 		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.screenWidth >= 1000 && player.tab!='none' && !(gameEnded && !player.keepGoing)"></div>
 
-		<div v-if="VERSION.num != '0.0.3.7' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
+		<div v-if="VERSION.num != '0.0.3.7.1' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
 			<br>
 			<h2>The game is currently being updated.</h2><br />
 			If you can see this message, that means the game has detected inconsistent version number between files.<br />
 			This can be caused by the website currently being updated and not ready yet or there is an error causing the files to be read incorrectly.<br />
 			Please try again later, or if this screen has been up for more than 30 minutes, please contact the mod author.<br />
 			<br>
-			index.js version: 0.0.3.7<br />
+			index.js version: 0.0.3.7.1<br />
 			mod.js version: {{VERSION.num}}<br />
 			game.js version: {{gameVer}}<br />
 			components.js version: {{compVer}}<br />

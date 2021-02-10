@@ -27,12 +27,15 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.7",
+	num: "0.0.3.7.1",
 	name: "End of Act 0?",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.3.7.1</h2><br>
+		Added <spoiler>Compact Mode for Sign Viewers</spoiler>.<br>
+    <br>
 	<h2>v0.0.3.7</h2><br>
 		<h5 style="opacity:0.5">- End of Act 0? -</h5>
 		The game now has a definitive "end", or does it?<br>
@@ -40,6 +43,9 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(
 		Even more massive slowdowns.<br>
 		Even more bugs.<br>
 	<br>
+	<h3>v0.0.3.6.1 ~ v0.0.3.6.4</h2><br>
+		Miscellaneous bug fixes that I don't even know what they are anymore.<br>
+    <br>
 	<h2>v0.0.3.6</h2><br>
 		<h5 style="opacity:0.5">- Massive Slowdown -</h5>
 		Added two new layers, each has over 144(!) new things that you can buy. Gosh that will be very laggy.<br>

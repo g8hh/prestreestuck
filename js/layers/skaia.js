@@ -634,7 +634,7 @@ addLayer("skaia", {
         },
         63: {
             title: "<p style='transform: scale(-1, -1)'><alternate>NOT A SYMPHONY</alternate>",
-            description: "Buying Class Power gives you 15 levels instead of 1, except for the last two special classes. Also does a Lunar Sway reset.",
+            description: "Buying Class Power gives you 12 levels instead of 1, except for the last two special classes. Also does a Lunar Sway reset.",
             cost: new Decimal("ee6000000"),
             currencyLocation() { return player },
             currencyDisplayName: "points",
