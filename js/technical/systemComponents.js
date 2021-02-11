@@ -45,6 +45,20 @@ var systemComponents = {
 				can: ((player[layer].unlocked || tmp[layer].isLayer) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
 			}"
 			v-bind:style="tmp[layer].computedNodeStyle" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'">
+			} : {}, tmp[layer].nodeStyle]">
+			{{(abb !== '' ? abb : '&nbsp;')}}
+			} : {}, tmp[layer].nodeStyle]">
+			{{(abb !== '' ? abb : '&nbsp;')}}
+			} : {}, tmp[layer].nodeStyle]">
+			{{(abb !== '' ? abb : '&nbsp;')}}
+			} : {}, tmp[layer].nodeStyle]">
+			{{(abb !== '' ? abb : '&nbsp;')}}
+			} : {}, tmp[layer].nodeStyle]">
+			{{(abb !== '' ? abb : '&nbsp;')}}
+			} : {}, tmp[layer].nodeStyle]">
+			{{(abb !== '' ? abb : '&nbsp;')}}
+			} : {}, tmp[layer].nodeStyle]">
+			{{(abb !== '' ? abb : '&nbsp;')}}
 		</button>
 		`
 	},
@@ -90,15 +104,12 @@ var systemComponents = {
 
 	'overlay-head': {
 		template: `			
-		<div class="overlayThing" style="padding-bottom:7px; width: 90%">
+		<div class="overlayThing" style="padding-bottom:7px; width: 90%; z-index: 1000; position: relative">
 		<span v-if="player.devSpeed && player.devSpeed != 1" class="overlayThing">
 			<br>Dev Speed: {{format(player.devSpeed)}}x<br>
 		</span>
 		<span v-if="player.offTime !== undefined"  class="overlayThing">
 			<br>Offline Time: {{formatTime(player.offTime.remain)}}<br>
-		</span>
-		<span v-if="false && !player.keepGoing"  class="overlayThing">
-			<br>Reach {{formatWhole(ENDGAME)}} to beat the game!<br>
 		</span>
 		<br>
 		<span v-if="player.points.lt('1e1000')"  class="overlayThing">You have </span>
