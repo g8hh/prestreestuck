@@ -49,12 +49,13 @@ function format(decimal, precision = 2, precision2 = 3) {
 		else return commaFormat(Decimal.pow(10, slog.sub(slog.floor())), precision2) + "F" + commaFormat(slog.floor(), 0)
 	}
 	else if (decimal.gte("ee6")) {
-		var slog = 0;
-		while (decimal.gte(1e9)) {
-			decimal = decimal.log10()
-			slog += 1
+		var slog = decimal.layer;
+		decimal = new Decimal(decimal.mag)
+		while (decimal.lt("1000")) {
+			decimal = Decimal.pow(10, decimal)
+			slog--;
 		}
-		return "".padEnd(slog, "e") + commaFormat(decimal, decimal.gte(1000) ? 0 : precision2)
+		return "".padEnd(slog, "e") + format(decimal, 0)
 	}
 	else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
 	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision2)
@@ -70,11 +71,18 @@ function formatWhole(decimal) {
 }
 
 function formatTime(s) {
-	if (s < 60) return format(s) + "s"
-	else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
-	else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-	else if (s < 31536000) return formatWhole(Math.floor(s / 84600) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-	else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 84600) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
+	if (s < 31536000000) {
+		var str = format(s % 60) + "s"
+		if (s >= 60) str = formatWhole(Math.floor(s / 60) % 60) + "m " + str
+		if (s >= 3600) str = formatWhole(Math.floor(s / 3600) % 24) + "h " + str
+		if (s >= 86400) str = formatWhole(Math.floor(s / 86400) % 365) + "d " + str
+		if (s >= 31536000) str = formatWhole(Math.floor(s / 31536000)) + "y " + str
+		return str
+	} else {
+		var y = s / 31536000
+		if (y >= 1e9) return format(y / 1e9) + " aeons"
+		return formatWhole(y) + " years"
+	}
 }
 
 function toPlaces(x, precision, maxAccepted) {

@@ -1,4 +1,4 @@
-var gameVer = "0.0.3.7.1";
+var gameVer = "0.0.3.8";
 
 var player;
 var needCanvasUpdate = true;
@@ -411,7 +411,7 @@ var interval = setInterval(function() {
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
 	}
-	tmp.scrolled = document.getElementById('treeTab').scrollTop > 30
+	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
 	updateTemp();
 	gameLoop(diff)
 	fixNaNs()

@@ -1,4 +1,4 @@
-var systemVer = "0.0.3.7.1";
+var systemVer = "0.0.3.8";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -116,7 +116,7 @@ var systemComponents = {
 		<h2  class="overlayThing" id="points">{{format(player.points)}}</h2>
 		<span v-if="player.points.lt('1e1e6')"  class="overlayThing"> {{modInfo.pointsName}}</span>
 		<br>
-		<span v-if="canGenPoints()"  class="overlayThing">({{tmp.other.oompsMag >= 1 ? format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "") + "s" : format(getPointGen())}}/sec)</span>
+		<span v-if="canGenPoints()"  class="overlayThing">({{tmp.other.oompsMag != 0 ? format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "") + "s" : format(getPointGen())}}/sec)</span>
 		<div v-for="thing in tmp.displayThings" class="overlayThing"><span v-if="thing" v-html="thing"></span></div>
 	</div>
 	`
@@ -133,20 +133,25 @@ var systemComponents = {
             <br>
             made by {{modInfo.author}}	
         </span>
-        <br><br>
-        a mod of The Prestige Tree made by Jacorb and Aarex
-        <br>
-        original idea by papyrus (on discord)
-        <br>
-        using The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda
-        <br>
-        based on Homestuck by Andrew Hussie (of course)
-		<br><br>
+        <br>${
+			Math.random() < 0.1 ?
+			`<br>
+			<i>The Prestige Tree</i>, courtesy of <i>Distance Incremental</i> creator<br>
+			<i>The Modding Tree</i>, courtesy of <i>Homestuck: Act Omega</i> creator<br>
+			<i>Homestuck</i>, courtesy of <i>Psycholonials</i> creator<br>
+			also kudos to the original tree style game idea by the person with a name taken from a character from <i>Undertale</i> but whatever<br>` :
+			`<br>
+			a mod of The Prestige Tree made by Jacorb and Aarex<br>
+			original idea by papyrus (on discord)<br>
+			using The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda<br>
+			based on Homestuck by Andrew Hussie (of course)<br>`
+		}
+		<br>
         <h5 style="opacity: 0.5">
             This is made entirely for entertainment and parody purposes, no income is generated from this nor it's made to steal anybody's original works.
         </h5>
 		<br><br>
-		<div class="link" onclick="showTab('changelog-tab')">Changelog<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(see what happened throughout this thing's history)</h5></div><br>
+		<div class="link" onclick="showTab('changelog-tab')">The Changelog<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(see what happened throughout this thing's history)</h5></div><br>
 		<a class="link" href="acknowledgements.md" target="_blank">Acknowledgements<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(wall of text saying I do not own most of this)</h5></a><br>
         <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
         <a class="link" href="https://discord.gg/F3xveHV" target="_blank">The Modding Tree Discord<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(suggest everything and talk about how bad this mod is here)</h5></a><br>
@@ -177,9 +182,8 @@ var systemComponents = {
                 <td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button></td>
                 <td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{ player.hqTree?"ON":"OFF" }}</button></td>
             </tr>
-                <tr>
-                    <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: {{ player.hideChallenges?"HIDDEN":"SHOWN" }}</button></td>
-                <!--	<td><button class="opt" onclick="toggleOpt('oldStyle')">Style: {{ player.oldStyle?"v1.0":"NEW" }}</button></td>-->
+        	<tr>
+                <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: {{ player.hideChallenges?"HIDDEN":"SHOWN" }}</button></td>
             </tr> 
         </table>`
     },

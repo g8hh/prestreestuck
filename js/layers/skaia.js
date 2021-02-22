@@ -231,6 +231,22 @@ addLayer("skaia", {
             },
             unlocked() { return hasUpgrade("skaia", 90) },
         },
+        14: {
+            fullDisplay: "",
+            canAfford() { return true },
+            unlocked() { return true },
+            pay() {
+                ["aspTime", "aspSpace", "aspMind", "aspHeart", "aspHope", "aspRage", "aspLight", "aspVoid", "aspLife", "aspDoom", "aspBlood", "aspBreath",
+                "metaAspects", "metaClasses", "metaProspit", "metaDerse"].forEach(x => {
+                    layerDataReset(x)
+                    player[x].unlocked = false
+                })
+
+                player.skaia.level = new Decimal(1)
+                player.skaia.points = new Decimal(0)
+                player.skaia.boondollars = new Decimal(0)
+                player.subtabs.skaia.stuff = "Meta"},
+            },
         21: {
             description: "Begin stock trading simulator.",
             cost: new Decimal(1e6),
@@ -936,7 +952,7 @@ addLayer("skaia", {
             currencyLocation() { return player },
             currencyDisplayName: "points",
             currencyInternalName: "points",
-            unlocked() { return hasUpgrade("skaia", 87) },
+            unlocked() { return hasUpgrade("skaia", 88) },
         },
         90: {
             title: "<p style='transform: scale(-1, -1)'><alternate>IT IS JUST THE BEGINNING</alternate>",
@@ -945,7 +961,7 @@ addLayer("skaia", {
             currencyLocation() { return player },
             currencyDisplayName: "points",
             currencyInternalName: "points",
-            unlocked() { return hasUpgrade("skaia", 87) },
+            unlocked() { return hasUpgrade("skaia", 89) },
         },
     },
 
@@ -984,6 +1000,10 @@ addLayer("skaia", {
                 }
                 player.skaia.tradingClock = 0
             }
+        }
+
+        if (hasUpgrade("skaia", 13) && player.aspTime.points.gte("1")) {
+            buyUpgrade("skaia", 14)
         }
     },
 

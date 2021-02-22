@@ -108,12 +108,10 @@ addLayer("metaProspit", {
             var index = 11 + (sign - 0)
             c[index] = {}
             c[index].title = function () {
-                if (player.tab != this.layer) return
                 var compact = getClickableState(this.layer, 11)
                 return compact ? "" : format(getBuyableAmount("metaProspit", this.id), 0) + "<br/>" + prospitSigns[this.id - 11]
             }
             c[index].display = function () {
-                if (player.tab != this.layer) return
                 var bought = getBuyableAmount("metaProspit", this.id).gt(0)
                 var compact = getClickableState(this.layer, 11)
                 return compact ?

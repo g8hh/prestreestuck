@@ -56,7 +56,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Rogue Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are decreasing all Aspect Powers costs based on other Aspect Powers that's not themselves.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -95,7 +95,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Thief Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are boosting all Aspect Powers effects based on other Aspect Powers that's not themselves, after the softcaps.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -132,7 +132,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Heir Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are boosting all Aspect Powers effects based on themselves, after the softcaps.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -169,7 +169,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Maid Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are decreasing all Aspect Powers costs based on themselves.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -208,7 +208,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Page Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are decreasing all Aspect Shards costs based on other Aspect Shards that's not themselves.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -245,7 +245,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Knight Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are boosting all Aspect Shards effects based on themselves.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -284,7 +284,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Seer Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are decreasing all Aspect Shards costs based on all Aspect Powers, with their own being thrice as effective.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -323,7 +323,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Mage Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are boosting all Aspect Shards effects based on all Aspect Powers, but their own aspect is only as half as effective.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -363,7 +363,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Slyph Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are decreasing all Aspect Essence costs based on all Aspect Powers, with their own aspect also gets a bonus based on its Aspect Shards.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -407,7 +407,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Witch Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are boosting all Aspect Essence effects based on all Aspect Shards, with their own aspect also gets a bonus based on its Aspect Power.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -444,7 +444,7 @@ addLayer("metaClasses", {
                 return "<h5>Passive</h5>Bard Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are decrasing all Aspect Essence costs based on their own Aspect Power, but the effect fluctuates over time.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -485,7 +485,7 @@ addLayer("metaClasses", {
                 return "<h5>Active</h5>Prince Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are boosting all Aspect Essence effects based on the Aspect Essence of their counterpart aspect.<br/><br/><h3>Current effects:</h3>"
                 var asps = ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"]
                 for (var a = 1; a <= 12; a++) {
@@ -528,7 +528,7 @@ addLayer("metaClasses", {
                 return "Muse Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are boosting all Passive Classes effects based on your Class Points.<br/><br/><h3>Current effects:</h3>"
                 for (thing in tmp[this.layer].buyables[this.id].effect) {
                     ret += "<br/>" + tmp.metaClasses.buyables[thing].title.replace('<h5>Passive</h5>', '') + ": ^" + format(tmp[this.layer].buyables[this.id].effect[thing])
@@ -570,7 +570,7 @@ addLayer("metaClasses", {
                 return "Lord Power"
             },
             display() {
-                if (player.tab != this.layer) return
+                
                 var ret = "which are boosting all Active Classes effects based on your Class Points.<br/><br/><h3>Current effects:</h3>"
                 for (thing in tmp[this.layer].buyables[this.id].effect) {
                     ret += "<br/>" + tmp.metaClasses.buyables[thing].title.replace('<h5>Active</h5>', '') + ": " + (thing == 20 || thing == 22 ? "×" : "^") + format(tmp[this.layer].buyables[this.id].effect[thing])

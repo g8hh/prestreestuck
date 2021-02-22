@@ -17,8 +17,8 @@
 	webkit-outline: none;
 }
 
-#skaia { position: absolute; transform: translate(-37.50px, 112.50px); }
-#skaia:hover { transform: translate(-37.50px, 112.50px) scale(1.1, 1.1); }
+#skaia, #metaMeta { position: absolute; transform: translate(-37.50px, 112.50px); }
+#skaia:hover, #metaMeta:hover { transform: translate(-37.50px, 112.50px) scale(1.1, 1.1); }
 
 #aspTime, #metaDerse { position: absolute; transform: translate(112.50px, 112.50px); }
 #aspTime:hover, #metaDerse:hover { transform: translate(112.50px, 112.50px) scale(1.1, 1.1); }

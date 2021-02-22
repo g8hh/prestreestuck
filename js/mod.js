@@ -1,4 +1,4 @@
-let modInfo = {
+﻿let modInfo = {
 	name: "The Prestreestuck",
 	id: "treestuck",
 	author: "ducdat0507",
@@ -27,12 +27,19 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.7.1",
-	name: "End of Act 0?",
+	num: "0.0.3.8",
+	name: "The Game Continues",
 }
 
-let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
+let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h2>v0.0.3.8</h2><br>
+		<h5 style="opacity:0.5">- The Game Continues -</h5>
+		ACT 0 CONTINUES GODDAMNIT AAAAAAAAAAASADASHFASFHKAHLKSJ<br>
+		Added 1 new layer.<br>
+		Added... a few more things.<br>
+		Migrated to The Modding Tree 2.π.<br>
+	<br>
 	<h3>v0.0.3.7.1</h2><br>
 		Added <spoiler>Compact Mode for Sign Viewers</spoiler>.<br>
     <br>
@@ -142,7 +149,11 @@ function getPointGen() {
 
 	let gain = new Decimal(1)
 
-	if (!hasUpgrade("skaia", 12)) {
+	if (hasUpgrade("skaia", 14)) {
+		if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
+	} else if (hasUpgrade("skaia", 12)) {
+		gain = gain.mul(tmp.metaAspects.effect.pointBoost)
+	} else {
 		for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
 
 		if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
@@ -173,9 +184,7 @@ function getPointGen() {
 		if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
 		if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
 		if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
-	} else {
-		gain = gain.mul(tmp.metaAspects.effect.pointBoost)
-    }
+	}
 
 
 	if (Number.isNaN(gain.mag)) gain = new Decimal(0)
@@ -196,9 +205,10 @@ var displayThings = [
 		for (lys in LAYERS) {
 			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && !inChallenge("aspDoom", 12)))) rem++
 		}
-		if (hasUpgrade("skaia", 12)) rem -= 12;
+		if (hasUpgrade("skaia", 14)) rem -= 17;
+		else if (hasUpgrade("skaia", 12)) rem -= 12;
 		var acts = [
-			["Act 0", "Genesis", (rem == 0 ? "Current endgame: " + format("ee16000000") + " points" : rem + " layers remaining") + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : "")]
+			["Act 0", "Genesis", (rem == 0 ? "The end is nigh..." : rem + " layers remaining" + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : ""))]
 		]
 		return `<h2><br/>${acts[player.act][0]}</h2><br/>- ${acts[player.act][1]} -<br/><h5 style='margin-top:5px;opacity:0.5'><i>(${acts[player.act][2]})</i></h5>`
 	}
@@ -206,7 +216,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return hasUpgrade("skaia", 13) && player.aspTime.points.gte("1")
+	return player.metaMeta.resetTime >= Number.MAX_VALUE
 }
 
 

@@ -100,18 +100,16 @@ addLayer("metaDerse", {
             var index = 11 + (sign - 0)
             c[index] = {}
             c[index].title = function () {
-                if (player.tab != this.layer) return
                 var compact = getClickableState(this.layer, 11)
                 return compact ? "" : format(getBuyableAmount("metaDerse", this.id), 0) + "<br/>" + derseSigns[this.id - 11]
             }
             c[index].display = function () {
-                if (player.tab != this.layer) return
                 var bought = getBuyableAmount("metaDerse", this.id).gt(0)
                 var compact = getClickableState(this.layer, 11)
                 return compact ?
                     "<div style='position:absolute;transform:translate(3px,-10px);width:20px;height:20px;filter:brightness(" + (bought ? 1 : 0) + ");background:url(data/derse_sign_sprites.png) " + -((this.id - 11) % 12 * 20) + "px " + -(Math.floor((this.id - 11) / 12) * 20) + "px'>&nbsp;</div>" :
                     (bought ? "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to<br/>" +
-                    (this.id < 23 ? ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"][this.id - 11] + " Essence" : prospitSigns[this.id - 23] + " gain") + "."
+                    (this.id < 23 ? ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"][this.id - 11] + " Essence" : derseSigns[this.id - 23] + " gain") + "."
                     : "Cost: " + format(this.cost) + " Dersites")
             }
             c[index].cost = cost
