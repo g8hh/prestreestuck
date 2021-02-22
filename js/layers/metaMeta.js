@@ -350,7 +350,7 @@ addLayer("metaMeta", {
             unlocked() { return hasUpgrade(this.layer, 54) },
             canAfford() { return player[this.layer].points.gte(this.cost()) && player[this.layer].buyables[this.id].lt(2000) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + " / 2,000<br/>Breath Accelerators"
+                return format(getBuyableAmount(this.layer, this.id), 0) + " / 2,000<br/>Blood Accelerators"
             },
             display() {
                 return "which are boosting Meta-Meta-Meta Upgrade effect by an additional " + format(tmp[this.layer].buyables[this.id].effect) + "%.\n\
@@ -1037,7 +1037,7 @@ addLayer("metaMeta", {
         },
         44: {
             title: "<p style='transform: scale(-1, -1)'><alternate>FINAL FRONTIER</alternate>",
-            description: "Meta-Metaness increases the Meta-Transcension requirements and Meta-Meta upgrade effect by +0.01 per level. Also resets you Meta-Metaness amount.",
+            description: "Meta-Metaness increases the Meta-Transcension requirements and Meta-Meta upgrade effect by +0.01 per level. Also resets your Meta-Metaness amount.",
             cost: new Decimal(50),
             currencyDisplayName: "Meta-Metaness",
             currencyInternalName: "meta",
