@@ -1100,7 +1100,7 @@ addLayer("metaMeta", {
             currencyInternalName: "overflows",
             currencyLocation() { return player[this.layer] },
             unlocked() { 
-                return hasUpgrade("metaMeta", 54)
+                return hasUpgrade("metaMeta", 44)
             },
         },
         61: {

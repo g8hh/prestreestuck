@@ -344,6 +344,4 @@ addLayer("metaDerse", {
         { key: "d", description: "D: Abolish for Derse Points", unlocked() { return tmp[this.layer].layerShown }, onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
 
-    // oh my god update teaser
-
 })

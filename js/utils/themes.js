@@ -4,12 +4,14 @@
 const themes = {
 	0: ["Default", "#0f0f0f", "#000000b0", "#dfdfdf", "#ffffff", "#bf8f8f"],
 	1: ["Aqua", "#001f3f", "#000f1fb0", "#bfdfff", "#dfefff", "#c4a7b3"],
-	2: ["Homosuck", "#042300", "#030f00b0", "#abefb0", "#efffdf", "#c4a7b3"],
+	2: ["The Felt", "#042300", "#030f00b0", "#abefb0", "#efffdf", "#c4a7b3"],
+	3: ["Trickster", "#00117e", "#ff73fdb0", "#f9fd60", "#44ff00", "#ff0000"],
 }
 const colors = {
 	0: { 1: "#ffffff", 2: "#ffffffbf", 3: "#ffffff7f", },
 	1: { 1: "#bfdfff", 2: "#bfdfffbf", 3: "#bfdfff7f", },
 	2: { 1: "#abefb0", 2: "#abefb0bf", 3: "#abefb07f", },
+	3: { 1: "#ff73fd", 2: "#ff73fdbf", 3: "#ff73fd7f", },
 }
 
 function changeTheme() {
