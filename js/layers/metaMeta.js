@@ -16,10 +16,12 @@ addLayer("metaMeta", {
         return "Ascend for <b>+" + formatWhole(tmp[this.layer].resetGain) + "</b> Metaness<br/>Next at " + formatWhole(tmp[this.layer].nextAt) + " points"
     },
     getResetGain() {
+        if (!hasUpgrade("skaia", 14)) return new Decimal(0)
         var pow = buyableEffect(this.layer, 13).mul(hasUpgrade("metaMeta", 11) ? 1.12 : 1).mul(tmp.metaMeta.effect.overflowNerf)
         return applyLogapolynomialSoftcap(player.points.div(2).add(1).slog(10).pow(0.4).pow(pow).floor(), "e2100000", 2)
     },
     getNextAt() {
+        if (!hasUpgrade("skaia", 14)) return Decimal.dInf
         var pow = buyableEffect(this.layer, 13).mul(hasUpgrade("metaMeta", 11) ? 1.12 : 1).mul(tmp.metaMeta.effect.overflowNerf)
         return Decimal.tetrate(10, applyLogapolynomialSoftcap(new Decimal(tmp[this.layer].resetGain), "e2100000", 0.5).add(1).root(0.4).root(pow)).sub(1).mul(2)
     },
@@ -1098,8 +1100,7 @@ addLayer("metaMeta", {
             currencyInternalName: "overflows",
             currencyLocation() { return player[this.layer] },
             unlocked() { 
-                return ((+this.id + 1) % 10 == 5 || hasUpgrade(this.layer, +this.id + 1)) 
-                    && (this.id - 10 < 51 || hasUpgrade(this.layer, this.id - 10)) 
+                return hasUpgrade("metaMeta", 54)
             },
         },
         61: {
@@ -1434,6 +1435,23 @@ addLayer("metaMeta", {
     ],
 
     hotkeys: [
-        { key: "m", description: "M: Ascend for Metaness", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
+        { 
+            key: "m", 
+            description: "M: Ascend for Metaness", 
+            unlocked() { return hasUpgrade("skaia", 14) }, 
+            onPress() { if (canReset(this.layer)) doReset(this.layer) } 
+        },
+        { 
+            key: "M", 
+            description: "Shift+M: Meta-Transcend for Meta-Metaness", 
+            unlocked() { return tmp.metaMeta.clickables[11].canClick || player.metaMeta.meta.gte(1) || hasUpgrade("metaMeta", 11) }, 
+            onPress() { clickClickable("metaMeta", 11) } 
+        },
+        { 
+            key: "i", 
+            description: "I: Increment for Overflows", 
+            unlocked() { return tmp.metaMeta.clickables[12].canClick || player.metaMeta.overflowsTotal.gte(1) }, 
+            onPress() { clickClickable("metaMeta", 12) } 
+        },
     ],
 })

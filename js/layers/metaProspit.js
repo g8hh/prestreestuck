@@ -351,7 +351,7 @@ addLayer("metaProspit", {
     ],
 
     hotkeys: [
-        { key: "p", description: "P: Abolish for Prospit Points", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
+        { key: "p", description: "P: Abolish for Prospit Points", unlocked() { return tmp[this.layer].layerShown }, onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
 
 

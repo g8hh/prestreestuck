@@ -341,7 +341,7 @@ addLayer("metaDerse", {
     ],
 
     hotkeys: [
-        { key: "d", description: "D: Abolish for Derse Points", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
+        { key: "d", description: "D: Abolish for Derse Points", unlocked() { return tmp[this.layer].layerShown }, onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
 
     // oh my god update teaser

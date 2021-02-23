@@ -27,13 +27,15 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.8.1",
+	num: "0.0.3.8.2",
 	name: "The Game Continues",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
-	<h2>v0.0.3.8</h2><br>
+	<h3>v0.0.3.8.2</h3><br>
+		Fixed some hotkeys triggerable when they aren't supposed to.<br>
+	<h3>v0.0.3.8.1</h3><br>
 		Fixed some typos.<br>
 	<h2>v0.0.3.8</h2><br>
 		<h5 style="opacity:0.5">- The Game Continues -</h5>
@@ -42,7 +44,7 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 		Added... a few more things.<br>
 		Migrated to The Modding Tree 2.π.<br>
 	<br>
-	<h3>v0.0.3.7.1</h2><br>
+	<h3>v0.0.3.7.1</h3><br>
 		Added <spoiler>Compact Mode for Sign Viewers</spoiler>.<br>
     <br>
 	<h2>v0.0.3.7</h2><br>
@@ -52,7 +54,7 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 		Even more massive slowdowns.<br>
 		Even more bugs.<br>
 	<br>
-	<h3>v0.0.3.6.1 ~ v0.0.3.6.4</h2><br>
+	<h3>v0.0.3.6.1 ~ v0.0.3.6.4</h3><br>
 		Miscellaneous bug fixes that I don't even know what they are anymore.<br>
     <br>
 	<h2>v0.0.3.6</h2><br>
@@ -62,20 +64,20 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 		Decided not to bump the endgame because I accidently bumped it too much. Content should span until you get your first <spoiler>Gold sign</spoiler> in the new two layers.<br>
 		<h5 style="opacity:0.5"><br/><spoiler>(also the title of the new 244 "things" might not be trully accurate to their actual Homestuck-canony-thingy names so i guess you can report it to me if you want to fix something idk oh well)</spoiler></h5>
 	<br>
-	<h3>v0.0.3.5</h2><br>
+	<h3>v0.0.3.5</h3><br>
 		Added more <spoiler>Skaia upgrades</spoiler>.<br>
 		Bumped endgame to ee16,000,000 (note: the <spoiler>Unlock Prospit/Derse</spoiler> upgrades currently does nothing).<br>
 		Note: your <spoiler>Aspect and Class layers</spoiler> will be reset if you have more than ee100,000 points due to inflation. You still have your ee100,000 points though, so climbing back shouldn't be a problem.<br>
     <br>
-	<h3>v0.0.3.4</h2><br>
+	<h3>v0.0.3.4</h3><br>
 		Rebalanced the <spoiler>Class Points</spoiler> section.<br>
 		Bumped the endgame requrements to ee81,000 points.<br>
     <br>
-	<h3>v0.0.3.3</h2><br>
+	<h3>v0.0.3.3</h3><br>
 		Fixed having two <spoiler>Muse Powers</spoiler>.<br>
 		Used <span style="font-family:'Courier Prime', monospace">Courier Prime</span> as a fallback font if you somehow don't have Courier New installed on your device.<br>
     <br>
-	<h2>v0.0.3.2</h2><br>
+	<h2>v0.0.3.2</h3><br>
 		<h5 style="opacity:0.5">- I was right -</h5>
 		One new layer. Updated metadata. <spoiler>Skaia</spoiler> upgrades. Bumped endgame to ee51,000 points.<br>
 		Note: This update changed the internal for the <spoiler>meta aspect layer</spoiler> to make more consistency with the other <spoiler>meta layers</spoiler>, that means it has to be reseted. You should be able to climb back to where you originally was quick.<br>

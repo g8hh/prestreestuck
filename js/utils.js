@@ -359,7 +359,7 @@ document.onkeydown = function (e) {
 	if (onFocused) return
 	if (ctrlDown && hotkeys[key]) e.preventDefault()
 	if (hotkeys[key]) {
-		if (player[hotkeys[key].layer].unlocked)
+		if (player[hotkeys[key].layer].unlocked && player[hotkeys[key].layer].layerShown)
 			hotkeys[key].onPress()
 	}
 }
