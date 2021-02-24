@@ -2,7 +2,7 @@
 // ************ Save stuff ************
 
 function save() {
-	localStorage.setItem(modInfo.id + id, btoa(JSON.stringify(player)))
+	localStorage.setItem(modInfo.id, btoa(JSON.stringify(player)))
 }
 
 function startPlayerBase() {
