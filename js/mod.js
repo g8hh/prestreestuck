@@ -27,12 +27,14 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.8.3",
+	num: "0.0.3.8.4",
 	name: "The Game Continues",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.3.8.4</h3><br>
+		Fixed setiings tab being invisible.<br>
 	<h3>v0.0.3.8.3</h3><br>
 		Fixed overflow upgrades being invisible.<br>
 		Changes "themes" into "color schemes" and add a new one.<br>

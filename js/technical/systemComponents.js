@@ -1,4 +1,4 @@
-var systemVer = "0.0.3.8.3";
+var systemVer = "0.0.3.8.4";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -160,7 +160,10 @@ var systemComponents = {
 		<br><br>
         Time Played: {{ formatTime(player.timePlayed) }}<br><br>
         <h3>Hotkeys</h3><br>
-        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><br>{{key.description}}</span></div>
+        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><br>{{key.description}}</span>
+		<br><br>&nbsp;
+		</div>
+		
     `
     },
 
@@ -178,7 +181,7 @@ var systemComponents = {
                 <td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: {{ player.offlineProd?"ON":"OFF" }}</button></td>
             </tr>
             <tr>
-                <td><button class="opt" onclick="switchTheme()">Color Scheme: {{ player.theme.toString().repeat(0) + getThemeName() }}</button></td>
+                <td><button class="opt" onclick="switchTheme()">Color Scheme: {{ (player.theme ? "" : "") + getThemeName() }}</button></td>
                 <td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button></td>
                 <td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{ player.hqTree?"ON":"OFF" }}</button></td>
             </tr>
