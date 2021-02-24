@@ -102,7 +102,7 @@ addLayer("metaMeta", {
                 if ((x || getBuyableAmount(this.layer, this.id)).gte(10)) return Decimal.dInf
                 return Decimal.pow(80, Decimal.pow(3, x || getBuyableAmount(this.layer, this.id))) 
             },
-            effect(x) { return Decimal.pow(2 + (hasUpgrade("metaMeta", 44) ? player.metaMeta.meta * 0.01 : 1), x || getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(2 + (hasUpgrade("metaMeta", 44) ? player.metaMeta.meta * 0.01 : 0), x || getBuyableAmount(this.layer, this.id)) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 
