@@ -215,12 +215,12 @@ function load(saveId) {
 		let data = JSON.parse(atob(get))
 		if (data.points) {
 			player = Object.assign(getStartPlayer(), data)
-			save(player.saveId)
-			load(player.saveId)
 			meta.currentSave = player.saveId
 			meta.saves[player.saveId] = {
 				name: "Genesis"
 			}
+			save(player.saveId)
+			load(player.saveId)
 		}
 		if (data.currentSave !== undefined) {
 			meta = Object.assign(meta, data)
