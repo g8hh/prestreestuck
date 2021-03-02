@@ -13,13 +13,14 @@
 	<link href="https://fonts.googleapis.com/css?family=Courier+Prime:wght@400;700" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 	<script src="js/technical/break_eternity.js"></script>
+	<script src="js/modal.js"></script>
 	<script src="js/technical/layerSupport.js"></script>
+	<script src="js/utils/save.js"></script>
 	<script src="js/tree.js"></script>
 	<script src="js/mod.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/utils/NumberFormating.js"></script>
 	<script src="js/utils/options.js"></script>
-	<script src="js/utils/save.js"></script>
 	<script src="js/utils/themes.js"></script>
 
 	<script src="js/layers/skaia.js"></script>
@@ -42,6 +43,8 @@
 	<script src="js/layers/metaDerse.js"></script>
 	<script src="js/layers/metaMeta.js"></script>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/p5.min.js"></script>
+
 	<script src="js/technical/temp.js"></script>
 	<script src="js/game.js"></script>
 	<script src="js/technical/systemComponents.js"></script>
@@ -58,7 +61,7 @@
 		<div v-if="false" id="loadingSection" class="fullWidth" style="z-index:2147483647;background-color:var(--background)">
 			<div>
 				<h1>The Prestreestuck</h1><br />
-				<h2>v0.0.3.8.5</h2>
+				<h2>v0.0.3.8.6</h2>
 			</div>
 			<div>
 				<h3>Loading...</h3>
@@ -70,14 +73,14 @@
 		</div>
 		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.screenWidth >= 1000 && player.tab!='none' && !(gameEnded && !player.keepGoing)"></div>
 
-		<div v-if="VERSION.num != '0.0.3.8.5' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
+		<div v-if="VERSION.num != '0.0.3.8.6' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
 			<br>
 			<h2>The game is currently being updated.</h2><br />
 			If you can see this message, that means the game has detected inconsistent version number between files.<br />
 			This can be caused by the website currently being updated and not ready yet or there is an error causing the files to be read incorrectly.<br />
 			Please try again later, or if this screen has been up for more than 30 minutes, please contact the mod author.<br />
 			<br>
-			index.js version: 0.0.3.8.5<br />
+			index.js version: 0.0.3.8.6<br />
 			mod.js version: {{VERSION.num}}<br />
 			game.js version: {{gameVer}}<br />
 			components.js version: {{compVer}}<br />
@@ -140,7 +143,7 @@
 
 		</div>
 
-		<!-- Popups -->
+		<!-- Modals -->
 		<div class="popup-container">
 			<transition-group name="fade">
 				<div v-for="popup,index in activePopups" class="popup" v-bind:class="popup.type"
@@ -149,6 +152,15 @@
 					<h2 v-html="popup.message"></h2>
 				</div>
 			</transition-group>
+		</div>
+
+		<!-- Popups -->
+		<div v-if="modal.showing" class="modal">
+			<div>
+				<span v-if="modal.title"><h3 style="font-size:24px" v-html="modal.title"></h3><br/></span>
+				<span v-html="modal.content"></span><br/>
+				<button v-if="modal.dismiss" onclick="modal.hide()" v-html="modal.dismiss"></button>
+			</div>
 		</div>
 
 		<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !(gameEnded && !player.keepGoing)" onscroll="resizeCanvas()" style="background-color:var(--background)" v-bind:class="{ fullWidth: player.navTab == 'none' || tmp.other.screenWidth < 1000, col: player.navTab != 'none', right: player.navTab != 'none', fast: true, tab: true}">

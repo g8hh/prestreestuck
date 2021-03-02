@@ -1,14 +1,32 @@
 
 // ************ Save stuff ************
 
-function save() {
-	localStorage.setItem(modInfo.id, btoa(JSON.stringify(player)))
+var meta = {
+	currentSave: "",
+	act: 0,
+	saves: {},
+}
+
+function save(saveId) {
+	if (!saveId) saveId = player.saveId
+
+	meta.currentSave = player.saveId
+	
+	meta.saves[player.saveId].act = player.act
+	meta.saves[player.saveId].desc = (() => {
+		var ret = format(player.points) + " points"
+		return ret
+	})()
+
+	localStorage.setItem("pts_" + saveId, btoa(JSON.stringify(player)))
+	localStorage.setItem(modInfo.id, btoa(JSON.stringify(meta)))
 }
 
 function startPlayerBase() {
 	return {
 		tab: layoutInfo.startTab,
 		navTab: (layoutInfo.showTree ? "tree-tab" : "none"),
+		saveId: Date.now(),
 		time: Date.now(),
 		autosave: true,
 		notify: {},
@@ -162,27 +180,53 @@ function fixData(defaultData, newData) {
 	}	
 }
 
-function load() {
-	let get = localStorage.getItem(modInfo.id);
-	if (get===null || get===undefined) player = getStartPlayer()
-	else player = Object.assign(getStartPlayer(), JSON.parse(atob(get)))
-	fixSave()
+function load(saveId) {
+	if (saveId) {
+		let get = localStorage.getItem("pts_" + saveId);
+		if (get===null || get===undefined || saveId==="new") player = getStartPlayer()
+		else player = Object.assign(getStartPlayer(), JSON.parse(atob(get)))
+		player.saveId = saveId == "new" ? Date.now() : saveId
+		fixSave()
 
-	if (player.offlineProd) {
-		if (player.offTime === undefined) player.offTime = { remain: 0 }
-		player.offTime.remain += (Date.now() - player.time) / 1000
+		if (player.offlineProd) {
+			if (player.offTime === undefined) player.offTime = { remain: 0 }
+			player.offTime.remain += (Date.now() - player.time) / 1000
+		}
+		player.time = Date.now();
+		versionCheck();
+		changeTheme();
+		changeTreeQuality();
+		updateLayers()
+		setupModInfo()
+
+		setupTemp();
+		updateTemp();
+		updateTemp();
+		loadVue();
+	} else {
+		let get = localStorage.getItem(modInfo.id);
+		if (get===null || get===undefined) {
+			load("new")
+			meta.currentSave = player.saveId
+			meta.saves[player.saveId] = {
+				name: "Default"
+			}
+		}
+		let data = JSON.parse(atob(get))
+		if (data.points) {
+			player = Object.assign(getStartPlayer(), data)
+			save(player.saveId)
+			load(player.saveId)
+			meta.currentSave = player.saveId
+			meta.saves[player.saveId] = {
+				name: "Genesis"
+			}
+		}
+		if (data.currentSave !== undefined) {
+			meta = Object.assign(meta, data)
+			load(meta.currentSave)
+		}
 	}
-	player.time = Date.now();
-	versionCheck();
-	changeTheme();
-	changeTreeQuality();
-	updateLayers()
-	setupModInfo()
-
-	setupTemp();
-	updateTemp();
-	updateTemp();
-	loadVue();
 }
 
 function setupModInfo() {
@@ -229,7 +273,7 @@ function exportSave() {
 	el.value = str;
 	document.body.appendChild(el);
 	el.select();
-    el.setSelectionRange(0, 99999);
+    el.setSelectionRange(0, 999999);
 	document.execCommand("copy");
 	document.body.removeChild(el);
 }
@@ -240,6 +284,7 @@ function importSave(imported=undefined, forced=false) {
 		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)))
 		if(tempPlr.versionType != modInfo.id && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) // Wrong save (use "Forced" to force it to accept.)
 			return
+		tempPlr.saveId = player.saveId
 		player = tempPlr;
 		player.versionType = modInfo.id
 		fixSave()	
@@ -275,3 +320,100 @@ var saveInterval = setInterval(function() {
 	if (gameEnded&&!player.keepGoing) return;
 	if (player.autosave) save();
 }, 5000)
+
+function openSaveModal() {
+	modal.show(
+		"",
+		(() => {
+			var html = ""
+			var acts = [
+				["Act 0", "Genesis"]
+			]
+			for (var save in meta.saves) {
+				html += `
+				<div class="saveState" style="${save == meta.currentSave ? "box-shadow: 0 0 15px var(--color)" : ""}">
+					<input type="text" 
+						value="${meta.saves[save].name}" 
+						placeholder="Untitled Save" 
+						id="save${save}" onchange="changeSaveName(${save})"><br/>
+					<span style='font-size:14px'>
+						Act ${meta.saves[save].act} - ${acts[meta.saves[save].act][1]}<br/>
+						${meta.saves[save].desc}<br/>
+					</span>
+					<span style='font-size:12px;opacity:0.5'>
+						#${save}<br/>
+					</span>
+					<span style='font-size:3px;'>
+						<br/>
+					</span>
+					
+					${save == meta.currentSave ? `
+						<button disabled="true"> Loaded </button>
+					` : `
+						<button onclick='changeSave(${save})'> Load </button>
+						<button onclick='openDeleteSaveModal(${save})'> Delete </button>
+					`}
+				</div>
+				`
+			}
+			html += `
+			    <button style="margin:5px" onclick='openCreateSaveModal()'> New Save </span>
+			`
+			return html
+		})()
+	)
+}
+
+function changeSaveName(id) {
+	console.log(id)
+	meta.saves[id].name = document.getElementById("save" + id).value
+}
+
+function openCreateSaveModal() {
+	modal.show(
+		"Create New Save",
+		`
+			Enter your new save's name:
+			<input type="text" id="newSaveNameInput" style="margin:5px 0"
+				placeholder="New Save" 
+				id="save${save}" onchange="changeSaveName(${save})">
+			<button style="margin:5px" onclick='createSave(document.getElementById("newSaveNameInput").value); modal.hide()'> Create it! </span>
+		`
+	)
+}
+
+function createSave(name) {
+	load("new")
+	meta.currentSave = player.saveId
+	meta.saves[player.saveId] = {
+		name: name || "New Save",
+		act: 0,
+		desc: "0 points",
+	}
+	save();
+	window.location.reload();
+}
+
+function openDeleteSaveModal(id) {
+	modal.show(
+		"Delete “" + (meta.saves[id].name || "Untitled Save") + "”?",
+		`
+			You will lose everything that's in this save!<br/>
+			This process is irreversible!<br/>
+			<button style="margin:5px" onclick='deleteSave(${id}); openSaveModal()'> Get rid of it! </span>
+			<button onclick='openSaveModal()'> Nevermind, go back </span>
+		`,
+		""
+	)
+}
+
+function deleteSave(id) {
+	localStorage.removeItem("pts_" + id);
+	delete meta.saves[id]
+}
+
+function changeSave(id) {
+	meta.currentSave = id
+	localStorage.setItem(modInfo.id, btoa(JSON.stringify(meta)))
+	window.location.reload();
+}

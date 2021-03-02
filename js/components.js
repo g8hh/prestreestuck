@@ -1,4 +1,4 @@
-var compVer = "0.0.3.8.5";
+var compVer = "0.0.3.8.6";
 var app;
 
 function loadVue() {
@@ -447,7 +447,9 @@ function loadVue() {
 		el: "#app",
 		data: {
 			player,
+			meta,
 			tmp,
+			modal,
 			Decimal,
 			format,
 			formatWhole,

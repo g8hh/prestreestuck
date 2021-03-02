@@ -391,7 +391,7 @@ function isPlainObject(obj) {
 	return (!!obj) && (obj.constructor === Object)
 }
 
-document.title = modInfo.name
+document.title = "The Prestreestuck"
 
 
 

@@ -27,23 +27,31 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.8.5",
+	num: "0.0.3.8.6",
 	name: "The Game Continues",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.3.8.6</h3><br>
+		Added <spoiler>Eternity</spoiler> and <spoiler>Sacrifice</spoiler> for the <spoiler>Meta</spoiler> layer.<br>
+	<br>
 	<h3>v0.0.3.8.5</h3><br>
 		Fixed the <spoiler>Meta-Meta Upgrade</spoiler> effect being too overpowered early game.<br>
+	<br>
 	<h3>v0.0.3.8.4</h3><br>
 		Fixed setiings tab being invisible.<br>
+	<br>
 	<h3>v0.0.3.8.3</h3><br>
 		Fixed overflow upgrades being invisible.<br>
 		Changes "themes" into "color schemes" and add a new one.<br>
+	<br>
 	<h3>v0.0.3.8.2</h3><br>
 		Fixed some hotkeys triggerable when they aren't supposed to.<br>
+	<br>
 	<h3>v0.0.3.8.1</h3><br>
 		Fixed some typos.<br>
+	<br>
 	<h2>v0.0.3.8</h2><br>
 		<h5 style="opacity:0.5">- The Game Continues -</h5>
 		ACT 0 CONTINUES GODDAMNIT AAAAAAAAAAASADASHFASFHKAHLKSJ<br>
@@ -227,7 +235,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.metaMeta.resetTime >= Number.MAX_VALUE
+	return hasUpgrade("metaMeta", 124)
 }
 
 

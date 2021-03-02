@@ -1,4 +1,4 @@
-var systemVer = "0.0.3.8.5";
+var systemVer = "0.0.3.8.6";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -178,6 +178,7 @@ var systemComponents = {
             <tr>
                 <td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
                 <td><button class="opt" onclick="importSave()">Import</button></td>
+                <td><button class="opt" onclick="openSaveModal()">All Save States</button></td>
                 <td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: {{ player.offlineProd?"ON":"OFF" }}</button></td>
             </tr>
             <tr>
