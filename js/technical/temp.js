@@ -126,8 +126,14 @@ function updateTemp() {
 		}
 	}
 
+	var screenWidth = window.innerWidth
+	var splitScreen = screenWidth >= 1024
+	if (player.splitMode === "disabled") splitScreen = false
+	if (player.splitMode === "enabled") splitScreen = true
+
 	tmp.other = {
-		screenWidth: window.innerWidth,
+		screenWidth: screenWidth,
+		splitScreen: splitScreen,
 		lastPoints: player.points,
 		oomps: tmp.other.oomps,
 		oompsMag: tmp.other.oompsMag,

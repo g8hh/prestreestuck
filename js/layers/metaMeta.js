@@ -1902,12 +1902,12 @@ addLayer("metaMeta", {
         15: {
             requirementDescription: "×160,000,000 Sacrifice Multiplier",
             effectDescription() { return "Meta-Faucets now get updated highest first instead of lowest first." },
-            done() { return player.metaMeta.sacrificeMulti.gte(16000000) }
+            done() { return player.metaMeta.sacrificeMulti.gte(160000000) }
         },
         16: {
             requirementDescription: "×390,000,000 Sacrifice Multiplier",
             effectDescription() { return "Sacrifice Multiplier formula becomes better." },
-            done() { return player.metaMeta.sacrificeMulti.gte(39000000) }
+            done() { return player.metaMeta.sacrificeMulti.gte(390000000) }
         },
         17: {
             requirementDescription: "×1.612e9 Sacrifice Multiplier",

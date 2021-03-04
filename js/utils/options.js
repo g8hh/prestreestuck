@@ -9,6 +9,9 @@ function toggleOpt(name) {
 	if (name == "oldStyle")
 		updateStyle();
 }
+function switchOpt(name, opts) {
+	player[name] = opts[(opts.indexOf(player[name]) + 1) % opts.length];
+}
 var styleCooldown = 0;
 function updateStyle() {
 	styleCooldown = 1;

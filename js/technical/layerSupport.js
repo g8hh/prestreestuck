@@ -277,6 +277,7 @@ addLayer("options-tab", {
                         </tr>
                         <tr>
                             <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: ${player.hideChallenges?"HIDDEN":"SHOWN"}</button></td>
+                            <td><button class="opt" onclick="switchOpt('splitMode', ['flexible', 'enabled', 'disabled'])">Tab Splitting: ${player.splitMode == "flexible" ? "DYNAMIC" : "FORCE " + player.splitMode.toUpperCase()}</button></td>
                         </tr> 
                     `],
                 ],

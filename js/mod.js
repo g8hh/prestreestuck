@@ -27,14 +27,18 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.8.6",
+	num: "0.0.3.8.6.1",
 	name: "The Game Continues",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.3.8.6.1</h3><br>
+		Fixed <spoiler>Sacrifice Milestones</spoiler> unlocking earlier than intended.<br>
+	<br>
 	<h3>v0.0.3.8.6</h3><br>
 		Added <spoiler>Eternity</spoiler> and <spoiler>Sacrifice</spoiler> for the <spoiler>Meta</spoiler> layer.<br>
+		Added a multiple saving system. And hey, the modal from The Dynas Tree is back!
 	<br>
 	<h3>v0.0.3.8.5</h3><br>
 		Fixed the <spoiler>Meta-Meta Upgrade</spoiler> effect being too overpowered early game.<br>
