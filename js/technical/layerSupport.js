@@ -246,7 +246,45 @@ addLayer("info-tab", {
 })
 
 addLayer("options-tab", {
-    tabFormat: ["options-tab"],
+    microtabs: {
+        stuff: {
+            "Savings": {
+                content: () => [
+                    ["raw-html", `
+                        <table><tr>
+                            <td><button class="opt" onclick="save()">Save</button></td>
+                            <td><button class="opt" onclick="toggleOpt('autosave')">Autosave: ${player.autosave?"ENABLED":"DISABLED"}</button></td>
+                            <td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
+                        </tr>
+                        <tr>
+                            <td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
+                            <td><button class="opt" onclick="importSave()">Import</button></td>
+                            <td><button class="opt" onclick="openSaveModal()">All Save States</button></td>
+                        </tr>
+                        <tr>
+                            <td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: ${player.offlineProd?"ENABLED":"DISABLED"}</button></td>
+                        </tr>
+                    `],
+                ],
+            },
+            "Display": {
+                content: () => [
+                    ["raw-html", `
+                        <table><tr>
+                            <td><button class="opt" onclick="switchTheme()">Color Theme: ${getThemeName()}</button></td>
+                            <td><button class="opt" onclick="adjustMSDisp()">Show Milestones: ${player.msDisplay.toUpperCase()}</button></td>
+                            <td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: ${player.hqTree?"ENABLED":"DISABLED"}</button></td>
+                        </tr>
+                        <tr>
+                            <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: ${player.hideChallenges?"HIDDEN":"SHOWN"}</button></td>
+                            <td><button class="opt" onclick="switchOpt('splitMode', ['flexible', 'enabled', 'disabled'])">Tab Splitting: ${player.splitMode == "flexible" ? "DYNAMIC" : "FORCE " + player.splitMode.toUpperCase()}</button></td>
+                        </tr> 
+                    `],
+                ],
+            },
+        },
+    },
+    tabFormat: [["microtabs", "stuff"]],
     row: "otherside"
 })
 

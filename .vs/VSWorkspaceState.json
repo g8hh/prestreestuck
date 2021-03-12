@@ -5,8 +5,9 @@
     "\\js",
     "\\js\\Demo",
     "\\js\\layers",
-    "\\js\\technical"
+    "\\js\\technical",
+    "\\js\\utils"
   ],
-  "SelectedNode": "\\js\\layers\\skaia.js",
+  "SelectedNode": "\\js\\layers\\metaMeta.js",
   "PreviewInSolutionExplorer": false
 }

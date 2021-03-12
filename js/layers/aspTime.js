@@ -4,8 +4,8 @@ addLayer("aspTime", {
     row: 0,
     position: 0,
 
-    layerShown() { return !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
-    resource: "时间力量",
+    layerShown() { return !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) && !hasUpgrade("skaia", 14) },
+    resource: "Time Power",
     baseAmount() { return player.points },
     baseResource: "点",
     color: "#b70d0e",

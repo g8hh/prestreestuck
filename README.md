@@ -1,7 +1,11 @@
-# The-Modding-Tree
+<div style="text-align:center"><img src="data/favicon.png"/></div>
 
-A modified version of The Prestige Tree that is much easier to mod. It still requires programming knowledge, but it's mostly pretty easy things and copy/pasting.
+# <center>The Prestreestuck</center>
+made by ducdat0507  
 
-[Look here for a tutorial on getting started with modding with TMT](docs/getting-started.md)
+a mod of The Prestige Tree by Jacorb and Aarex  
+using The Modding Tree by Acamaeda  
+based on Homestuck by Andrew Hussie (of course)  
 
-You can look in the [documentation](docs/!general-info.md) for more information on how it all works, or look at the code in layers.js to see what it all looks like.
+You can play it [here](https://ducdat0507.github.io/prestreestuck/).  
+There's also a bonus TMT modfinder [here](https://ducdat0507.github.io/prestreestuck/finder.html).

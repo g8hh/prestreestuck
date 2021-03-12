@@ -19,7 +19,7 @@ function getHemospectrumName(pos) {
 }
 
 function getHemospectrum(pos) {
-    return ["#c91a00", "#c97800", "#b1ad00", "#99b81e", "#598a00", "#00a862", "#00a0a6", "#00528b", "#0046e9", "#60219b", "#9d229b", "#a71b5b"][pos]
+    return ["#f42123", "#cd7f32", "#abab1a", "#98b144", "#71a020", "#2caa6b", "#26baba", "#3796c6", "#6464ff", "#a954ff", "#a937a9", "#ae4170"][pos]
 }
 
 addLayer("metaProspit", {
@@ -88,6 +88,19 @@ addLayer("metaProspit", {
         }
     },
 
+    clickables: {
+        11: {
+            display() { return "Compact Mode:<br/>" + (getClickableState(this.layer, this.id) ? "On" : "Off") },
+            canClick: true,
+            onClick() { setClickableState(this.layer, this.id, getClickableState(this.layer, this.id) ? 0 : 1) },
+            style() {
+                return {
+                    "width": "100px", "height": "100px"
+                }
+            }
+        },
+    },
+
     buyables: (() => {
         var c = { rows: 12, cols: 12, }
         var cost = new Decimal(25)
@@ -95,26 +108,31 @@ addLayer("metaProspit", {
             var index = 11 + (sign - 0)
             c[index] = {}
             c[index].title = function () {
-                if (player.tab != this.layer) return
-                return format(getBuyableAmount("metaProspit", this.id), 0) + "<br/>" + prospitSigns[this.id - 11]
+                var compact = getClickableState(this.layer, 11)
+                return compact ? "" : format(getBuyableAmount("metaProspit", this.id), 0) + "<br/>" + prospitSigns[this.id - 11]
             }
             c[index].display = function () {
-                if (player.tab != this.layer) return
                 var bought = getBuyableAmount("metaProspit", this.id).gt(0)
-                return bought ? "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to<br/>" +
+                var compact = getClickableState(this.layer, 11)
+                return compact ?
+                    "<div style='position:absolute;transform:translate(3px,-10px);width:20px;height:20px;filter:brightness(" + (bought ? 1 : 0) + ");background:url(data/prospit_sign_sprites.png) " + -((this.id - 11) % 12 * 20) + "px " + -(Math.floor((this.id - 11) / 12) * 20) + "px'>&nbsp;</div>":
+                    (bought ? "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to<br/>" +
                     (this.id < 23 ? ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"][this.id - 11] + " Essence" : prospitSigns[this.id - 23] + " gain") + "."
-                    : "Cost: " + format(this.cost) + " Prospitians"
+                    : "Cost: " + format(this.cost) + " Prospitians")
             }
             c[index].cost = cost
             c[index].style = function () {
                 var bought = getBuyableAmount("metaProspit", this.id).gt(0)
-                var hc = this.id == 58 ? "#adabac" : getHemospectrum(Math.floor((this.id - 11) / 12))
+                var hc = this.id == 58 ? "#7c7e81" : getHemospectrum(Math.floor((this.id - 11) / 12))
+                var compact = getClickableState(this.layer, 11)
                 return {
-                    "width": "100px", "height": "100px", "margin": "0", "font-size": "50%",
+                    "margin": "0", "font-size": "50%",
+                    "width": compact ? "41px" : "100px",
+                    "height": compact ? "41px" : "100px",
                     "color": bought ? hc : "",
                     "background-color": bought ? "black" : "",
                     "border": bought ? "2px solid " + hc + "3f" : "",
-                    "box-shadow": bought ? "inset 0 0 25px " + hc : "",
+                    "box-shadow": bought ? "inset 0 0 " + (compact ? "10px" : "25px") + " " + hc : "",
                 }
             }
             c[index].canAfford = function () {
@@ -141,11 +159,15 @@ addLayer("metaProspit", {
             c[index] = {}
             c[index].unlocked = () => hasUpgrade("skaia", 60)
             c[index].title = function () {
+                if (getClickableState(this.layer, 11)) return
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Abolishments"
             }
             c[index].display = function () {
+                var compact = getClickableState(this.layer, 11)
                 var obj = tmp[this.layer].buyables[this.id]
-                return "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to all<br/>" +
+                return compact ? format(getBuyableAmount(this.layer, this.id), 0) + " Abolishments<br/>" + format(buyableEffect(this.layer, this.id), 2) +
+                    "× row gains":
+                    "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to all<br/>" +
                     getHemospectrumName(this.id - 156) + " sign gains<br/>Requires: " + format(this.cost()) + " Prospitians"
             }
             c[index].baseCost = cost
@@ -169,8 +191,11 @@ addLayer("metaProspit", {
             c[index].style = function () {
                 var buyable = tmp[this.layer].buyables[this.id].canAfford
                 var hc = getHemospectrum(this.id - 156)
+                var compact = getClickableState(this.layer, 11)
                 return {
-                    "width": "100px", "height": "100px", "border-radius": "0", "margin": "0", "font-size": "50%",
+                    "border-radius": "0", "margin": "0", "font-size": "50%",
+                    "width": "100px",
+                    "height": compact ? "41px" : "100px",
                     "border": buyable ? "2px solid " + hc + "3f" : "2px solid #0000002f",
                     "background-color": buyable ? hc : "",
                 }
@@ -197,6 +222,22 @@ addLayer("metaProspit", {
                 return true
             }
             m[index].effectDescription = function () {
+                if (getClickableState(this.layer, 11)) {
+                    return [
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " Class Point gain",
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " all Aspect Point effects",
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " Derse Point effect",
+                        () => "÷" + format(tmp[this.layer].milestones[this.id].effect) + " Derse Point requirement",
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " Prospit Point effect",
+                        () => "^" + format(tmp[this.layer].milestones[this.id].effect) + " Aspect Point gain",
+                        () => "^" + format(tmp[this.layer].milestones[this.id].effect) + " second row of Skaia upgrades",
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " sixth and eighth row Skaia upgrades",
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " sixth row Skaia upgrade",
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " Muse Power effect",
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " Lord Power effect",
+                        () => "×" + format(tmp[this.layer].milestones[this.id].effect) + " Prospit sign gains",
+                    ][this.id]()
+                }
                 return [
                     () => "All Rust sign effects boosts Class Point gain.<br/>Currently: ×" + format(tmp[this.layer].milestones[this.id].effect),
                     () => "All Bronze sign effects boosts all Aspect Point effects.<br/>Currently: ×" + format(tmp[this.layer].milestones[this.id].effect),
@@ -227,15 +268,18 @@ addLayer("metaProspit", {
                     () => eff.log(10).add(1),
                     () => eff.pow(0.05),
                     () => eff.pow(0.02),
-                    () => Decimal.pow(10, eff.add(1).log10().div(18).sqrt()),
+                    () => Decimal.pow(10, eff.log10().div(18).sqrt()),
                 ][this.id]
                 return effs()
             },
             m[index].style = function () {
                 var owned = hasMilestone(this.layer, this.id)
                 var hc = getHemospectrum(this.id)
+                var compact = getClickableState(this.layer, 11)
                 return {
-                    "width": "296px", "height": "96px", "margin": "0", "padding": "0", "border-radius": "25px 0 0 25px", "font-size": "60%", "vertical-align": "middle",
+                    "margin": "0", "padding": "0", "border-radius": "25px 0 0 25px", "font-size": "60%", "vertical-align": "middle",
+                    "width": compact ? (496 - (hasUpgrade('skaia', 60) ? 100 : 0)) + "px" : "296px",
+                    "height": compact ? "37px" : "96px",
                     "display": hasUpgrade("skaia", 55) ? "" : "none", 
                     "border": owned ? "2px solid " + hc + "3f" : "2px solid #0000002f",
                     "color": owned ? "#000000af" : "",
@@ -265,7 +309,10 @@ addLayer("metaProspit", {
                     }
                     return [
                         ["blank", "15px"],
+                        ["clickable", 11],
+                        ["blank", "15px"],
                         ["signs-holder", m],
+                        ["blank", "15px"],
                     ]
                 })(),
             },
@@ -301,6 +348,10 @@ addLayer("metaProspit", {
         ["blank", "15px"],
         ["microtabs", "stuff"],
         ["blank", "35px"],
+    ],
+
+    hotkeys: [
+        { key: "p", description: "P: Abolish for Prospit Points", unlocked() { return tmp[this.layer].layerShown }, onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
 
 

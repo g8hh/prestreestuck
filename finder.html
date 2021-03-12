@@ -4,20 +4,48 @@
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<link rel="stylesheet" type="text/css" href="popup.css" />
 
+	<title>¤TPTM™: ducdat0507's The Prestige Tree Modfinder™</title>
+
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 	<script>
 		let app = {} 
 
-        function update() {
-            app.mods = []
-            app.statusText = "Patience is a virtue"
-            fetch("https://api.github.com/repos/Acamaeda/The-Modding-Tree/forks?per_page=100&sort=newest")
+        function fetchParent() {
+            fetch("https://api.github.com/repos/Acamaeda/The-Modding-Tree")
                 .then(res => {
                     if (res.status == 200) {
                         res.json()
                             .then(json => {
-                                app.mods = json
+                                app.statusText = `
+                                    The Modding Tree currently has ${json["forks"]} forks.
+                                `
+                                for (var a = 1; a <= Math.min(Math.ceil(json["forks"] / 100), 5); a++) fetchChildren(a)
+                            })
+                    } else if (res.status == 403) {
+                        app.statusText = "Due to several reasons, GitHub only allows a limited amount of API calls per computer every once in a while."
+                        fetch("https://api.github.com/rate_limit")
+                            .then(res => {
+                                res.json().then(json => { if (json.resources && json.resources.core && json.resources.core.reset) app.statusText += "<br/>Please try again in " + formatTime(json.resources.core.reset * 1000 - new Date()) + "."; console.log(json.resources.core.reset) }) })
+                        console.log(res)
+                    } else {
+                        app.statusText = "Something gone wrong???"
+                        console.log(res)
+                    }
+                })
+                .catch(error => {
+                    app.statusText = "Something gone wrong???"
+                    console.log(error)
+                });
+        }
+
+        function fetchChildren(page = 1) {
+            fetch("https://api.github.com/repos/Acamaeda/The-Modding-Tree/forks?page=" + page + "&per_page=100&sort=newest")
+                .then(res => {
+                    if (res.status == 200) {
+                        res.json()
+                            .then(json => {
+                                app.mods = app.mods.concat(json)
                                 app.statusText = `
                                     Sort by:<br/>
                                     <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setSortRule('updated_at')"><span>Update</button>
@@ -46,9 +74,17 @@
                     app.statusText = "Something gone wrong???"
                     console.log(error)
                 });
+        }
+
+        function update() {
+            app.mods = []
+            app.statusText = "Patience is a virtue"
+            fetchParent()
 		}
 
-		function formatTime(ms) {
+        function formatTime(ms) {
+            if (ms < 0) return "in the future???"
+            if (ms == 0) return "literally right now"
 			if (ms < 1000) return ms.toLocaleString("en-US") + "ms"
             ms /= 1000
             if (ms < 60) return Math.floor(ms).toLocaleString("en-US") + "s"
@@ -107,9 +143,25 @@
         setInterval(() => app.width = window.innerWidth, 100)
 		
 	</script>
+    <style>
+        .navButton {
+            border: 1px solid #e3e3e2;
+            background: linear-gradient(#ffffff, #f6f6f5);
+            color: #3f3f3e;
+            width: calc(33% - 7px);
+            padding: 3px;
+            height: 12px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        .navButton.disabled {
+            color: #c9c9c9;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body onload="load()" style="overflow-y:scroll">
-    <div id="finderApp">
+    <div id="finderApp" style="padding:5px">
         <div>
             <br />
             <h3>ducdat0507's The Prestige Tree Modfinder</h3><br />
@@ -118,29 +170,33 @@
         </div>
         <div v-html="statusText + '<br/>'">
         </div>
-        <div v-for="repo in mods" v-bind:style="{'width': 'calc(' + (100 / Math.max(Math.floor(width / 400), 1)) + '% - 10px)'}" style="display:inline-flex;margin:0;padding:5px;transition:none">
-            <div v-if="repo.owner" style="text-align:left;border:2px solid white;border-radius:24px;padding:5px;width:100%">
+        <div v-for="repo in mods" v-bind:style="{'width': 'calc(' + (100 / Math.max(Math.floor((width - 10) / 400), 1)) + '% - 10px)'}" style="display:inline-flex;margin:0;padding:5px;transition:none">
+            <div v-if="repo.owner" style="text-align:left;border:4px solid #272725;background:linear-gradient(#383838, #2a2a29);border-radius:4px;padding:5px;width:100%">
                 <table>
                     <tr>
-                        <td><img v-bind:src="repo.owner.avatar_url" style="width:50px;height:50px;border-radius:16px;" /></td>
-                        <td style="text-align:left;padding-left:6px;width:100%;transform:translateY(-2px)">
-                            <h3>{{repo.owner.login}}</h3>
-                            <span style="opacity:0.5;font-size:14px"><br />/{{repo.name}}</span>
+                        <td><img v-bind:src="repo.owner.avatar_url" style="width:50px;height:50px;border-radius:8px;" /></td>
+                        <td style="text-align:left;padding-left:6px;width:75%;transform:translateY(-2px)">
+                            <a style="color:#ffffff" v-bind:href="repo.owner.html_url" target="_blank"><h3>{{repo.owner.login}}</h3></a>
+                            <a style="color:#02f2f2" v-bind:href="repo.html_url" target="_blank"><span style="font-size:14px"><br />/{{repo.name}}</span></a>
                         </td>
-                        <td style="text-align:right;width:200px;transform:translateY(-2px)">
-                            {{repo.stargazers_count.toLocaleString("en-US")}}<span style="font-size:12px">&nbsp;stars</span><br />
-                            {{repo.open_issues_count.toLocaleString("en-US")}}<span style="font-size:12px">&nbsp;issues</span><br />
+                        <td style="text-align:right;width:25%;transform:translateY(-2px);line-height:0.8;user-select:none;">
+                            <span style="font-size:12px" v-bind:title="'Updated on ' + new Date(repo.updated_at)">{{formatTime(new Date() - new Date(repo.updated_at))}} <img src="data/finder_updated.png"/></span><br />
+                            <span style="font-size:12px" v-bind:title="'Created on ' + new Date(repo.created_at)">{{formatTime(new Date() - new Date(repo.created_at))}} <img src="data/finder_created.png"/></span><br />
+                            <span style="font-size:12px" v-bind:title="repo.stargazers_count.toLocaleString('en-US') + ' star' + (repo.stargazers_count == 1 ? '' : 's')">{{repo.stargazers_count.toLocaleString("en-US")}} <img src="data/finder_stars.png"/></span><br />
+                            <span style="font-size:12px" v-bind:title="repo.open_issues_count.toLocaleString('en-US') + ' open issue' + (repo.open_issues_count == 1 ? '' : 's')">{{repo.open_issues_count.toLocaleString("en-US")}} <img src="data/finder_issues.png"/></span><br />
                         </td>
                     </tr>
                 </table>
-                <div style="background-color:white;width:100%;height:2px;margin-top:3px;margin-bottom:5px">&nbsp;</div>
-                <h5>
-                    Created {{formatTime(new Date() - new Date(repo.created_at))}} ago, {{Math.abs(new Date(repo.created_at) - new Date(repo.updated_at)) < 10000 ? "Not yet updated" : "Updated " + formatTime(new Date() - new Date(repo.updated_at)) + " ago"}}<br />
-                    <span v-if="!descFilter.includes(repo.description)"><i>"{{repo.description}}"</i><br /></span>
-                    <span v-else><i style="opacity:0.5">No descriptions</i><br /></span>
-                    <a class="link" style="font-size:12px;display:inline" v-bind:href="repo.html_url" target="_blank">main repo</a> |
-                    <span v-if="repo.has_pages"><a class="link" style="font-size:12px;display:inline" v-bind:href="'https://' + repo.owner.login + '.github.io/' + repo.name" target="_blank">github.io</a> |</span>
-                    <a class="link" style="font-size:12px;display:inline" v-bind:href="'https://raw.githack.com/' + repo.owner.login + '/' + repo.name + '/' + repo.default_branch + '/'" target="_blank">raw.githack.com</a>
+                <div style="display:table;font-size:12.5px;height:80px;width:calc(100% + 10px);background-color:#0000007f;margin:5px -5px;box-shadow:inset 0 0 100px #000000b0">
+                    <div style="display:table-cell;vertical-align:middle">
+                        <span v-if="!descFilter.includes(repo.description)"><i>"{{repo.description}}"</i><br /></span>
+                        <span v-else><i style="opacity:0.5">No descriptions</i><br /></span>
+                    </div>
+                </div>
+                <h5 style="margin:-5px">
+                    <a class="navButton" v-bind:href="repo.homepage" v-bind:class="[repo.homepage == '' ? 'disabled' : '']" target="_blank">Homepage</a><!--
+                 --><a class="navButton" v-bind:href="'https://' + repo.owner.login + '.github.io/' + repo.name" v-bind:class="[!repo.has_pages ? 'disabled' : '']" target="_blank">GitHub Pages</a><!--
+                 --><a class="navButton" v-bind:href="'https://raw.githack.com/' + repo.owner.login + '/' + repo.name + '/' + repo.default_branch + '/'" target="_blank">raw.githack.com</a>
                 </h5>
             </div>
         </div>

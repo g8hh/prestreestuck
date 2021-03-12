@@ -1,4 +1,4 @@
-let modInfo = {
+﻿let modInfo = {
 	name: "The Prestreestuck",
 	id: "treestuck",
 	author: "ducdat0507",
@@ -27,12 +27,45 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.7",
-	name: "End of Act 0?",
+	num: "0.0.3.8.6.1",
+	name: "The Game Continues",
 }
 
-let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
+let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.3.8.6.1</h3><br>
+		Fixed <spoiler>Sacrifice Milestones</spoiler> unlocking earlier than intended.<br>
+	<br>
+	<h3>v0.0.3.8.6</h3><br>
+		Added <spoiler>Eternity</spoiler> and <spoiler>Sacrifice</spoiler> for the <spoiler>Meta</spoiler> layer.<br>
+		Added a multiple saving system. And hey, the modal from The Dynas Tree is back!
+	<br>
+	<h3>v0.0.3.8.5</h3><br>
+		Fixed the <spoiler>Meta-Meta Upgrade</spoiler> effect being too overpowered early game.<br>
+	<br>
+	<h3>v0.0.3.8.4</h3><br>
+		Fixed setiings tab being invisible.<br>
+	<br>
+	<h3>v0.0.3.8.3</h3><br>
+		Fixed overflow upgrades being invisible.<br>
+		Changes "themes" into "color schemes" and add a new one.<br>
+	<br>
+	<h3>v0.0.3.8.2</h3><br>
+		Fixed some hotkeys triggerable when they aren't supposed to.<br>
+	<br>
+	<h3>v0.0.3.8.1</h3><br>
+		Fixed some typos.<br>
+	<br>
+	<h2>v0.0.3.8</h2><br>
+		<h5 style="opacity:0.5">- The Game Continues -</h5>
+		ACT 0 CONTINUES GODDAMNIT AAAAAAAAAAASADASHFASFHKAHLKSJ<br>
+		Added 1 new layer.<br>
+		Added... a few more things.<br>
+		Migrated to The Modding Tree 2.π.<br>
+	<br>
+	<h3>v0.0.3.7.1</h3><br>
+		Added <spoiler>Compact Mode for Sign Viewers</spoiler>.<br>
+    <br>
 	<h2>v0.0.3.7</h2><br>
 		<h5 style="opacity:0.5">- End of Act 0? -</h5>
 		The game now has a definitive "end", or does it?<br>
@@ -40,6 +73,9 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(
 		Even more massive slowdowns.<br>
 		Even more bugs.<br>
 	<br>
+	<h3>v0.0.3.6.1 ~ v0.0.3.6.4</h3><br>
+		Miscellaneous bug fixes that I don't even know what they are anymore.<br>
+    <br>
 	<h2>v0.0.3.6</h2><br>
 		<h5 style="opacity:0.5">- Massive Slowdown -</h5>
 		Added two new layers, each has over 144(!) new things that you can buy. Gosh that will be very laggy.<br>
@@ -47,20 +83,20 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;Changelog<h1 style="opacity:0.05">(
 		Decided not to bump the endgame because I accidently bumped it too much. Content should span until you get your first <spoiler>Gold sign</spoiler> in the new two layers.<br>
 		<h5 style="opacity:0.5"><br/><spoiler>(also the title of the new 244 "things" might not be trully accurate to their actual Homestuck-canony-thingy names so i guess you can report it to me if you want to fix something idk oh well)</spoiler></h5>
 	<br>
-	<h3>v0.0.3.5</h2><br>
+	<h3>v0.0.3.5</h3><br>
 		Added more <spoiler>Skaia upgrades</spoiler>.<br>
 		Bumped endgame to ee16,000,000 (note: the <spoiler>Unlock Prospit/Derse</spoiler> upgrades currently does nothing).<br>
 		Note: your <spoiler>Aspect and Class layers</spoiler> will be reset if you have more than ee100,000 points due to inflation. You still have your ee100,000 points though, so climbing back shouldn't be a problem.<br>
     <br>
-	<h3>v0.0.3.4</h2><br>
+	<h3>v0.0.3.4</h3><br>
 		Rebalanced the <spoiler>Class Points</spoiler> section.<br>
 		Bumped the endgame requrements to ee81,000 points.<br>
     <br>
-	<h3>v0.0.3.3</h2><br>
+	<h3>v0.0.3.3</h3><br>
 		Fixed having two <spoiler>Muse Powers</spoiler>.<br>
 		Used <span style="font-family:'Courier Prime', monospace">Courier Prime</span> as a fallback font if you somehow don't have Courier New installed on your device.<br>
     <br>
-	<h2>v0.0.3.2</h2><br>
+	<h2>v0.0.3.2</h3><br>
 		<h5 style="opacity:0.5">- I was right -</h5>
 		One new layer. Updated metadata. <spoiler>Skaia</spoiler> upgrades. Bumped endgame to ee51,000 points.<br>
 		Note: This update changed the internal for the <spoiler>meta aspect layer</spoiler> to make more consistency with the other <spoiler>meta layers</spoiler>, that means it has to be reseted. You should be able to climb back to where you originally was quick.<br>
@@ -136,7 +172,11 @@ function getPointGen() {
 
 	let gain = new Decimal(1)
 
-	if (!hasUpgrade("skaia", 12)) {
+	if (hasUpgrade("skaia", 14)) {
+		if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
+	} else if (hasUpgrade("skaia", 12)) {
+		gain = gain.mul(tmp.metaAspects.effect.pointBoost)
+	} else {
 		for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
 
 		if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
@@ -167,9 +207,7 @@ function getPointGen() {
 		if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
 		if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
 		if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
-	} else {
-		gain = gain.mul(tmp.metaAspects.effect.pointBoost)
-    }
+	}
 
 
 	if (Number.isNaN(gain.mag)) gain = new Decimal(0)
@@ -190,9 +228,10 @@ var displayThings = [
 		for (lys in LAYERS) {
 			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && !inChallenge("aspDoom", 12)))) rem++
 		}
-		if (hasUpgrade("skaia", 12)) rem -= 12;
+		if (hasUpgrade("skaia", 14)) rem -= 17;
+		else if (hasUpgrade("skaia", 12)) rem -= 12;
 		var acts = [
-			["Act 0", "Genesis", (rem == 0 ? "Current endgame: " + format("ee16000000") + " points" : rem + " layers remaining") + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : "")]
+			["Act 0", "Genesis", (rem == 0 ? "The end is nigh..." : rem + " layers remaining" + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : ""))]
 		]
 		return `<h2><br/>${acts[player.act][0]}</h2><br/>- ${acts[player.act][1]} -<br/><h5 style='margin-top:5px;opacity:0.5'><i>(${acts[player.act][2]})</i></h5>`
 	}
@@ -200,7 +239,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return hasUpgrade("skaia", 13) && player.aspTime.points.gte("1")
+	return hasUpgrade("metaMeta", 124)
 }
 
 
