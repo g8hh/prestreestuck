@@ -1095,8 +1095,8 @@ addLayer("skaia", {
                     ["upgrade", "21"],
                     ["display-text", function () {
                         if (!hasUpgrade("skaia", 21)) return ""
-                        const tgs = [["buildGrist", "PrftlyGnricStock"]]
-                        let data = "<h5/>" + "Stock Name".padEnd(16, "\u00a0") + " |" + "In Stock".padStart(15, "\u00a0") + " |" + "S. Price".padStart(9, "\u00a0") + " |" + "P. Speed".padStart(9, "\u00a0") + " | Actions:<br/>"
+                        const tgs = [["建造谷仓", "神圣谷仓"]]
+                        let data = "<h5/>" + "仓库名".padEnd(16, "\u00a0") + " |" + "库中储量".padStart(15, "\u00a0") + " |" + "出售价格".padStart(9, "\u00a0") + " |" + "涨价速度".padStart(9, "\u00a0") + " | 行动:<br/>"
                         tgs.forEach(target => {
                             data += target[1].padEnd(16, "\u00a0") + " |"
                                 + format(player.skaia[target[0] + "Stock"]).padStart(15, "\u00a0") + " |"
