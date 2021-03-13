@@ -8,7 +8,7 @@ addLayer("aspRage", {
     layerShown() { return (hasUpgrade("aspMind", 24) || player.aspRage.unlocked) && !inChallenge("aspDoom", 12) && !hasUpgrade("skaia", 12) },
     resource: "Rage Essence",
     baseAmount() { return player.aspMind.points },
-    baseResource: "风力量",
+    baseResource: "心灵力量",
     color: "#520c61",
     resetDescription: "Absorb ",
 
