@@ -1129,7 +1129,7 @@ addLayer("skaia", {
                 unlocked: () => hasUpgrade("skaia", 12),
                 content: [
                     ["blank", "15px"],
-                    ["display-text", () => "你的点数每分钟给你 " + format(tmp.skaia.effect.levelGain.mul(60)) + " 回切点."],
+                    ["display-text", () => "你的点数每分钟给你 " + format(tmp.skaia.effect.levelGain.mul(60)) + " 点."],
                     ["blank", "15px"],
                     ["upgrade", "31"],
                     ["row", [["upgrade", "32"], ["upgrade", "33"], ["upgrade", "34"]]],
