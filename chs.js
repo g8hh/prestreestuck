@@ -1301,7 +1301,7 @@ var cnItems = {
     'Your Overflows and Total Overlows no longer resets when you respec your Eternity Upgrades with the \“Meta-Faucet Upgrades also gives you Meta-Faucets\” upgrade.': '重置永恒升级“元-插槽升级每达到一次整数的平方，会额外给你一个元-插槽“升级时你的超限和总超限不再重置',
     'You get 1.5% of your remaining Sacrifice Multiplier per second.': '每秒获得剩余的献祭倍增器的1.5%',
     'Unlocks the bottom-left Eternity Upgrade, but only when you\'ve bought all previous ones.': '解锁左下的永恒升级，但只有在你购买了这之前的所有永恒升级后才解锁',
-    'Meta-Faucets now get updated highest first instead of lowest first.': '元-插槽现在优先获取最高的而不是最低的',
+    'Meta-Faucets now get updated highest first instead of lowest first.': '新的元-插槽现在从最上方插入而不是最下方',
     'Sacrifice Multiplier formula becomes better.': '献祭倍增器公式变得更好',
     'Replaces the Respec Overflow Upgrades button to Reset Current Dilation.': '移除重置超限升级按钮，用重置时间膨胀替代它',
     'Unlocks Meta-Meta-Faucets.': '解锁元-元-插槽',
