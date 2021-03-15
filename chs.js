@@ -822,7 +822,7 @@ var cnItems = {
     'Doom Accelerators': '灾厄加速器',
     'Void Accelerators': '虚空加速器',
     'Rogue Booster': '游侠增强器',
-    'Theif Booster': '盗贼增强器',
+    'Thief Booster': '盗贼增强器',
     'Heir Booster': '继承人增强器',
     'Maid Booster': '女仆增强器',
     'Page Booster': '历史增强器',
