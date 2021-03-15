@@ -13,7 +13,7 @@ addLayer("metaMeta", {
     canReset() { return new Decimal(tmp[this.layer].resetGain).gte(1) },
     canBuyMax() { return true },
     prestigeButtonText() { 
-        return "Ascend for <b>+" + formatWhole(tmp[this.layer].resetGain) + "</b> Metaness<br/>Next at " + formatWhole(tmp[this.layer].nextAt) + " points"
+        return "Ascend for <b>+" + formatWhole(tmp[this.layer].resetGain) + "</b> Metaness<br/>下一个需要 " + formatWhole(tmp[this.layer].nextAt) + " points"
     },
     getResetGain() {
         if (!hasUpgrade("skaia", 14)) return new Decimal(0)
