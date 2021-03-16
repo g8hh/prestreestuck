@@ -1240,7 +1240,7 @@ var cnItems = {
     'Automatically clicks on Meta-Faucet Upgrades button per tick.': '每一刻自动点击元-插槽升级',
     'Automatically Increments for Overflows.': '自动进行增长获得超限',
     'Eternities.': '永恒',
-    'For all Lower Meta-Upgrades and Faucet Upgrades, buying power is increased by 1\% of itself, rounded up.': '每次购买较低的元-升级和插槽升级都会购买它们现有量的1%',
+    'For all Lower Meta-Upgrades and Faucet Upgrades, buying power is increased by 1\% of itself, rounded up.': '每次购买下方的元-升级和插槽升级都会购买它们现有量的1%',
     'Incrementing now only resets your points.': '增长现在只重置点数',
     'Meta-Faucet Upgrade\^4s now gives you a bonus Meta-Faucet every upgrade.': '元-插槽升级^4现在每次升级都会加成你的元-插槽',
     'Meta-Faucets': '元-插槽',
