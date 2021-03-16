@@ -1308,7 +1308,8 @@ var cnItems = {
     'Raises the Metaness effect power tower by your amount of Overflows, plus 1.': '基于你的超限+1提高你的元性质力量塔效果',
     'Begin stock trading simulator.': '开始交易模拟',
     'Cost: 1,000,000 Boondollars\n			': '消耗：1,000,000恩惠币\n			',
-    '': '',
+    'Automatically buy low, sell high when possible. ': '自动低价购入，高价出售',
+    'Cost: 1.000e11 Boondollars\n			': '消耗：1.000e11恩惠币\n			',
     '': '',
     '': '',
 
@@ -1997,7 +1998,7 @@ var cnRegReplace = new Map([
     [/^\^(.+) all \“Time goes by faster\” upgrades effects.$/, '^$1所有“时间流动加快”升级效果'],
     [/^\^(.+) all \“speeds up Time\” upgrades effects.$/, '^$1所有“加速时间”升级效果'],
     [/^(.+)Try reloading the page, and if it don't help, contact the mod author!\n(.+)$/, '尝试重新加载页面，如果没有帮助，请联系mod作者!'],
-    [/^You have (.+)Space, which are giving a (.+) boost to Time Power gain$/, '你有$1空间，将增强空间力量获取量$2'],
+    [/^You have (.+)Space, which are giving a (.+) boost to Time Power gain$/, '你有$1空间，将增强时间力量获取量×$2'],
     [/^which are giving (.+)Space per second.\n(.+)Cost: (.+) Space Power$/, '将生产$1空间每秒。\n$2成本：$3 空间力量'],
     [/^which are giving (.+)Space Generators per second.\n(.+)Cost: (.+) Space Power$/, '将生产$1空间发生器每秒。\n$2成本：$3 空间力量'],
     [/^You\'ve spent (.+) days this Meta-Ascension.$/, '你已经在本次元飞升中经过了 $1 天'],
