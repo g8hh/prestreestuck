@@ -846,7 +846,7 @@ var cnItems = {
     'Meta-Faucets.': '元-插槽',
     'Meta-Meta-Faucets.': '元-元-插槽',
     'Meta-Meta-Faucets \#': '元-元-插槽 #',
-    '': '',
+    'buildGrist': '建造谷仓',
     '': '',
     '': '',
     'Shard and Essence replacements scales better.': '优化碎片和精华的购买进度重置',
