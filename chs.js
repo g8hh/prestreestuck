@@ -1858,7 +1858,7 @@ var cnRegReplace = new Map([
     [/^(.+) Mind Power\n			$/, '$1 精神力量'],
     [/^(.+) Hope Power\n			$/, '$1 希望力量'],
     [/^(.+) Mind Power\n			$/, '$1 精神力量'],
-    [/^Point gain is softcapped beyond (.+) points, with a magnitude of (.+).$/, '点数获取将在$1到达软上限，影响级别为$3'],
+    [/^Point gain is softcapped beyond (.+) points, with a magnitude of (.+).$/, '点数获取将在$1到达软上限，影响级别为$2'],
     [/^Raises Time Power gain to the power of \^(.+)$/, '时间力量获得量变为^$1'],
     [/^Raises Space Power gain to the power of \^(.+)$/, '空间力量获得量变为^$1'],
     [/^Tetrates point gain by \^\^(.+)$/, '点数获得量变为^^$1'],
