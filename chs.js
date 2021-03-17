@@ -66,7 +66,7 @@ var cnItems = {
     'Breath Essence': '呼吸精华',
     'Blood Essence': '鲜血精华',
     'Blood Power.': '鲜血力量',
-    'Blood Power.': '呼吸力量',
+    'Breath Power.': '呼吸力量',
     'Time Multiplier': '时间加倍器',
     'Time Multiplier\^': '时间加倍器^',
     'Time Multiplier\^\∞ Synergizer': '时间加倍器^∞协同器',
