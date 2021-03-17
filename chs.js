@@ -1008,7 +1008,7 @@ var cnItems = {
     'Hope and Rage Essence boosts Time Power gain.': '希望和愤怒精华加成时间力量获得量',
     'Hope and Rage Essence boosts point gain.': '希望和愤怒精华加成点数获得量',
     'Reduces the Hope Essence requirements by 1e12.': '希望精华需求降低1e12',
-    'Reduces the Rage Essence requirements by 1e10.': '希望精华需求降低1e10',
+    'Reduces the Rage Essence requirements by 1e10.': '愤怒精华需求降低1e10',
     'Void Power boosts Light Power gain': '虚空力量加成光明力量获得量',
     'Light Power boosts Void Power gain': '光明力量加成虚空力量获得量',
     'Light Power and Void Power boosts point gain': '光明力量和虚空力量加成点数获得量',
