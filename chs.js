@@ -1943,6 +1943,7 @@ var cnRegReplace = new Map([
     [/^which are giving (.+) Breath Power per second.$/, '将产生e$1呼吸力量每秒'],
     [/^which are decreasing the scaling point of Light Researches by (.+)$/, '使所有光明研究的涨价速度降低$1'],
     [/^which are decreasing the scaling point of Light Researches by (.+).$/, '使所有光明研究的涨价速度降低$1.'],
+    [/^which are decreasing the scaling point of Light Researches by (.+).(.+)$/, '使所有光明研究的涨价速度降低$1.$2'],
     [/^which are giving a (.+)× boost to point gain$/, '使你的点数获得量增加$1×'],
     [/^which are giving a (.+)× boost to Time Power gain$/, '使你的时间力量获得量增加$1×'],
     [/^which are giving a (.+)× boost to Space Power gain$/, '使你的空间力量获得量增加$1×'],
