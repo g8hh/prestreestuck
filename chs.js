@@ -1871,7 +1871,7 @@ var cnRegReplace = new Map([
     [/^Raises Space Power gain to the power of \^(.+)$/, '空间力量获得量变为^$1'],
     [/^Tetrates point gain by \^\^(.+)$/, '点数获得量变为^^$1'],
     [/^(.+) \/ (.+) completions$/, '$1 / $2 完成次数'],
-    [/^Hope Power \(\+(.+)\/s\).$/, '心灵力量 (+$1/s)'],
+    [/^Hope Power \(\+(.+)\/s\).$/, '希望力量 (+$1/s)'],
     [/^Idle \/ (.+)$/, '空闲 / $1'],
     //[/^Idle \/ e(.+)$/, '空闲 / e$1'],
     [/^Idle \/ (.+)$/, '空闲 / $1'],
