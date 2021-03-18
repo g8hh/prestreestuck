@@ -861,7 +861,7 @@ var cnItems = {
     'Absorbing Breath and Blood Essence no longer resets anything.': '呼吸和鲜血的重置不再重置任何东西。',
     'Automatically do Breath and Blood resets.': '自动执行呼吸和鲜血重置。',
     'Gain the ability to bulk get Time Boosters. Also affects autobuyers.': '可以批量购买时间增强器，也影响自动购买者。',
-    'Keeps Doom Wraths on Breath and Blood resets.': '进行呼吸和鲜血重置后你可以保留灾厄狂怒',
+    'Keeps Doom Wraths on Breath and Blood resets.': '进行呼吸和鲜血重置后你可以保留灾厄盛怒挑战',
     'Progression': '进阶',
     'Multiplies all of the second upgrade row effect with the fourth root of Skaia level plus 1, after all above power upgrades.': '在以上所有能力升级之后，将所有第二行升级效果乘以斯卡亚等级的四次方根加1',
     'You can bulk absorb Breath and Blood ': '你可以批量重置呼吸和鲜血',
