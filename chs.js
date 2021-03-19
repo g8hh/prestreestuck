@@ -1316,7 +1316,7 @@ var cnItems = {
     'Hope Power boosts Space Power gain': '希望力量加成空间力量获取量',
     'Hope Power boosts points gain': '希望力量加成点数获取量',
     'All of the previous challenge，combined.': '所有前面的挑战，全部一起',
-    '': '',
+    'which are decreasing the scaling point of Light Researches by': '使所有光明研究的涨价速度降低',
     '': '',
     '': '',
     '': '',
