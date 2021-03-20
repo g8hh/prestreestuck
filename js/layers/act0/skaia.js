@@ -1,4 +1,4 @@
-addLayer("skaia", {
+if (act == 0) addLayer("skaia", {
     name: "Skaia",
     symbol: "<img src='data/spirograph.png' style='width:calc(80% );height:calc(80%);margin:10%'></img>",
     row: 999,

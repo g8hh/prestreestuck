@@ -1,4 +1,4 @@
-addLayer("aspLife", {
+if (act == 0) addLayer("aspLife", {
     name: "Life",
     symbol: "<img src='data/life.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>",
     row: 5,

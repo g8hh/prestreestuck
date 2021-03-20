@@ -1,4 +1,4 @@
-addLayer("aspMind", {
+if (act == 0) addLayer("aspMind", {
     name: "Mind",
     symbol: "<img src='data/mind.png' style='width:calc(80% - 3px);height:calc(80% - 3px);margin:10%'></img>",
     row: 2,

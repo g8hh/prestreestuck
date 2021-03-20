@@ -1,4 +1,4 @@
-addLayer("aspSpace", {
+if (act == 0) addLayer("aspSpace", {
     name: "Space",
     symbol: "<img src='data/space.png' style='width:calc(80% - 2px);height:calc(80% - 2px);margin:10%'></img>",
     row: 1,

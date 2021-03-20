@@ -11,6 +11,7 @@ function save(saveId) {
 	if (!saveId) saveId = player.saveId
 
 	meta.currentSave = player.saveId
+	meta.act = player.act
 	
 	meta.saves[player.saveId].act = player.act
 	meta.saves[player.saveId].desc = (() => {
@@ -327,9 +328,11 @@ function openSaveModal() {
 		"",
 		(() => {
 			var html = ""
-			var acts = [
-				["Act 0", "Genesis"]
-			]
+			var acts = {
+				0: ["Act 0", "Genesis"],
+				1: ["Act 1", "Incrementalism"],
+				omega: ["Act Ω", "?????"],
+			}
 			for (var save in meta.saves) {
 				html += `
 				<div class="saveState" style="${save == meta.currentSave ? "box-shadow: 0 0 15px var(--color)" : ""}">
@@ -415,6 +418,19 @@ function deleteSave(id) {
 
 function changeSave(id) {
 	meta.currentSave = id
+	meta.act = meta.saves[id].act
 	localStorage.setItem(modInfo.id, btoa(JSON.stringify(meta)))
 	window.location.reload();
+}
+
+function switchAct(act) {
+	player = {
+		...getStartPlayer(),
+		
+		timePlayed: player.timePlayed,
+		saveId: player.saveId,
+		act: act,
+	}
+	save();
+	window.location.reload()
 }

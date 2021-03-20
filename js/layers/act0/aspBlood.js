@@ -1,4 +1,4 @@
-addLayer("aspBlood", {
+if (act == 0) addLayer("aspBlood", {
     name: "Blood",
     symbol: "<img src='data/blood.png' style='width:calc(80% - 2px);height:calc(80% - 2px);margin:10%'></img>",
     row: 7,
