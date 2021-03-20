@@ -1707,7 +1707,7 @@ var cnExcludeWhole = [
     /^x?\d+(\.\d+)?[A-Za-z%]{0,2}(\s.C)?\s*$/, //12.34K,23.4 °C
     /^x?\d+(\.\d+)?(e[+\-]?\d+)?\s*$/, //12.34e+4
     /^\s*$/, //纯空格
-    /^(.+)直到下一个回切点$/, 
+    /^(.+)直到下一个阶层点$/, 
     /^÷(.+),$/, 
     /^(.+)x$/, 
     /^e(.+)\/秒$/, 
@@ -1731,7 +1731,7 @@ var cnRegReplace = new Map([
     [/^requires ([\d\.]+) more research points$/, '需要$1个研究点'],
     [/^(\d+) Royal points$/, '$1 皇家点数'],
     [/^(\d+) layers remaining$/, '$1 层剩余'],
-    [/^and will need (.+) Echepoints to climb to the next rung.$/, '并且需要$1个阶层点才能提升到下一个阶层。'],
+    [/^and will need (.+) Echepoints to climb to the next rung.$/, '并且需要$1个阶层点数才能提升到下一个阶层。'],
     [/^Cost: (\d+) RP$/, '成本：$1 皇家点数'],
     [/^([\d\.]+)\/sec$/, '$1\/秒'],
     [/^which are boosting your Aspect Point gain by ×(.+).\n(.+)Cost: (.+) points$/, '使你的相位点获取量增加$1\n成本：$3 点'],
@@ -2034,7 +2034,7 @@ var cnRegReplace = new Map([
     [/^Usages: (\d+)\/$/, '用途：$1\/'],
     [/^workers: (\d+)\/$/, '工人：$1\/'],
     //[/^which are giving a ×(.+)e(.+) boost to point gain, a ×(.+)e(.+) boost to self gain and are producing (.+) Echepoints per minute.$/, '使你的点数获取×$1e$2，自身获取增加×$3e$4，每秒生产$5阶层点数'],
-    [/^which are giving a ×(.+) boost to point gain, a ×(.+) boost to self gain and are producing (.+) Echepoints per minute.$/, '使你的点数获取×$1，自身获取增加×$2，每秒生产$3阶层点数'],
+    [/^which are giving a ×(.+) boost to point gain, a ×(.+) boost to self gain and are producing (.+) Echepoints per minute.$/, '使你的点数获取×$1，自身获取增加×$2，每分钟生产$3阶层点数'],
     //[/^which are giving a ×(.+)e(.+) boost to point gain, a ×(.+)e(.+) boost to self gain and are producing (.+)e(.+) Echepoints per minute.$/, '使你的点数获取×$1e$2，自身获取增加×$3e$4，每秒生产$5e$6阶层点数'],
     //[/^which are giving a ×ee(.+) boost to point gain, a ×(.+)e(.+) boost to self gain and are producing (.+) Echepoints per minute.$/, '使你的点数获取×ee$1，自身获取增加×$2e$3，每秒生产$4阶层点数'],
     //[/^which are giving a ×ee(.+) boost to point gain, a ×(.+)e(.+) boost to self gain and are producing (.+)e(.+) Echepoints per minute.$/, '使你的点数获取×ee$1，自身获取增加×$2e$3，每秒生产$4e$5阶层点数'],
