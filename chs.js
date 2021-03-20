@@ -1936,7 +1936,7 @@ var cnRegReplace = new Map([
     [/^which are boosting your first row of Heart upgrades\' effect by \^$/, '增强第一排心灵升级的效果^'],
     [/^which are boosting your first row of Heart upgrades\' effect \(again\) by \^$/, '增强第一排心灵升级的效果(再次)^'],
     [/^which are boosting your Heart Power gain by ×(.+)$/, '增强心灵力量获取量×$1'],
-    [/^which are boosting all of your Space Generators by ×(.+)$/, '增强所有时间加倍器的效果×$1'],
+    [/^which are boosting all of your Space Generators by ×(.+)$/, '增强所有空间发生器的效果×$1'],
     [/^which are boosting your Space Power gain by ×(.+)$/, '增强空间力量获取量×$1'],
     [/^which are boosting your Time Booster\'s effect by \^$/, '增强所有时间增强器的效果^'],
     [/^which are boosting your Time Booster\^2\'s effect by \^$/, '增强所有时间增强器^2的效果^'],
