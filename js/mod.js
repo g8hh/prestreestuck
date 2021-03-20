@@ -38,6 +38,7 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 		End of Act 0?<br>
 		This game is definitely very broken by now<br>
 		(If you see a bug in the <spoiler>Meta</spoiler> layer, it is probably intentional)<br>
+		<spoiler>(I'm definitely going to question my design decisions now)</spoiler><br>
 	<br>
 	<h3>v0.0.3.8.6.1</h3><br>
 		Fixed <spoiler>Sacrifice Milestones</spoiler> unlocking earlier than intended.<br>
