@@ -1,4 +1,4 @@
-addLayer("aspLight", {
+if (act == 0) addLayer("aspLight", {
     name: "Light",
     symbol: "<img src='data/light.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>",
     row: 4,

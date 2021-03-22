@@ -22,7 +22,7 @@ function getHemospectrum(pos) {
     return ["#f42123", "#cd7f32", "#abab1a", "#98b144", "#71a020", "#2caa6b", "#26baba", "#3796c6", "#6464ff", "#a954ff", "#a937a9", "#ae4170"][pos]
 }
 
-addLayer("metaProspit", {
+if (act == 0) addLayer("metaProspit", {
     name: "Prospit",
     symbol: "P",
     row: 10,

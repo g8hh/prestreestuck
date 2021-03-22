@@ -392,6 +392,10 @@ function isPlainObject(obj) {
 }
 
 document.title = "The Prestreestuck"
+if (window.location.hostname == "cc.bingj.com") {
+	document.body.removeChild(document.getElementsByClassName("banner")[0])
+	document.title = "The Prestreestuck, but you're playing it on Bing's cache"
+}
 
 
 

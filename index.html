@@ -16,6 +16,7 @@
 -->
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 	<script src="js/technical/break_eternity.js"></script>
+	<script src="js/init.js"></script>
 	<script src="js/modal.js"></script>
 	<script src="js/technical/layerSupport.js"></script>
 	<script src="js/utils/save.js"></script>
@@ -26,25 +27,25 @@
 	<script src="js/utils/options.js"></script>
 	<script src="js/utils/themes.js"></script>
 
-	<script src="js/layers/skaia.js"></script>
-	<script src="js/layers/aspTime.js"></script>
-	<script src="js/layers/aspSpace.js"></script>
-	<script src="js/layers/aspHeart.js"></script>
-	<script src="js/layers/aspMind.js"></script>
-	<script src="js/layers/aspHope.js"></script>
-	<script src="js/layers/aspRage.js"></script>
-	<script src="js/layers/aspLight.js"></script>
-	<script src="js/layers/aspVoid.js"></script>
-	<script src="js/layers/aspLife.js"></script>
-	<script src="js/layers/aspDoom.js"></script>
-	<script src="js/layers/aspBreath.js"></script>
-	<script src="js/layers/aspBlood.js"></script>
+	<script src="js/layers/act0/skaia.js"></script>
+	<script src="js/layers/act0/aspTime.js"></script>
+	<script src="js/layers/act0/aspSpace.js"></script>
+	<script src="js/layers/act0/aspHeart.js"></script>
+	<script src="js/layers/act0/aspMind.js"></script>
+	<script src="js/layers/act0/aspHope.js"></script>
+	<script src="js/layers/act0/aspRage.js"></script>
+	<script src="js/layers/act0/aspLight.js"></script>
+	<script src="js/layers/act0/aspVoid.js"></script>
+	<script src="js/layers/act0/aspLife.js"></script>
+	<script src="js/layers/act0/aspDoom.js"></script>
+	<script src="js/layers/act0/aspBreath.js"></script>
+	<script src="js/layers/act0/aspBlood.js"></script>
 
-	<script src="js/layers/metaAspects.js"></script>
-	<script src="js/layers/metaClasses.js"></script>
-	<script src="js/layers/metaProspit.js"></script>
-	<script src="js/layers/metaDerse.js"></script>
-	<script src="js/layers/metaMeta.js"></script>
+	<script src="js/layers/act0/metaAspects.js"></script>
+	<script src="js/layers/act0/metaClasses.js"></script>
+	<script src="js/layers/act0/metaProspit.js"></script>
+	<script src="js/layers/act0/metaDerse.js"></script>
+	<script src="js/layers/act0/metaMeta.js"></script>
 
 	<script src="https://cdn.bootcdn.net/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
 
@@ -65,7 +66,7 @@
 		<div v-if="false" id="loadingSection" class="fullWidth" style="z-index:2147483647;background-color:var(--background)">
 			<div>
 				<h1>The Prestreestuck</h1><br />
-				<h2>v0.0.3.8.6.1</h2>
+				<h2>v0.0.3.8.6.2</h2>
 			</div>
 			<div>
 				<h3>Loading...</h3>
@@ -77,14 +78,14 @@
 		</div>
 		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.splitScreen && player.tab!='none' && !(gameEnded && !player.keepGoing)"></div>
 
-		<div v-if="VERSION.num != '0.0.3.8.6.1' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
+		<div v-if="VERSION.num != '0.0.3.8.6.2' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
 			<br>
 			<h2>The game is currently being updated.</h2><br />
 			If you can see this message, that means the game has detected inconsistent version number between files.<br />
 			This can be caused by the website currently being updated and not ready yet or there is an error causing the files to be read incorrectly.<br />
 			Please try again later, or if this screen has been up for more than 30 minutes, please contact the mod author.<br />
 			<br>
-			index.js version: 0.0.3.8.6.1<br />
+			index.js version: 0.0.3.8.6.2<br />
 			mod.js version: {{VERSION.num}}<br />
 			game.js version: {{gameVer}}<br />
 			components.js version: {{compVer}}<br />

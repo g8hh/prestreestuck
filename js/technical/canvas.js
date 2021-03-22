@@ -39,37 +39,39 @@ function drawTree() {
 	ctx.imageSmoothingEnabled = false
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	if (hasUpgrade("skaia", 11)) {
-		var scale = Math.max(canvas.height / 250, canvas.width / 446)
-		var skyHeight = scale * 250
-		var skyWidth = scale * 446
-		if (hasUpgrade("skaia", 12)) ctx.filter = 'hue-rotate(' + (player.timePlayed * 6.12) + 'deg)'; 
-		ctx.drawImage(skyImgs[Math.floor(player.time / 15000) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
-		ctx.globalAlpha = (player.time / 15000) % 1;
-		ctx.drawImage(skyImgs[Math.floor(player.time / 15000 + 1) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
-		ctx.globalAlpha = 1;
-	}
-
-	if (hasUpgrade("skaia", 12)) ctx.filter = 'hue-rotate(' + -(player.timePlayed * 4.13) + 'deg)'; 
-
-	if ((player.aspHope.unlocked || player.aspRage.unlocked) && sDensity < 8) sDensity++
-	else if ((hasUpgrade("aspMind", 24) || (player.aspHope.unlocked && player.aspRage.unlocked)) && sDensity < 16) sDensity++
-	else if (sDensity > 0) sDensity--
-	if (sDensity > 0 || hasUpgrade("skaia", 12)) {
-		if (!document.getElementById("skaia")) return
-		let skaia = document.getElementById("skaia").getBoundingClientRect();
-		let x = skaia.left + (skaia.width / 2) + document.body.scrollLeft;
-		let y = skaia.top + (skaia.height / 2) + document.body.scrollTop;
-		ctx.lineWidth = hasUpgrade("skaia", 11) ? 25 : 5;
-		ctx.beginPath()
-		ctx.strokeStyle = hasUpgrade("skaia", 11) ? "#38f43d" : colors_theme[1] + sDensity.toString(16).padStart(2, "0")
-		let step = Math.PI / 21
-		let offset = (player.time / 600000) % (Math.PI * 2)
-		ctx.moveTo(getSpirographX(0, offset) * 25 + x, getSpirographY(0, offset) * 25 + y)
-		for (var t = step; t <= Math.PI * 14; t += step) {
-			ctx.lineTo(getSpirographX(t, offset) * 25 + x, getSpirographY(t, offset) * 25 + y);
+	if (player.act == 0) {
+		if (hasUpgrade("skaia", 11)) {
+			var scale = Math.max(canvas.height / 250, canvas.width / 446)
+			var skyHeight = scale * 250
+			var skyWidth = scale * 446
+			if (hasUpgrade("skaia", 12)) ctx.filter = 'hue-rotate(' + (player.timePlayed * 6.12) + 'deg)'; 
+			ctx.drawImage(skyImgs[Math.floor(player.time / 15000) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
+			ctx.globalAlpha = (player.time / 15000) % 1;
+			ctx.drawImage(skyImgs[Math.floor(player.time / 15000 + 1) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
+			ctx.globalAlpha = 1;
 		}
-		ctx.stroke()
+
+		if (hasUpgrade("skaia", 12)) ctx.filter = 'hue-rotate(' + -(player.timePlayed * 4.13) + 'deg)'; 
+
+		if ((player.aspHope.unlocked || player.aspRage.unlocked) && sDensity < 8) sDensity++
+		else if ((hasUpgrade("aspMind", 24) || (player.aspHope.unlocked && player.aspRage.unlocked)) && sDensity < 16) sDensity++
+		else if (sDensity > 0) sDensity--
+		if (sDensity > 0 || hasUpgrade("skaia", 12)) {
+			if (!document.getElementById("skaia")) return
+			let skaia = document.getElementById("skaia").getBoundingClientRect();
+			let x = skaia.left + (skaia.width / 2) + document.body.scrollLeft;
+			let y = skaia.top + (skaia.height / 2) + document.body.scrollTop;
+			ctx.lineWidth = hasUpgrade("skaia", 11) ? 25 : 5;
+			ctx.beginPath()
+			ctx.strokeStyle = hasUpgrade("skaia", 11) ? "#38f43d" : colors_theme[1] + sDensity.toString(16).padStart(2, "0")
+			let step = Math.PI / 21
+			let offset = (player.time / 600000) % (Math.PI * 2)
+			ctx.moveTo(getSpirographX(0, offset) * 25 + x, getSpirographY(0, offset) * 25 + y)
+			for (var t = step; t <= Math.PI * 14; t += step) {
+				ctx.lineTo(getSpirographX(t, offset) * 25 + x, getSpirographY(t, offset) * 25 + y);
+			}
+			ctx.stroke()
+		}
 	}
 
 	ctx.filter = "none"
@@ -82,9 +84,14 @@ function drawTree() {
 		}
 	}
 
-	if (hasUpgrade("skaia", 11)) {
-		ctx.fillStyle = "#ffffff" + Math.max(Math.floor(255 - 25 * player.phaseTimer), 0).toString(16).padStart(2, "0")
+	if (player.act == 0 && hasUpgrade("skaia", 11)) {
+		ctx.fillStyle = "#ffffff" + Math.min(Math.max(Math.floor(255 - 25 * player.phaseTimer), 0), 255).toString(16).padStart(2, "0")
 		ctx.fillRect(0, 0, canvas.width, canvas.height)
+    }
+	if (player.act == 0 && getBuyableAmount("metaMeta", 121).gte(999.5)) {
+		ctx.fillStyle = "#ffffff" + Math.min(Math.floor(25 * player.phaseTimer), 255).toString(16).padStart(2, "0")
+		ctx.fillRect(0, 0, canvas.width, canvas.height)
+		if (25 * player.phaseTimer > 255) switchAct(1);
     }
 }
 

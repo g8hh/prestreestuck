@@ -5,9 +5,9 @@
 	pointsName: "points",
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	initialStartPoints: new Decimal(act == 0 ? 10 : 0), // Used for hard resets and new players
 	
-	offlineLimit: 1,  // In hours
+	offlineLimit: (+act + 1) || 1,  // In hours
 }
 
 let flavorTitles = [
@@ -27,12 +27,19 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.8.6.1",
-	name: "The Game Continues",
+	num: "0.0.3.8.6.2",
+	name: "A Broken Game",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h2>v0.0.3.8.6.2</h2><br>
+		<h5 style="opacity:0.5">- A Broken Game -</h5>
+		End of Act 0?<br>
+		This game is definitely very broken by now<br>
+		(If you see a bug in the <spoiler>Meta</spoiler> layer, it is probably intentional)<br>
+		<spoiler>(I'm definitely going to question my design decisions now)</spoiler><br>
+	<br>
 	<h3>v0.0.3.8.6.1</h3><br>
 		Fixed <spoiler>Sacrifice Milestones</spoiler> unlocking earlier than intended.<br>
 	<br>
@@ -167,46 +174,53 @@ function canGenPoints(){
 
 // Calculate points/sec!
 function getPointGen() {
+	if (act == "omega") {
+		player.act = 0
+		save()
+		window.location = "https://mspfa.com/?s=16414&p=1"
+	}
+
 	if(!canGenPoints())
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	if (player.act == 0) {
+		if (hasUpgrade("skaia", 14)) {
+			if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
+		} else if (hasUpgrade("skaia", 12)) {
+			gain = gain.mul(tmp.metaAspects.effect.pointBoost)
+		} else {
+			for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
 
-	if (hasUpgrade("skaia", 14)) {
-		if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
-	} else if (hasUpgrade("skaia", 12)) {
-		gain = gain.mul(tmp.metaAspects.effect.pointBoost)
-	} else {
-		for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
+			if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
+			if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
 
-		if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
-		if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
+			if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
+			if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
+			if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
 
-		if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
-		if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
-		if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
+			if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
+			if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
 
-		if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
-		if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
+			if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
+			if (hasUpgrade("aspHope", 34)) gain = gain.mul(tmp.aspHope.upgrades[34].effect)
+			if (hasUpgrade("aspHope", 51)) gain = gain.mul(tmp.aspHope.upgrades[51].effect)
+			if (hasUpgrade("aspHope", 63)) gain = gain.mul(tmp.aspHope.upgrades[63].effect)
 
-		if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
-		if (hasUpgrade("aspHope", 34)) gain = gain.mul(tmp.aspHope.upgrades[34].effect)
-		if (hasUpgrade("aspHope", 51)) gain = gain.mul(tmp.aspHope.upgrades[51].effect)
-		if (hasUpgrade("aspHope", 63)) gain = gain.mul(tmp.aspHope.upgrades[63].effect)
+			gain = gain.mul(tmp.aspHeart.effect.pointBoost)
+			gain = gain.mul(tmp.aspMind.effect.pointBoost)
+			gain = gain.mul(tmp.aspLife.effect.pointBoost)
+			gain = gain.mul(tmp.aspDoom.effect.pointBoost)
 
-		gain = gain.mul(tmp.aspHeart.effect.pointBoost)
-		gain = gain.mul(tmp.aspMind.effect.pointBoost)
-		gain = gain.mul(tmp.aspLife.effect.pointBoost)
-		gain = gain.mul(tmp.aspDoom.effect.pointBoost)
+			gain = gain.mul(tmp.aspLight.buyables[11].effect)
 
-		gain = gain.mul(tmp.aspLight.buyables[11].effect)
+			if (getBuyableAmount("aspLife", 11).gt(0)) gain = gain.mul(tmp.aspLife.buyables[11].effect)
+			if (challengeCompletions("aspDoom", 11) >= 8) gain = gain.pow(1.05)
 
-		if (getBuyableAmount("aspLife", 11).gt(0)) gain = gain.mul(tmp.aspLife.buyables[11].effect)
-		if (challengeCompletions("aspDoom", 11) >= 8) gain = gain.pow(1.05)
-
-		if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
-		if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
-		if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
+			if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
+			if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
+			if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
+		}
 	}
 
 
@@ -228,18 +242,22 @@ var displayThings = [
 		for (lys in LAYERS) {
 			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && !inChallenge("aspDoom", 12)))) rem++
 		}
-		if (hasUpgrade("skaia", 14)) rem -= 17;
-		else if (hasUpgrade("skaia", 12)) rem -= 12;
-		var acts = [
-			["Act 0", "Genesis", (rem == 0 ? "The end is nigh..." : rem + " layers remaining" + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : ""))]
-		]
+		if (player.act == 0) {
+			if (hasUpgrade("skaia", 14)) rem -= 17;
+			else if (hasUpgrade("skaia", 12)) rem -= 12;
+		}
+		var acts = {
+			0: ["Act 0", "Genesis", (rem == 0 ? "The end is nigh..." : rem + " layers remaining" + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : ""))],
+			1: ["End of Act 0??", "-", "Coming soon..."],
+			omega: ["Act Ω", "?????", "???????????"],
+		}
 		return `<h2><br/>${acts[player.act][0]}</h2><br/>- ${acts[player.act][1]} -<br/><h5 style='margin-top:5px;opacity:0.5'><i>(${acts[player.act][2]})</i></h5>`
 	}
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return hasUpgrade("metaMeta", 124)
+	return player.act == 1
 }
 
 

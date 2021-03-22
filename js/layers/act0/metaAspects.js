@@ -1,4 +1,4 @@
-addLayer("metaAspects", {
+if (act == 0) addLayer("metaAspects", {
     name: "Aspects",
     symbol: "A",
     row: 8,

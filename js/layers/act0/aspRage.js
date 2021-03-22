@@ -1,4 +1,4 @@
-addLayer("aspRage", {
+if (act == 0) addLayer("aspRage", {
     name: "Rage",
     symbol: "<img src='data/rage.png' style='width:calc(80% + 0px);height:calc(80% + 0px);margin:10%'></img>",
     row: 3,
