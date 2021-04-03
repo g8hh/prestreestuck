@@ -2009,7 +2009,7 @@ var cnRegReplace = new Map([
     [/^which are multipling the Faucet Upgrade\^2 effect by ×(.+).\n(.+)Cost: (.+) Metaness$/, '使插槽升级^2效果×$1\n消耗：$3元性质'],
     [/^which are multipling the Faucet Upgrade\^5 effect by ×(.+).\n(.+)Cost: (.+) Metaness$/, '使插槽升级^5效果×$1\n消耗：$3元性质'],
     [/^which are multipling all faucet effeciencies by ×(.+).\n(.+)Cost: (.+) Metaness$/, '使所有插槽的效果×$1\n消耗：$3元性质'],
-    [/^(.+) \/ (.+) Class Points(.+)\n(.+)$/, '$1 \/ $2 阶级点'],
+    [/^(.+) \/ (.+) Class Points(.+)\n(.+)$/, '$1 \/ $2 课程点'],
     [/^You are getting (.+) Aspect Points per second.$/, '您每秒获得$1相位点。'],
     [/^Your Rogue Faucets are multipling the Metaness effect's power tower by (.+).$/, '你的游侠插槽使元性质力量塔的效果增强$1倍'],
     [/^Your Time Faucets are multipling the Metaness effect's power tower by (.+).$/, '你的时间插槽使元性质力量塔的效果增强$1倍'],
