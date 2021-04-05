@@ -27,12 +27,16 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.8.6.2",
+	num: "0.0.3.8.6.3",
 	name: "A Broken Game",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.0.3.8.6.3</h3><br>
+		Fixed <spoiler>Limitation reset</spoiler> resetting <spoiler>Meta-Meta-Faucets</spoiler> even if you have 50+ of them.<br>
+		Fixed <spoiler>Meta-Meta-Faucet</spoiler> #1000 effect showing as #100.<br>
+		Fixed <spoiler>Sburb Sacrifice Milestones</spoiler> showing sooner than intended.<br>
 	<h2>v0.0.3.8.6.2</h2><br>
 		<h5 style="opacity:0.5">- A Broken Game -</h5>
 		End of Act 0?<br>
