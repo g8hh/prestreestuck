@@ -35,3 +35,47 @@ function openCreditsModal() {
 		"Ok"
 	)
 }
+
+function openStartModal() {
+    modal.show(
+        'The Prestreestuck', `
+            <span style='font-size:14px'>
+                <i>
+                    You found yourself in an unfamilliar place.<br/>
+                    It appears to be the first time that you're here.<br/>
+                    This place looks like... a title screen? From a game?<br/>
+                </i><br/>
+                <button onclick='openContentWarningModal()'> Show Content Warning </button>
+                <br/><br/>
+                You decided to start the game from:
+                <div class="saveState" style='cursor:pointer;margin-top:5px' onclick='switchAct(0);'>
+                    <h3 style="font-size:21px">Act 0</h3><br/>
+                    <span style='font-size:14px'>Tree of Genesis</span>
+                </div>
+                <div class="saveState" style='cursor:pointer' onclick='switchAct(1);'>
+                    <h3 style="font-size:21px">Act 1</h3><br/>
+                    <span style='font-size:14px'>MS-Paint Incremental</span>
+                </div>
+                (select one from above!)
+            </span>
+        `, 
+        ''
+    )
+}
+
+function openContentWarningModal() {
+    modal.show(
+        'Contenc Waning (!important)', `
+            <span style='font-size:14px'><br/>
+                This game may contains photosensitive images that may trigger seizures.
+                <br/><br/>
+                This game may introduces more uncomforting or questiionable content as it evolves.
+                <br/><br/>
+                Oh and also it's Homestuck related.<br/>
+                Don't say we didn't warn you.
+            </span><br/><br/>
+			<button onclick='openStartModal()'> Go back </button>
+        `, 
+        ''
+    )
+}

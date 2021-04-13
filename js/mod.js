@@ -27,12 +27,14 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.0",
+	num: "0.1.0.1",
 	name: "MS-Paint Fan Incremental",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.1.0.1</h3><br>
+		Added opening screen.<br>
 	<h2>v0.1.0</h2><br>
 		<h5 style="opacity:0.5">- MS-Paint Fan Incremental -</h5>
 		<i>ACT 1 POG</i><br>
@@ -184,7 +186,7 @@ function canGenPoints(){
 // Calculate points/sec!
 function getPointGen() {
 	if (act == "omega") {
-		player.act = 0
+		player.act = -1
 		save()
 		window.location = "https://mspfa.com/?s=16414&p=1"
 	}
@@ -193,7 +195,10 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if (act == 0) {
+	if (act == -1) {
+		clearInterval(interval);
+		openStartModal();
+	} else if (act == 0) {
 		if (hasUpgrade("skaia", 14)) {
 			if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
 		} else if (hasUpgrade("skaia", 12)) {
@@ -230,6 +235,8 @@ function getPointGen() {
 			if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
 			if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
 		}
+	} else if (act == 1) {
+		gain = new Decimal(0)
 	}
 
 
@@ -240,7 +247,7 @@ function getPointGen() {
 
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
-	act: 0,
+	act: -1,
 	phaseTimer: 0,
 }}
 
@@ -256,6 +263,7 @@ var displayThings = [
 			else if (hasUpgrade("skaia", 12)) rem -= 12;
 		}
 		var acts = {
+			'-1': ["", "", ""],
 			0: ["Act 0", "Genesis", (rem == 0 ? "The end is nigh..." : rem + " layers remaining" + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : ""))],
 			1: ["End of Act 0??", "-", "Coming soon..."],
 			omega: ["Act Ω", "?????", "???????????"],

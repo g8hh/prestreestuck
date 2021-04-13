@@ -1,4 +1,4 @@
-var gameVer = "0.1.0";
+var gameVer = "0.1.0.1";
 
 var player;
 var needCanvasUpdate = true;

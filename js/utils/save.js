@@ -3,7 +3,7 @@
 
 var meta = {
 	currentSave: "",
-	act: 0,
+	act: -1,
 	saves: {},
 }
 
@@ -224,6 +224,7 @@ function load(saveId) {
 			meta.saves[player.saveId] = {
 				name: "Default"
 			}
+			return;
 		}
 		let data = JSON.parse(atob(get))
 		if (data.points) {
@@ -395,7 +396,7 @@ function openCreateSaveModal() {
 			<br/><br/>Start from:
 			<div class="saveState" style='cursor:pointer;margin-top:5px' onclick='createSave(document.getElementById("newSaveNameInput").value, 0); modal.hide()'>
 			    <h3 style="font-size:21px">Act 0</h3><br/>
-				<span style='font-size:14px'>Genesis</span>
+				<span style='font-size:14px'>Tree of Genesis</span>
 			</div>
 			<div class="saveState" style='cursor:pointer' onclick='createSave(document.getElementById("newSaveNameInput").value, 1); modal.hide()'>
 			    <h3 style="font-size:21px">Act 1</h3><br/>
@@ -410,7 +411,7 @@ function openCreateSaveModal() {
 function createSave(name, targetAct) {
 	clearInterval(interval)
 	load("new")
-	player.act = targetAct || 0
+	player.act = targetAct || -1
 	meta.currentSave = player.saveId
 	meta.saves[player.saveId] = {
 		name: name || "New Save",
