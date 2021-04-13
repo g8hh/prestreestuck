@@ -211,6 +211,61 @@ function inChallenge(layer, id) {
 		return tmp[layer].challenges[challenge].countsAs.includes(id)
 }
 
+// ************ Story ************
+
+function startStoryPage(layer, page) {
+	player[layer].story.page = page;
+}
+
+function MSPFAToStory(data) {
+	if (typeof data == "string") data = JSON.parse(data.replace("\n", "\\n"))
+	var story = {};
+	for (index in data) {
+		story[+index+1] = {
+			content: `<h1>${data[index].c}</h1><br/><br/>${applyBBCode(data[index].b)}`,
+			commands: data[index].n.map(page => {return {
+				page: page,
+				title: data[page-1] ? data[page-1].c : ""
+			}})
+		}
+	}
+	return story;
+}
+
+function applyBBCode(string) {
+	var bbcode = [
+		[/  /g, "&nbsp;&nbsp;"],
+		[/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;"],
+		[/\r?\n/g, "<br>"],
+		[/\[b\]((?:(?!\[b\]).)*?)\[\/b\]/gi, "<span style=\"font-weight: bolder;\">$1</span>"],
+		[/\[i\]((?:(?!\[i\]).)*?)\[\/i\]/gi, "<span style=\"font-style: italic;\">$1</span>"],
+		[/\[u\]((?:(?!\[u\]).)*?)\[\/u\]/gi, "<span style=\"text-decoration: underline;\">$1</span>"],
+		[/\[s\]((?:(?!\[s\]).)*?)\[\/s\]/gi, "<span style=\"text-decoration: line-through;\">$1</span>"],
+		[/\[size=(\d*?)\]((?:(?!\[size=(?:\d*?)\]).)*?)\[\/size\]/gi, "<span style=\"font-size: $1px;\">$2</span>"],
+		[/\[color=("?)#?([a-f0-9]{3}(?:[a-f0-9]{3})?)\1\]((?:(?!\[color(?:=[^;]*?)\]).)*?)\[\/color\]/gi, "<span style=\"color: #$2;\">$3</span>"],
+		[/\[color=("?)([^";]+?)\1\]((?:(?!\[color(?:=[^;]*?)\]).)*?)\[\/color\]/gi, "<span style=\"color: $2;\">$3</span>"],
+		[/\[background=("?)#?([a-f0-9]{3}(?:[a-f0-9]{3})?)\1\]((?:(?!\[background(?:=[^;]*?)\]).)*?)\[\/background\]/gi, "<span style=\"background-color: #$2;\">$3</span>"],
+		[/\[background=("?)([^";]+?)\1\]((?:(?!\[background(?:=[^;]*?)\]).)*?)\[\/background\]/gi, "<span style=\"background-color: $2;\">$3</span>"],
+		[/\[font=("?)([^";]*?)\1\]((?:(?!\[size(?:=[^;]*?)\]).)*?)\[\/font\]/gi, "<span style=\"font-family: $2;\">$3</span>"],
+		[/\[(center|left|right|justify)\]((?:(?!\[\1\]).)*?)\[\/\1\]/gi, "<div style=\"text-align: $1;\">$2</div>"],
+		[/\[url\]([^"]*?)\[\/url\]/gi, "<a href=\"$1\">$1</a>"],
+		[/\[url=("?)([^"]*?)\1\]((?:(?!\[url(?:=.*?)\]).)*?)\[\/url\]/gi, "<a href=\"$2\">$3</a>"],
+		[/\[alt=("?)([^"]*?)\1\]((?:(?!\[alt(?:=.*?)\]).)*?)\[\/alt\]/gi, "<span title=\"$2\">$3</span>"],
+		[/\[img\]([^"]*?)\[\/img\]/gi, "<img src=\"$1\">"],
+		[/\[img=(\d*?)x(\d*?)\]([^"]*?)\[\/img\]/gi, "<img src=\"$3\" width=\"$1\" height=\"$2\">"],
+		[/\[spoiler\]((?:(?!\[spoiler(?: .*?)?\]).)*?)\[\/spoiler\]/gi, "<div class=\"spoiler closed\"><div style=\"text-align: center;\"><input type=\"button\" value=\"Show\" data-close=\"Hide\" data-open=\"Show\"></div><div>$1</div></div>"],
+		[/\[spoiler open=("?)([^"]*?)\1 close=("?)([^"]*?)\3\]((?:(?!\[spoiler(?: .*?)?\]).)*?)\[\/spoiler\]/gi, "<div class=\"spoiler closed\"><div style=\"text-align: center;\"><input type=\"button\" value=\"$2\" data-open=\"$2\" data-close=\"$4\"></div><div>$5</div></div>"],
+		[/\[spoiler close=("?)([^"]*?)\1 open=("?)([^"]*?)\3\]((?:(?!\[spoiler(?: .*?)?\]).)*?)\[\/spoiler\]/gi, "<div class=\"spoiler closed\"><div style=\"text-align: center;\"><input type=\"button\" value=\"$4\" data-open=\"$4\" data-close=\"$2\"></div><div>$5</div></div>"],
+		[/\[flash=(\d*?)x(\d*?)\](.*?)\[\/flash\]/gi, "<object type=\"application/x-shockwave-flash\" data=\"$3\" width=\"$1\" height=\"$2\"></object>"],
+		[/\[user\](.+?)\[\/user\]/gi, "<a class=\"usertag\" href=\"/user/?u=$1\" data-userid=\"$1\">@...</a>"]
+	]
+
+	for (bbc of bbcode) {
+		string = string.replace(bbc[0], bbc[1])
+	}
+	return string;
+}
+
 // ************ Misc ************
 
 var onTreeTab = true

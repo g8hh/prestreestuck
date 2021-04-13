@@ -1,4 +1,4 @@
-var systemVer = "0.0.3.8.6.3";
+var systemVer = "0.1.0";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -67,7 +67,7 @@ var systemComponents = {
 	'layer-tab': {
 		props: ['layer', 'back', 'spacing', 'embedded'],
 		template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]">
-		<div v-if="back"><button v-bind:class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack()">←</button></div>
+		<div v-if="back && (layoutInfo.showTree() || ['info-tab', 'options-tab'].includes(layer))"><button v-bind:class="back == 'big' ? 'other-back' : 'back'" :style="{left: layoutInfo.showTree() ? '' : '8px'}" v-on:click="layoutInfo.showTree() ? goBack() : player.tab = 'player1'">←</button></div>
 		<div v-if="!tmp[layer].tabFormat">
 			<div v-if="spacing" v-bind:style="{'height': spacing}" :key="this.$vnode.key + '-spacing'"></div>
 			<info-box v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]":key="this.$vnode.key + '-info'"></info-box>
@@ -131,7 +131,7 @@ var systemComponents = {
         <br>
         <span v-if="modInfo.author">
             <br>
-            made by {{modInfo.author}}	
+            made by <a onclick="openCreditsModal()" class="link" style="font-size:14px;display:inline" >some people</a>
         </span>
         <br>${
 			Math.random() < 0.1 ?
@@ -153,8 +153,8 @@ var systemComponents = {
 		<br><br>
 		<div class="link" onclick="showTab('changelog-tab')">The Changelog<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(see what happened throughout this thing's history)</h5></div><br>
 		<a class="link" href="acknowledgements.md" target="_blank">Acknowledgements<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(wall of text saying I do not own most of this)</h5></a><br>
-        <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
-        <a class="link" href="https://discord.gg/F3xveHV" target="_blank">The Modding Tree Discord<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(suggest everything and talk about how bad this mod is here)</h5></a><br>
+        <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(suggest everything and talk about how bad this mod is here)</h5></a><br></span>
+        <a class="link" href="https://discord.gg/F3xveHV" target="_blank">The Modding Tree Discord<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(talking about all the mods, mod-creators and modded trees)</h5></a><br>
         <a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree server<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(server of the person who made the original game)</h5></a><br>
 		<a class="link" href="finder.html" target="_blank">The Prestige Tree Modfinder<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(in case you're already sick of this)</h5></a><br>
 		<br><br>

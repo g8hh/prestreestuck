@@ -3,8 +3,8 @@
 	id: "treestuck",
 	author: "ducdat0507",
 	pointsName: "points",
-	discordName: "",
-	discordLink: "",
+	discordName: "The Prestreestuck Server",
+	discordLink: "https://discord.gg/fHcWmmprGm",
 	initialStartPoints: new Decimal(act == 0 ? 10 : 0), // Used for hard resets and new players
 	
 	offlineLimit: (+act + 1) || 1,  // In hours
@@ -27,12 +27,17 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.3.8.6.3",
-	name: "A Broken Game",
+	num: "0.1.0",
+	name: "MS-Paint Fan Incremental",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h2>v0.1.0</h2><br>
+		<h5 style="opacity:0.5">- MS-Paint Fan Incremental -</h5>
+		<i>ACT 1 POG</i><br>
+		Fixed black hole eras lasting 1e40 years instead of 1e100.<br>
+	<br>
 	<h3>v0.0.3.8.6.3</h3><br>
 		Fixed <spoiler>Limitation reset</spoiler> resetting <spoiler>Meta-Meta-Faucets</spoiler> even if you have 50+ of them.<br>
 		Fixed <spoiler>Meta-Meta-Faucet</spoiler> #1000 effect showing as #100.<br>
@@ -188,7 +193,7 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if (player.act == 0) {
+	if (act == 0) {
 		if (hasUpgrade("skaia", 14)) {
 			if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
 		} else if (hasUpgrade("skaia", 12)) {
@@ -246,7 +251,7 @@ var displayThings = [
 		for (lys in LAYERS) {
 			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && !inChallenge("aspDoom", 12)))) rem++
 		}
-		if (player.act == 0) {
+		if (act == 0) {
 			if (hasUpgrade("skaia", 14)) rem -= 17;
 			else if (hasUpgrade("skaia", 12)) rem -= 12;
 		}
@@ -261,7 +266,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.act == 1
+	return false // player.act == 1
 }
 
 

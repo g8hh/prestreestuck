@@ -1,4 +1,4 @@
-var gameVer = "0.0.3.8.6.3";
+var gameVer = "0.1.0";
 
 var player;
 var needCanvasUpdate = true;
@@ -156,6 +156,8 @@ function layerDataReset(layer, keep = []) {
 	for (thing in storedData) {
 		player[layer][thing] = storedData[thing]
 	}
+	
+	player[layer].story = getStartStory(layer)
 }
 
 function resetBuyables(layer){
@@ -324,7 +326,7 @@ function gameLoop(diff) {
 	if (isNaN(diff)) diff = 0
 	if (gameEnded && !player.keepGoing) {
 		diff = 0
-		player.tab = "gameEnded"
+		// player.tab = "gameEnded"
 	}
 	if (player.devSpeed) diff *= player.devSpeed
 

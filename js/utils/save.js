@@ -97,6 +97,7 @@ function getStartLayerData(layer){
 	layerdata.milestones = []
 	layerdata.achievements = []
 	layerdata.challenges = getStartChallenges(layer)
+	layerdata.story = getStartStory(layer)
 	return layerdata
 }
 
@@ -127,6 +128,16 @@ function getStartChallenges(layer){
 		for (id in layers[layer].challenges)
 			if (isPlainObject(layers[layer].challenges[id]))
 				data[id] = 0
+	}
+	return data
+}
+
+function getStartStory(layer){
+	let data = {}
+	if (layers[layer].story) {
+		data = {
+			page: 1
+		}
 	}
 	return data
 }
@@ -377,21 +388,33 @@ function openCreateSaveModal() {
 	modal.show(
 		"Create New Save",
 		`
-			Enter your new save's name:
-			<input type="text" id="newSaveNameInput" style="margin:5px 0"
+			Enter your new save's name:<br/>
+			<input type="text" id="newSaveNameInput" style="margin:5px 0;width:400px;"
 				placeholder="New Save" 
 				id="save${save}" onchange="changeSaveName(${save})">
-			<button style="margin:5px" onclick='createSave(document.getElementById("newSaveNameInput").value); modal.hide()'> Create it! </span>
-		`
+			<br/><br/>Start from:
+			<div class="saveState" style='cursor:pointer;margin-top:5px' onclick='createSave(document.getElementById("newSaveNameInput").value, 0); modal.hide()'>
+			    <h3 style="font-size:21px">Act 0</h3><br/>
+				<span style='font-size:14px'>Genesis</span>
+			</div>
+			<div class="saveState" style='cursor:pointer' onclick='createSave(document.getElementById("newSaveNameInput").value, 1); modal.hide()'>
+			    <h3 style="font-size:21px">Act 1</h3><br/>
+				<span style='font-size:14px'>MS-Paint Incremental</span>
+			</div>
+			<button onclick='openSaveModal()'> Nevermind, return </span>
+		`,
+		""
 	)
 }
 
-function createSave(name) {
+function createSave(name, targetAct) {
+	clearInterval(interval)
 	load("new")
+	player.act = targetAct || 0
 	meta.currentSave = player.saveId
 	meta.saves[player.saveId] = {
 		name: name || "New Save",
-		act: 0,
+		act: targetAct || 0,
 		desc: "0 points",
 	}
 	save();

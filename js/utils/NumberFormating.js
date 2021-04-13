@@ -80,7 +80,7 @@ function formatTime(s) {
 		return str
 	} else {
 		var y = s / 31536000
-		if (y >= 1e100) return format(y / 1e40) + " black hole eras"
+		if (y >= 1e100) return format(y / 1e100) + " black hole eras"
 		if (y >= 1e40) return format(y / 1e40) + " degenerate eras"
 		if (y >= 1e9) return format(y / 1e9) + " aeons"
 		if (y >= 1e6) return format(y / 1e6) + " megannums"
