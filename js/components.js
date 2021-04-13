@@ -1,4 +1,4 @@
-var compVer = "0.0.3.8.6.2";
+var compVer = "0.1.0.1";
 var app;
 
 function loadVue() {
@@ -427,6 +427,18 @@ function loadVue() {
 					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
 					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
+			</div>
+		</div>
+		`
+	})
+
+	Vue.component('story', {
+		props: ['layer', ],
+		template: `
+		<div v-if="tmp[layer].story && tmp[layer].story[player[layer].story.page]" style="max-width:650px;margin:15px;font-size:14px;">
+		    <div v-html="tmp[layer].story[player[layer].story.page].content"></div>
+		    <div v-for="cmd in tmp[layer].story[player[layer].story.page].commands" style="text-align:left;font-size:18px;padding-top:30px;padding-bottom:80px;">
+			    &gt; <a v-html="cmd.title" v-on:click="startStoryPage(layer, cmd.page)" class="link" style="display:inline;font-weight:normal;"></a>
 			</div>
 		</div>
 		`

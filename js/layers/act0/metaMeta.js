@@ -1032,7 +1032,7 @@ if (act == 0) addLayer("metaMeta", {
                     player[this.layer].aspectFaucets =  Array.from({ length: 12 }, _ => new Decimal(0))
                     player[this.layer].classFaucets = Array.from({ length: 12 }, _ => new Decimal(0))
                     player[this.layer].metaFaucets = []
-                    player[this.layer].metaMetaFaucets = []
+                    if (player[this.layer].metaMetaFaucets.length <= 50) player[this.layer].metaMetaFaucets = []
 
                     if (hasUpgrade("metaMeta", 13)) for (var a = 11; a <= 13; a++) player[this.layer].buyables[a] = new Decimal(2)
                     if (hasUpgrade("metaMeta", 31)) for (var a = 21; a <= 23; a++) player[this.layer].buyables[a] = new Decimal(3)
@@ -1060,7 +1060,7 @@ if (act == 0) addLayer("metaMeta", {
                     player[this.layer].aspectFaucets =  Array.from({ length: 12 }, _ => new Decimal(0)),
                     player[this.layer].classFaucets = Array.from({ length: 12 }, _ => new Decimal(0)),
                     player[this.layer].metaFaucets = []
-                    player[this.layer].metaMetaFaucets = []
+                    if (player[this.layer].metaMetaFaucets.length <= 50) player[this.layer].metaMetaFaucets = []
                     doReset(this.layer, true)
 
                     if (hasMilestone("metaMeta", 2)) {
@@ -1097,7 +1097,7 @@ if (act == 0) addLayer("metaMeta", {
                     player[this.layer].aspectFaucets =  Array.from({ length: 12 }, _ => new Decimal(0)),
                     player[this.layer].classFaucets = Array.from({ length: 12 }, _ => new Decimal(0)),
                     player[this.layer].metaFaucets = []
-                    player[this.layer].metaMetaFaucets = []
+                    if (player[this.layer].metaMetaFaucets.length <= 50) player[this.layer].metaMetaFaucets = []
                     doReset(this.layer, true)
 
                     if (hasMilestone("metaMeta", 8)) {
@@ -1141,7 +1141,7 @@ if (act == 0) addLayer("metaMeta", {
                 player[this.layer].aspectFaucets =  Array.from({ length: 12 }, _ => new Decimal(0)),
                 player[this.layer].classFaucets = Array.from({ length: 12 }, _ => new Decimal(0)),
                 player[this.layer].metaFaucets = []
-                player[this.layer].metaMetaFaucets = []
+                if (player[this.layer].metaMetaFaucets.length <= 50) player[this.layer].metaMetaFaucets = []
                 doReset(this.layer, true)
 
                 if (hasMilestone("metaMeta", 2)) {
@@ -1164,8 +1164,8 @@ if (act == 0) addLayer("metaMeta", {
                 return true
             },
             onClick() {
-                if (hasUpgrade("metaMeta", 94) && !hasMilestone("metaMeta", 12)) {
-                    player.metaMeta.overflows = player.metaMeta.overflowsTotal = new Decimal(0);
+                if (hasUpgrade("metaMeta", 94)) {
+                    if (!hasMilestone("metaMeta", 12)) player.metaMeta.overflows = player.metaMeta.overflowsTotal = new Decimal(0);
                     player.metaMeta.remeta = true;
                 }
 
@@ -1181,7 +1181,7 @@ if (act == 0) addLayer("metaMeta", {
                 player[this.layer].aspectFaucets =  Array.from({ length: 12 }, _ => new Decimal(0)),
                 player[this.layer].classFaucets = Array.from({ length: 12 }, _ => new Decimal(0)),
                 player[this.layer].metaFaucets = []
-                player[this.layer].metaMetaFaucets = []
+                if (player[this.layer].metaMetaFaucets.length <= 50) player[this.layer].metaMetaFaucets = []
                 doReset(this.layer, true)
 
                 if (hasMilestone("metaMeta", 8)) {
@@ -2009,49 +2009,58 @@ if (act == 0) addLayer("metaMeta", {
         },
         25: {
             requirementDescription: "×1.000e510 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "Your Sacrifice Multiplier boosts the Meta-Meta-Faucets' Meta-Meta-Faucets Boost. Currently: ^" + format(tmp[this.layer].milestones[this.id].effect)  },
             effect() { return player.metaMeta.sacrificeMulti.div("e510").add(1).slog(2).add(1).div(2) },
             done() { return player.metaMeta.sacrificeMulti.gte("e510") }
         },
         26: {
             requirementDescription: "×1.000e754 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "Your Sburb-building process boosts the Meta-Meta-Faucets' Meta-Meta-Faucets Boost. Currently: ^" + format(tmp[this.layer].milestones[this.id].effect)  },
             effect() { return player.metaMeta.buyables[121].div(100).add(1) },
             done() { return player.metaMeta.sacrificeMulti.gte("e754") }
         },
         27: {
             requirementDescription: "×1e1234 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "You gain more Sacrifice Multiplier per mile of Sburb-building based on current Sburb-building process. Also reduces the Sburb requirement by the same amount. Currently: ×" + format(tmp[this.layer].milestones[this.id].effect)  },
             effect() { return player.metaMeta.buyables[121].div(50).add(1).pow(2.5).pow(hasMilestone("metaMeta", 28) ? 1.8 : 1) },
             done() { return player.metaMeta.sacrificeMulti.gte("e1234") }
         },
         28: {
             requirementDescription: "×1e1503 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "^2.5 previous milestone effect."  },
             done() { return player.metaMeta.sacrificeMulti.gte("e1503") }
         },
         29: {
             requirementDescription: "×1e1740 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "Your Sburb-building requirements grows slower."  },
             done() { return player.metaMeta.sacrificeMulti.gte("e1740") }
         },
         30: {
             requirementDescription: "×1e2360 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "Raises Metaness gain by 3 to the power of your current Eternity amount."  },
             done() { return player.metaMeta.sacrificeMulti.gte("e2360") }
         },
         31: {
             requirementDescription: "×1e2468 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "Raises Metaness gain by 1.5 to the power of your current Overflow amount."  },
             done() { return player.metaMeta.sacrificeMulti.gte("e2468") }
         },
         32: {
             requirementDescription: "×1e2800 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "Metaness increases your Sacrifice Multiplier."  },
             done() { return player.metaMeta.sacrificeMulti.gte("e2800") }
         },
         33: {
             requirementDescription: "×e1.000e10 Sacrifice Multiplier",
+            unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "Meta-Transcending, Overflow Incrementing, and Time Dilation now doubles the related currencies."  },
             done() { return player.metaMeta.sacrificeMulti.gte("ee10") }
         },
@@ -2113,12 +2122,12 @@ if (act == 0) addLayer("metaMeta", {
         }
 
         if (hasMilestone("metaMeta", 15)) for (var a = player.metaMeta.metaFaucets.length - 1; a >= 0; a--) player.metaMeta.metaFaucets[a] = 
-        Decimal.add(player.metaMeta.metaFaucets[a], new Decimal(player.metaMeta.metaFaucets[a+1]).add(1).mul(buyableEffect("metaMeta", 91)).mul(delta))
+        Decimal.add(player.metaMeta.metaFaucets[a], new Decimal(player.metaMeta.metaFaucets[a+1]).add(1).mul(buyableEffect("metaMeta", 91)).mul(delta)).abs()
         else for (var a = 0; a < player.metaMeta.metaFaucets.length; a++) player.metaMeta.metaFaucets[a] = 
-        Decimal.add(player.metaMeta.metaFaucets[a], new Decimal(player.metaMeta.metaFaucets[a+1]).add(1).mul(buyableEffect("metaMeta", 91)).mul(delta))
+        Decimal.add(player.metaMeta.metaFaucets[a], new Decimal(player.metaMeta.metaFaucets[a+1]).add(1).mul(buyableEffect("metaMeta", 91)).mul(delta)).abs()
 
         for (var a = player.metaMeta.metaMetaFaucets.length - 1; a >= 0; a--) player.metaMeta.metaMetaFaucets[a] = 
-        Decimal.add(player.metaMeta.metaMetaFaucets[a], new Decimal(player.metaMeta.metaMetaFaucets[a+1]).add(1).mul(tmp.metaMeta.effect.mmFaucetBoost).mul(delta))
+        Decimal.add(player.metaMeta.metaMetaFaucets[a], new Decimal(player.metaMeta.metaMetaFaucets[a+1]).add(1).mul(tmp.metaMeta.effect.mmFaucetBoost).mul(delta)).abs()
 
         if (hasUpgrade("metaMeta", 62)) {
             var mul = tmp.metaMeta.buyables[71].effect.mul(tmp.metaMeta.buyables[63].effect).mul(tmp.metaMeta.effect.faucetBoost)
@@ -2295,7 +2304,7 @@ if (act == 0) addLayer("metaMeta", {
                         if (len > 179) ret += 
                             "Meta-Meta-Faucet #180: ×" + format(tmp.metaMeta.effect.mFaucetAllBoost) + " All Previous Boosts<br/>"
                         if (len > 999) ret += 
-                            "Meta-Meta-Faucet #100: ×" + format(tmp.metaMeta.effect.mmFaucetBoost) + " Meta-Meta-Faucets Boost<br/>"
+                            "Meta-Meta-Faucet #1000: ×" + format(tmp.metaMeta.effect.mmFaucetBoost) + " Meta-Meta-Faucets Boost<br/>"
                             return ret
                     })],
                     ["blank", "15px"],
@@ -2389,6 +2398,8 @@ if (act == 0) addLayer("metaMeta", {
             (player.metaMeta.points.gte("e10000") && !tmp.metaMeta.microtabs.stuff["Limitation"].unlocked) ||
             (hasUpgrade("metaMeta", 94) && !player.metaMeta.remeta)
             ) ? "<br/><h5 style='opacity:0.5'>Sometimes the best way to continue is to start again.</h5>" : ""],
+        ["display-text", () => Number.isNaN(player.metaMeta.points.mag) ? 
+            "<br/><h5 style='opacity:0.5'>NaNi? Game broke?<br/>Have you tried keeping building Sburb?</h5>" : ""],
         ["blank", "35px"],
     ],
 

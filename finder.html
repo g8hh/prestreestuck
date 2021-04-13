@@ -47,15 +47,8 @@
                             .then(json => {
                                 app.mods = app.mods.concat(json)
                                 app.statusText = `
-                                    Sort by:<br/>
-                                    <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setSortRule('updated_at')"><span>Update</button>
-                                    <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setSortRule('created_at')"><span>Creation</button>
-                                    <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setSortRule('stargazers_count')"><span>Stars</button>
-                                    <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setSortRule('open_issues_count')"><span>Open issues</button>
-                                    &nbsp;
-                                    <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setSortOrder(-1)"><span>▼</button>
-                                    <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setSortOrder(1)"><span>▲</button>
-                                    
+                                    <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setTab('sort')"><span>Sort...</button>
+                                    <button class="tabButton" style="border-color:white;padding:5px;margin:10px 0;font-size:16px" onclick="setTab('filter')"><span>Filter...</button>
                                 `
                                 if (app.mods.sort) app.mods.sort(sortMods);
                             })
@@ -98,6 +91,11 @@
             return Math.floor(ms / 365).toLocaleString("en-US") + "y " + Math.floor((ms % 1) * 365).toLocaleString("en-US") + "d"
         }
 
+        function setTab(tab) {
+            app.tab = app.tab == tab ? "" : tab;
+            app.mods.sort(sortMods)
+        }
+
         function setSortOrder(order) {
             app.sortOrder = order
             app.mods.sort(sortMods)
@@ -118,6 +116,13 @@
             return 0;
         }
 
+        function filter(mods) {
+            return mods.filter(repo => 
+                new Date(repo.updated_at) - new Date(repo.created_at) > app.timeCreationFilter * 1000
+                && new Date() - new Date(repo.updated_at) < app.timeUpdatedFilter * 1000
+            );
+        }
+
 		function load() {
             app = new Vue({
                 el: "#finderApp",
@@ -127,6 +132,9 @@
                     sortOrder: 1,
                     width: 100,
                     statusText: "",
+                    tab: "",
+                    timeCreationFilter: 0,
+                    timeUpdatedFilter: +"Infinity",
                 },
             })
 			update()
@@ -144,6 +152,15 @@
 		
 	</script>
     <style>
+        select, .tabItem {
+            background-color: #ffffff;
+            color: #3f3f3e;
+            padding: 3px;
+            border: 2px solid #0000002f;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
         .navButton {
             border: 1px solid #e3e3e2;
             background: linear-gradient(#ffffff, #f6f6f5);
@@ -164,13 +181,52 @@
     <div id="finderApp" style="padding:5px">
         <div>
             <br />
-            <h3>ducdat0507's The Prestige Tree Modfinder</h3><br />
+            <h3>ducdat0507's The Prestige Tree Modfinder™</h3><br />
             This basically fetches all forks from TMT's repository using the GitHub API.<br />
             <br />
         </div>
-        <div v-html="statusText + '<br/>'">
+        <div v-html="statusText + '<br/>'"></div>
+        <div v-bind:style="{'display': tab == 'sort' ? '' : 'none'}">
+            Sort:<div style="font-size:5px">&nbsp;</div>By: 
+            <select onchange="setSortRule(this.value)" v-bind:value="sortRule">
+                <option value="updated_at">Update date</option>
+                <option value="created_at">Creation date</option>
+                <option value="stargazers_count">Stars</option>
+                <option value="open_issues_count">Open issues</option>
+            </select>
+            &nbsp;Order: 
+            <button class="tabItem" style="width:29px; border-radius: 5px 0 0 5px" v-bind:style="{'opacity': sortOrder == -1 ? 1 : .5}" onclick="setSortOrder(-1)"><span>▼</button><!--
+            --><button class="tabItem" style="width:29px; border-radius: 0 5px 5px 0" v-bind:style="{'opacity': sortOrder == 1 ? 1 : .5}" onclick="setSortOrder(1)"><span>▲</button>
+            <br/>&nbsp;
         </div>
-        <div v-for="repo in mods" v-bind:style="{'width': 'calc(' + (100 / Math.max(Math.floor((width - 10) / 400), 1)) + '% - 10px)'}" style="display:inline-flex;margin:0;padding:5px;transition:none">
+        <div v-bind:style="{'display': tab == 'filter' ? '' : 'none'}">
+            Updated since:<div style="font-size:5px">&nbsp;</div>Creation: 
+            <select onchange="app.timeCreationFilter = +this.value" v-bind:value="timeCreationFilter">
+                <option value="0">Unfiltered</option>
+                <option value="60">&gt; 1 minute</option>
+                <option value="600">&gt; 10 minutes</option>
+                <option value="3600">&gt; 1 hour</option>
+                <option value="14400">&gt; 4 hours</option>
+                <option value="43200">&gt; 12 hours</option>
+                <option value="86400">&gt; 1 day</option>
+                <option value="259200">&gt; 3 days</option>
+                <option value="604800">&gt; 7 days</option>
+                <option value="2592000">&gt; 1 month</option>
+            </select>
+            &nbsp;Now: 
+            <select onchange="app.timeUpdatedFilter = +this.value" v-bind:value="timeUpdatedFilter">
+                <option value="Infinity">Unfiltered</option>
+                <option value="31104000">&lt; 1 year</option>
+                <option value="20736000">&lt; 8 months</option>
+                <option value="10368000">&lt; 4 months</option>
+                <option value="5184000">&lt; 2 months</option>
+                <option value="2592000">&lt; 1 month</option>
+                <option value="604800">&lt; 7 days</option>
+                <option value="86400">&lt; 1 day</option>
+            </select>
+            <br/>&nbsp;
+        </div>
+        <div v-for="repo in filter(mods)" v-bind:style="{'width': 'calc(' + (100 / Math.max(Math.floor((width - 10) / 400), 1)) + '% - 10px)'}" style="display:inline-flex;margin:0;padding:5px;transition:none">
             <div v-if="repo.owner" style="text-align:left;border:4px solid #272725;background:linear-gradient(#383838, #2a2a29);border-radius:4px;padding:5px;width:100%">
                 <table>
                     <tr>
