@@ -411,11 +411,11 @@ function openCreateSaveModal() {
 function createSave(name, targetAct) {
 	clearInterval(interval)
 	load("new")
-	player.act = targetAct || -1
+	player.act = targetAct ?? -1
 	meta.currentSave = player.saveId
 	meta.saves[player.saveId] = {
 		name: name || "New Save",
-		act: targetAct || 0,
+		act: targetAct ?? 0,
 		desc: "0 points",
 	}
 	save();
