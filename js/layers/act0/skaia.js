@@ -1021,7 +1021,7 @@ if (act == 0) addLayer("skaia", {
         2: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>AGE OF GROWTH</alternate></p>4 Breath Essence & 4 Blood Essence",
             done() { return player.aspBreath.best.gte(4) && player.aspBlood.best.gte(4) },
-            effectDescription: "Keeps Hope Upgrades and Rage Milestones on Breath and Blood resets.",
+            effectDescription: "Keeps Hope Upgrades and Rage Challenges on Breath and Blood resets.",
         },
         3: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>EVERYTHING IS ALMOST READY</alternate></p>6 Breath Essence & 6 Blood Essence",
