@@ -1,4 +1,4 @@
-var compVer = "0.1.0.2";
+var compVer = "0.1.0.3";
 var app;
 
 function loadVue() {
@@ -433,12 +433,63 @@ function loadVue() {
 	})
 
 	Vue.component('story', {
-		props: ['layer', ],
+		props: ['layer'],
+		data: () => {
+			return {
+				current: tmp[layer].story ? tmp[layer].story[player[layer].story.page] : null
+			}
+		},
 		template: `
-		<div v-if="tmp[layer].story && tmp[layer].story[player[layer].story.page]" style="max-width:650px;margin:15px;font-size:14px;">
-		    <div v-html="tmp[layer].story[player[layer].story.page].content"></div>
-		    <div v-for="cmd in tmp[layer].story[player[layer].story.page].commands" style="text-align:left;font-size:18px;padding-top:30px;padding-bottom:80px;">
+		<div v-if="current" style="max-width:650px;margin:15px;font-size:14px;">
+		    <div v-html="current.content"></div>
+			<div v-if="current.pesterlog" class="pesterlog">
+				<div v-for="msg in current.pesterlog" style="margin:10px" v-bind:style="{'text-align': msg[0] == 'msg' ? (msg[3] && msg[3].split(' ').includes('right') ? 'right' : 'left') : 'center'}">
+					<div v-if="msg[0] == 'start'" style="color:#00000080">
+						-- 
+						<span class="courier" v-bind:style="{color: players[msg[1]].color}">{{players[msg[1]].full}}</span>
+						began pestering <span class="courier" v-bind:style="{color: players[msg[2]].color}">{{players[msg[2]].full}}</span>
+						at <span class="courier" v-bind:style="{color: '#000000'}">{{msg[3]}}</span>
+						--
+					</div>
+					<div v-if="msg[0] == 'end'" style="color:#00000080">
+						-- 
+						<span class="courier" v-bind:style="{color: players[msg[1]].color}">{{players[msg[1]].full}}</span>
+						ceased pestering <span class="courier" v-bind:style="{color: players[msg[2]].color}">{{players[msg[2]].full}}</span>
+						at <span class="courier" v-bind:style="{color: '#000000'}">{{msg[3]}}</span>
+						--
+					</div>
+					<div v-if="msg[0] == 'msg'" v-bind:style="{color: players[msg[1]].color}" :class="msg[3] ? msg[3].split(' ').concat('msg') : ['msg']" v-html="msg[2]">
+					</div>
+				</div>
+			</div>
+		    <div v-for="cmd in current.commands" style="text-align:left;font-size:18px;padding-top:30px;padding-bottom:80px;">
 			    &gt; <a v-html="cmd.title" v-on:click="startStoryPage(layer, cmd.page)" class="link" style="display:inline;font-weight:normal;"></a>
+			</div>
+		</div>
+		`
+	})
+
+	Vue.component('discord', {
+		props: ['invite', 'title', 'desc'],
+		data: function() {
+			if (!discord[this.invite]) {
+				fetch("https://discord.com/api/v9/invites/" + this.invite + "?with_counts=true")
+					.then(res => res.json())
+					.then((out) => {
+					discord[this.invite] = out
+				})
+			}
+			return { data: discord[this.invite] }
+		},
+		template: `
+		<div class="discordInvite">
+			<div class="v-center" style="width:100%;">
+				<a class=link v-bind:href="'https://discord.gg/' + invite" style="font-size:16px;display:inline;font-weight:400">{{title || (discord[invite] ? discord[invite].guild.name : invite)}}</a><br/>
+				{{desc}}<br/>
+				<span v-if="discord[invite]" style="opacity:.5">
+					({{formatWhole(discord[invite].approximate_member_count)}} members, 
+					{{formatWhole(discord[invite].approximate_presence_count)}} online)
+				</span>
 			</div>
 		</div>
 		`
@@ -462,6 +513,7 @@ function loadVue() {
 			meta,
 			tmp,
 			modal,
+			discord,
 			Decimal,
 			format,
 			formatWhole,

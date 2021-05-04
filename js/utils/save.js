@@ -216,6 +216,7 @@ function load(saveId) {
 		updateTemp();
 		updateTemp();
 		loadVue();
+		
 	} else {
 		let get = localStorage.getItem(modInfo.id);
 		if (get===null || get===undefined) {
@@ -241,6 +242,7 @@ function load(saveId) {
 			load(meta.currentSave)
 		}
 	}
+	
 }
 
 function setupModInfo() {

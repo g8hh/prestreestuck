@@ -17,6 +17,8 @@
 	-webkit-outline: none;
 }
 
+/* custom layer transform */
+
 #skaia, #metaMeta { position: absolute; transform: translate(-37.50px, 112.50px); }
 #skaia:hover, #metaMeta:hover { transform: translate(-37.50px, 112.50px) scale(1.1, 1.1); }
 
@@ -45,6 +47,8 @@
 #aspBlood, #metaAspects { position: absolute; transform: translate(-37.50px, 262.50px); }
 #aspBlood:hover, #metaAspects:hover { transform: translate(-37.50px, 262.50px) scale(1.1, 1.1); }
 
+/* custom layer style */
+
 #metaAspects {
 	color: #e5b9ff !important;
 	background-color: #2e0149 !important;
@@ -54,10 +58,69 @@
 	background-color: #020d65 !important;
 }
 
+/* extra quirk */
+
 alternate {
 	font-family: Oblivion;
 	transform: scale(-1, -1) !important;
 }
+
+.pesterlog {
+	margin: 20px;
+	padding: -20px;
+
+	width: calc(100% - 40px);
+
+	background-color: #ffffff;
+	color: #000000;
+	box-shadow: 0 0 10px 10px #ffffff;
+	
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
+}
+
+.msg {
+	display: inline-block !important;
+
+	text-align: left;
+	
+	max-width: 80%;
+	border: 2px solid #ffb500;
+	box-shadow: 2px 2px 10px -2px #00000080;
+
+	padding: 5px 10px;
+}
+.msg.right {
+	text-align: right;
+}
+
+.discordInvite {
+	display: inline-block;
+	font-size: 12px;
+	width: 320px;
+	height: 80px;
+	margin: 5px;
+	border: 2px solid rgba(0, 0, 0, 0.125);
+	box-shadow: 0 0 5px black;
+	border-radius: 5px;
+	position: relative;
+}
+
+.v-center {
+	position: absolute;
+	top: 50%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+.vh-center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+/* end of custom styles */
 
 body {
 	background-color: var(--background);
@@ -133,7 +196,7 @@ button {
 	vertical-align: 0
 }
 
-h1, h2, h3, b, input {
+h1, h2, h3, b, input, .pesterlog > * > *, .courier {
 	display: inline;
 	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace
 }

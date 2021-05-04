@@ -1,4 +1,4 @@
-var gameVer = "0.1.0.2";
+var gameVer = "0.1.0.3";
 
 var player;
 var needCanvasUpdate = true;
@@ -380,6 +380,11 @@ function gameLoop(diff) {
 		if (layers[layer].achievements) updateAchievements(layer)
 	}
 
+	// For anyone who is Chinese but don't like watermarks: Setting "player.hideQQLinks" to true and reload 
+	// might hide the QQ links.
+	if (player.hideQQLink && document.location.hostname == "idlegame.gitee.io" && document.querySelector(".main-im")) {
+		document.querySelector(".main-im").style.display = "none";
+	}
 }
 
 function hardReset() {

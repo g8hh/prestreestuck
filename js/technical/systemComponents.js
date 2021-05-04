@@ -1,4 +1,4 @@
-var systemVer = "0.1.0.2";
+var systemVer = "0.1.0.3";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -133,30 +133,20 @@ var systemComponents = {
             <br>
             made by <a onclick="openCreditsModal()" class="link" style="font-size:14px;display:inline" >some people</a>
         </span>
-        <br>${
-			Math.random() < 0.1 ?
-			`<br>
-			<i>The Prestige Tree</i>, courtesy of <i>Distance Incremental</i> creator<br>
-			<i>The Modding Tree</i>, courtesy of <i>Homestuck: Act Omega</i> creator<br>
-			<i>Homestuck</i>, courtesy of <i>Psycholonials</i> creator<br>
-			also kudos to the original tree style game idea by the person with a name taken from a character from <i>Undertale</i> but whatever<br>` :
-			`<br>
-			a mod of The Prestige Tree made by Jacorb and Aarex<br>
-			original idea by papyrus (on discord)<br>
-			using The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda<br>
-			based on Homestuck by Andrew Hussie (of course)<br>`
-		}
-		<br>
         <h5 style="opacity: 0.5">
             This is made entirely for entertainment and parody purposes, no income is generated from this nor it's made to steal anybody's original works.
         </h5>
 		<br><br>
-		<div class="link" onclick="showTab('changelog-tab')">The Changelog<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(see what happened throughout this thing's history)</h5></div><br>
-		<a class="link" href="acknowledgements.md" target="_blank">Acknowledgements<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(wall of text saying I do not own most of this)</h5></a><br>
-        <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(suggest everything and talk about how bad this mod is here)</h5></a><br></span>
-        <a class="link" href="https://discord.gg/F3xveHV" target="_blank">The Modding Tree Discord<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(talking about all the mods, mod-creators and modded trees)</h5></a><br>
-        <a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree server<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(server of the person who made the original game)</h5></a><br>
-		<a class="link" href="finder.html" target="_blank">The Prestige Tree Modfinder<h5 style="opacity:0.5;font-size:12px;font-weight:normal">(in case you're already sick of this)</h5></a><br>
+        <h3>Helpful links:</h3><br/>
+		<div class="discordInvite"> <div class="v-center" style="width:100%">
+			<a class=link onclick="showTab('changelog-tab')" style="font-size:16px;display:inline;font-weight:400">
+			The Changelog</a><br/>Pretty much the history of the game
+		</div></div>
+		<br><br>
+        <h3>Discord servers:</h3><br/>
+		<discord invite="fHcWmmprGm" title="The Prestreestuck Server" desc="Suggest things and talk about how bad this is here"></discord>
+		<discord invite="F3xveHV" title="The Modding Tree Discord" desc="All the mods, mod finders and mod makers!"></discord>
+		<discord invite="wwQfgPa" title="Jacorb's Main Server" desc="Server of the person who made the original game"></discord>
 		<br><br>
         Time Played: {{ formatTime(player.timePlayed) }}<br><br>
         <h3>Hotkeys</h3><br>

@@ -40,16 +40,12 @@ function milestoneShown(layer, id) {
 	switch (player.msDisplay) {
 		case "always":
 			return true;
-			break;
 		case "automation":
 			return (auto) || !complete;
-			break;
 		case "incomplete":
 			return !complete;
-			break;
 		case "never":
 			return false;
-			break;
 	}
 	return false;
 }
