@@ -299,6 +299,13 @@ function maxTickLength() {
 function fixOldSave(oldVersion) {
 	console.log("Loaded old version from" + oldVersion)
 	if (player.tab == "aspects") player.tab = "metaAspects";
+	if (oldVersion <= "0.1.0.3") {
+		if (act == 0) {
+			if (hasUpgrade("skaia", 12)) switchAct("0.1")
+			else if (hasUpgrade("skaia", 13) || hasUpgrade("skaia", 14)) switchAct("0.2")
+			else switchAct("0.0")
+		}
+    }
 	if (oldVersion <= "0.0.3.4" && player.points.gte("ee100000")) {
 		player.points = new Decimal("ee100000");
 		player.skaia.points = new Decimal(0);
