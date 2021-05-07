@@ -5,7 +5,7 @@ if (act.startsWith("0")) addLayer("skaia", {
     position: 0,
     branches: [],
 
-    layerShown() { return act > "0" || player.aspHope.unlocked || player.aspRage.unlocked },
+    layerShown() { return act > "0.0" || player.aspHope.unlocked || player.aspRage.unlocked },
     resource: "Experience",
     type: "none",
     color: "#ffffff",

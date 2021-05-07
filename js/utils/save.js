@@ -398,7 +398,7 @@ function openCreateSaveModal() {
 				placeholder="New Save" 
 				id="save${save}" onchange="changeSaveName(${save})">
 			<br/><br/>Start from:
-			<div class="saveState" style='cursor:pointer;margin-top:5px' onclick='createSave(document.getElementById("newSaveNameInput").value, 0); modal.hide()'>
+			<div class="saveState" style='cursor:pointer;margin-top:5px' onclick='createSave(document.getElementById("newSaveNameInput").value, "0.0"); modal.hide()'>
 			    <h3 style="font-size:21px">Act 0</h3><br/>
 				<span style='font-size:14px'>Tree of Genesis</span>
 			</div>
