@@ -343,7 +343,9 @@ function openSaveModal() {
 		(() => {
 			var html = ""
 			var acts = {
-				0: ["Act 0", "Genesis"],
+				"0.0": ["Act 0", "Genesis"],
+				"0.1": ["Act 0", "Genesis"],
+				"0.2": ["Act 0", "Genesis"],
 				1: ["Act 1", "Incrementalism"],
 				omega: ["Act Ω", "?????"],
 			}
@@ -355,7 +357,7 @@ function openSaveModal() {
 						placeholder="Untitled Save" 
 						id="save${save}" onchange="changeSaveName(${save})"><br/>
 					<span style='font-size:14px'>
-						Act ${meta.saves[save].act} - ${acts[meta.saves[save].act][1]}<br/>
+						${acts[meta.saves[save].act][0]} - ${acts[meta.saves[save].act][1]}<br/>
 						${meta.saves[save].desc}<br/>
 					</span>
 					<span style='font-size:12px;opacity:0.5'>
