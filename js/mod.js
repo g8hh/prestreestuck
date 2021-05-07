@@ -262,15 +262,17 @@ var displayThings = [
 	function () {
 		var rem = 0
 		for (lys in LAYERS) {
-			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && !inChallenge("aspDoom", 12)))) rem++
+			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && player.act == "0.0" && !inChallenge("aspDoom", 12)))) rem++
 		}
 		if (act == 0) {
-			if (hasUpgrade("skaia", 14)) rem -= 17;
-			else if (hasUpgrade("skaia", 12)) rem -= 12;
+			if (hasUpgrade("skaia", 14)) rem += 5;
+			else if (hasUpgrade("skaia", 12)) rem += 1;
 		}
 		var acts = {
 			'-1': ["", "", ""],
-			0: ["Act 0", "Genesis", (rem == 0 ? "The end is nigh..." : rem + " layers remaining" + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : ""))],
+			"0.0": ["Act 0", "Genesis", rem + " layers remaining"],
+			"0.1": ["Act 0", "Genesis", rem + " layers remaining"],
+			"0.2": ["Act 0", "Genesis", "The end is nigh..."],
 			1: ["End of Act 0??", "-", "Coming soon..."],
 			omega: ["Act Ω", "?????", "???????????"],
 		}

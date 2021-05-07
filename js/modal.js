@@ -48,7 +48,7 @@ function openStartModal() {
                 <button onclick='openContentWarningModal()'> Show Content Warning </button>
                 <br/><br/>
                 You decided to start the game from:
-                <div class="saveState" style='cursor:pointer;margin-top:5px' onclick='switchAct(0);'>
+                <div class="saveState" style='cursor:pointer;margin-top:5px' onclick='switchAct("0.0");'>
                     <h3 style="font-size:21px">Act 0</h3><br/>
                     <span style='font-size:14px'>Tree of Genesis</span>
                 </div>

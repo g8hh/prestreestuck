@@ -1,4 +1,4 @@
-if (act == 0) addLayer("aspDoom", {
+if (act == "0.0") addLayer("aspDoom", {
     name: "Doom",
     symbol: "<img src='data/doom.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>",
     row: 6,
