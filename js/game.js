@@ -389,8 +389,9 @@ function gameLoop(diff) {
 
 function hardReset() {
 	if (!confirm("Are you sure you want to do this? You will lose all your progress!")) return
-	player = null
-	save();
+	let saveName = meta.saves[meta.currentSave].name
+	deleteSave(player.saveId)
+	createSave(saveName, "0.0")
 	window.location.reload();
 }
 

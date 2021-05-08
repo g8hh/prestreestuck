@@ -40,7 +40,7 @@ function drawTree() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	if (player.act.startsWith("0")) {
-		if (player.act == "0.0", player.act == "0.1") {
+		if ((player.act == "0.0" && hasUpgrade("skaia", 11)) || player.act == "0.1") {
 			var scale = Math.max(canvas.height / 250, canvas.width / 446)
 			var skyHeight = scale * 250
 			var skyWidth = scale * 446

@@ -451,9 +451,9 @@ function changeSave(id) {
 	window.location.reload();
 }
 
-function switchAct(act) {
+function switchAct(act, reset = true) {
 	player = {
-		...getStartPlayer(),
+		...reset ? getStartPlayer() : player,
 		
 		timePlayed: player.timePlayed,
 		saveId: player.saveId,
