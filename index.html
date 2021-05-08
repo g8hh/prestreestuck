@@ -124,7 +124,7 @@
 			<button
 				v-if="player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside')"
 				class="other-back overlayThing" onclick="goBack()">←</button>
-			<img id="optionWheel" class="overlayThing" v-if="player.tab!='options-tab'" src="options_wheel.png"
+			<img id="optionWheel" class="overlayThing" v-if="player.tab!='options-tab'" src="data/options_wheel.png"
 				onclick="showTab('options-tab')"></img>
 			<div id="info" v-if="player.tab!='info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
 			<div id="discord" class="overlayThing">
