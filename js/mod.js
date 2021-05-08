@@ -34,16 +34,22 @@ let VERSION = {
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
-	<h3>v0.1.0.4</h3><br>
+	<h2>v0.1.0.4</h2><br>
+		<h5 style="opacity:0.5">- The Great Split -</h5>
 		Attepted to split Act 0 into 3 different stages to improve performance.<br>
+		Fixed hard reset not working properly (if I don't want to say at all).<br>
+	<br>
 	<h3>v0.1.0.3</h3><br>
 		Redesigned the info tab. Discord links now showing member counts.<br>
 		Fixed side options sometimes getting hidden on Act 1.<br>
 		Added miscellaneous features.<br>
+	<br>
 	<h3>v0.1.0.2</h3><br>
 		Fixed selecting act 0 in the new save dialog directs you to the opening screen.<br>
+	<br>
 	<h3>v0.1.0.1</h3><br>
 		Added opening screen.<br>
+	<br>
 	<h2>v0.1.0</h2><br>
 		<h5 style="opacity:0.5">- MS-Paint Fan Incremental -</h5>
 		<i>ACT 1 POG</i><br>
@@ -53,6 +59,7 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 		Fixed <spoiler>Limitation reset</spoiler> resetting <spoiler>Meta-Meta-Faucets</spoiler> even if you have 50+ of them.<br>
 		Fixed <spoiler>Meta-Meta-Faucet</spoiler> #1000 effect showing as #100.<br>
 		Fixed <spoiler>Sburb Sacrifice Milestones</spoiler> showing sooner than intended.<br>
+	<br>
 	<h2>v0.0.3.8.6.2</h2><br>
 		<h5 style="opacity:0.5">- A Broken Game -</h5>
 		End of Act 0?<br>
@@ -265,10 +272,8 @@ var displayThings = [
 		for (lys in LAYERS) {
 			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && player.act == "0.0" && !inChallenge("aspDoom", 12)))) rem++
 		}
-		if (act == 0) {
-			if (hasUpgrade("skaia", 14)) rem += 5;
-			else if (hasUpgrade("skaia", 12)) rem += 1;
-		}
+		if (act == "0.0") rem += 5;
+		else if (act == "0.1") rem += 1;
 		var acts = {
 			'-1': ["", "", ""],
 			"0.0": ["Act 0", "Genesis", rem + " layers remaining"],
