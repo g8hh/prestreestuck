@@ -19,8 +19,8 @@ function save(saveId) {
 		return ret
 	})()
 
-	localStorage.setItem("pts_" + saveId, btoa(JSON.stringify(player)))
-	localStorage.setItem(modInfo.id, btoa(JSON.stringify(meta)))
+	localStorage.setItem("pts_" + saveId, btoa(unescape(encodeURIComponent(JSON.stringify(player)))))
+	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(meta)))))
 }
 
 function startPlayerBase() {
@@ -44,8 +44,8 @@ function startPlayerBase() {
 		showStory: true,
 		points: modInfo.initialStartPoints,
 		subtabs: {},
-		lastSafeTab: (layoutInfo.showTree ? "none" : layoutInfo.startTab)
-	}
+		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)
+	};
 }
 
 function getStartPlayer() {
@@ -79,26 +79,33 @@ function getStartPlayer() {
 	}
 	return playerdata
 }
+function getStartLayerData(layer) {
+	layerdata = {};
+	if (layers[layer].startData)
+		layerdata = layers[layer].startData();
 
-function getStartLayerData(layer){
-	layerdata = {}
-	if (layers[layer].startData) 
-		layerdata = layers[layer].startData()
+	if (layerdata.unlocked === undefined)
+		layerdata.unlocked = true;
+	if (layerdata.total === undefined)
+		layerdata.total = new Decimal(0);
+	if (layerdata.best === undefined)
+		layerdata.best = new Decimal(0);
+	if (layerdata.resetTime === undefined)
+		layerdata.resetTime = 0;
+	if (layerdata.forceTooltip === undefined)
+		layerdata.forceTooltip = false;
 
-	if (layerdata.unlocked === undefined) layerdata.unlocked = true
-	if (layerdata.total === undefined) layerdata.total = new Decimal(0)
-	if (layerdata.best === undefined) layerdata.best = new Decimal(0)
-	if (layerdata.resetTime === undefined) layerdata.resetTime = 0
-
-	layerdata.buyables = getStartBuyables(layer)
-	if(layerdata.clickables == undefined) layerdata.clickables = getStartClickables(layer)
-	layerdata.spentOnBuyables = new Decimal(0)
-	layerdata.upgrades = []
-	layerdata.milestones = []
-	layerdata.achievements = []
-	layerdata.challenges = getStartChallenges(layer)
-	layerdata.story = getStartStory(layer)
-	return layerdata
+	layerdata.buyables = getStartBuyables(layer);
+	if (layerdata.noRespecConfirm === undefined) layerdata.noRespecConfirm = false
+	if (layerdata.clickables == undefined)
+		layerdata.clickables = getStartClickables(layer);
+	layerdata.spentOnBuyables = new Decimal(0);
+	layerdata.upgrades = [];
+	layerdata.milestones = [];
+	layerdata.lastMilestone = null;
+	layerdata.achievements = [];
+	layerdata.challenges = getStartChallenges(layer);
+	return layerdata;
 }
 
 
@@ -197,7 +204,7 @@ function load(saveId) {
 	if (saveId) {
 		let get = localStorage.getItem("pts_" + saveId);
 		if (get===null || get===undefined || saveId==="new") player = getStartPlayer()
-		else player = Object.assign(getStartPlayer(), JSON.parse(atob(get)))
+		else player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))))
 		player.saveId = saveId == "new" ? Date.now() : saveId
 		fixSave()
 
