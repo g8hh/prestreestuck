@@ -5,7 +5,7 @@
 	pointsName: "points",
 	discordName: "The Prestreestuck Server",
 	discordLink: "https://discord.gg/fHcWmmprGm",
-	initialStartPoints: new Decimal(act == 0 ? 10 : 0), // Used for hard resets and new players
+	initialStartPoints: new Decimal(act.startsWith("0") ? 10 : 0), // Used for hard resets and new players
 	
 	offlineLimit: (+act + 1) || 1,  // In hours
 }
@@ -21,18 +21,21 @@ let flavorTitles = [
 	"NO, IT IS NOT CANON YET",
 	"BUT WHY THOUGH",
 	"READ HOMESTUCK INSTEAD",
-	"UNDEFINED"
+	"UNDEFINED",
+	"PLAY THIS GAME IN TRICKSTER THEME, I DARE YOU"
 ]
 let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.0.3",
-	name: "MS-Paint Fan Incremental",
+	num: "0.1.0.4",
+	name: "The Great Split",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.1.0.4</h3><br>
+		Attepted to split Act 0 into 3 different stages to improve performance.<br>
 	<h3>v0.1.0.3</h3><br>
 		Redesigned the info tab. Discord links now showing member counts.<br>
 		Fixed side options sometimes getting hidden on Act 1.<br>
@@ -204,43 +207,41 @@ function getPointGen() {
 	if (act == -1) {
 		clearInterval(interval);
 		openStartModal();
-	} else if (act == 0) {
-		if (hasUpgrade("skaia", 14)) {
-			if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
-		} else if (hasUpgrade("skaia", 12)) {
-			gain = gain.mul(tmp.metaAspects.effect.pointBoost)
-		} else {
-			for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
+	} else if (act == "0.0") {
+		for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
 
-			if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
-			if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
+		if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
+		if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
 
-			if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
-			if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
-			if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
+		if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
+		if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
+		if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
 
-			if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
-			if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
+		if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
+		if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
 
-			if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
-			if (hasUpgrade("aspHope", 34)) gain = gain.mul(tmp.aspHope.upgrades[34].effect)
-			if (hasUpgrade("aspHope", 51)) gain = gain.mul(tmp.aspHope.upgrades[51].effect)
-			if (hasUpgrade("aspHope", 63)) gain = gain.mul(tmp.aspHope.upgrades[63].effect)
+		if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
+		if (hasUpgrade("aspHope", 34)) gain = gain.mul(tmp.aspHope.upgrades[34].effect)
+		if (hasUpgrade("aspHope", 51)) gain = gain.mul(tmp.aspHope.upgrades[51].effect)
+		if (hasUpgrade("aspHope", 63)) gain = gain.mul(tmp.aspHope.upgrades[63].effect)
 
-			gain = gain.mul(tmp.aspHeart.effect.pointBoost)
-			gain = gain.mul(tmp.aspMind.effect.pointBoost)
-			gain = gain.mul(tmp.aspLife.effect.pointBoost)
-			gain = gain.mul(tmp.aspDoom.effect.pointBoost)
+		gain = gain.mul(tmp.aspHeart.effect.pointBoost)
+		gain = gain.mul(tmp.aspMind.effect.pointBoost)
+		gain = gain.mul(tmp.aspLife.effect.pointBoost)
+		gain = gain.mul(tmp.aspDoom.effect.pointBoost)
 
-			gain = gain.mul(tmp.aspLight.buyables[11].effect)
+		gain = gain.mul(tmp.aspLight.buyables[11].effect)
 
-			if (getBuyableAmount("aspLife", 11).gt(0)) gain = gain.mul(tmp.aspLife.buyables[11].effect)
-			if (challengeCompletions("aspDoom", 11) >= 8) gain = gain.pow(1.05)
+		if (getBuyableAmount("aspLife", 11).gt(0)) gain = gain.mul(tmp.aspLife.buyables[11].effect)
+		if (challengeCompletions("aspDoom", 11) >= 8) gain = gain.pow(1.05)
 
-			if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
-			if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
-			if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
-		}
+		if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
+		if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
+		if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
+	} else if (act == "0.1") {
+		gain = gain.mul(tmp.metaAspects.effect.pointBoost)
+	} else if (act == "0.2") {
+		if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
 	} else if (act == 1) {
 		gain = new Decimal(0)
 	}

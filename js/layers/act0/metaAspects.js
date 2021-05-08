@@ -2152,7 +2152,7 @@ if (act == "0.1") addLayer("metaAspects", {
     },
 
     update(delta) {
-        if (hasUpgrade("skaia", 12)) player.metaAspects.points = player.metaAspects.points.add(tmp.metaAspects.effect.selfGain.mul(delta))
+        player.metaAspects.points = player.metaAspects.points.add(tmp.metaAspects.effect.selfGain.mul(delta))
 
         player[this.layer].autoBuyerTime += delta
         if (player[this.layer].autoBuyerTime >= 1) {

@@ -54,7 +54,7 @@ function drawTree() {
 		if (player.act == "0.1") ctx.filter = 'hue-rotate(' + -(player.timePlayed * 4.13) + 'deg)'; 
 
 		if (player.act == "0.0" && (player.aspHope.unlocked || player.aspRage.unlocked) && sDensity < 8) sDensity++
-		else if ((player.act == "0.1" && (player.aspHope.unlocked && player.aspRage.unlocked)) && sDensity < 16) sDensity++
+		else if ((player.act == "0.0" && (player.aspHope.unlocked && player.aspRage.unlocked)) && sDensity < 16) sDensity++
 		else if (sDensity > 0) sDensity--
 		if (sDensity > 0 || hasUpgrade("skaia", 12)) {
 			if (!document.getElementById("skaia")) return
