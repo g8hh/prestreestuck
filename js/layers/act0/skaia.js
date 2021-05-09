@@ -933,44 +933,38 @@ if (act.startsWith("0")) addLayer("skaia", {
 
     update(delta) {
         player.phaseTimer += delta
-        if (act == "0.0") {
-            if (player.skaia.points.gt(tmp.skaia.effect.climbReq)) {
-                player.skaia.points = player.skaia.points.sub(tmp.skaia.effect.climbReq)
-                player.skaia.level = player.skaia.level.add(hasUpgrade("skaia", 52) ? 100 : 1).mul(hasUpgrade("skaia", 71) ? (hasUpgrade("skaia", 90) ? 1e10 : 2) : 1)
-            }
-            player.skaia.boondollars = player.skaia.boondollars.add(tmp.skaia.effect.boondollarGain.mul(delta)).div(player.skaia.boondollars.add(1).log(10).sub(9).max(1).pow(0.05).pow(delta))
+        if (player.skaia.points.gt(tmp.skaia.effect.climbReq)) {
+            player.skaia.points = player.skaia.points.sub(tmp.skaia.effect.climbReq)
+            player.skaia.level = player.skaia.level.add(hasUpgrade("skaia", 52) ? 100 : 1).mul(hasUpgrade("skaia", 71) ? (hasUpgrade("skaia", 90) ? 1e10 : 2) : 1)
+        }
+        player.skaia.boondollars = player.skaia.boondollars.add(tmp.skaia.effect.boondollarGain.mul(delta)).div(player.skaia.boondollars.add(1).log(10).sub(9).max(1).pow(0.05).pow(delta))
 
-            if (Number.isNaN(player.skaia.points.mag) || Number.isNaN(player.skaia.boondollars.mag)) {
-                console.log(a)
-                player.skaia.boondollars = new Decimal(0)
-            }
-            if (hasUpgrade("skaia", 12)) {
-                player.skaia.points = player.skaia.points.add(tmp.skaia.effect.levelGain.mul(delta))
-            }
+        if (Number.isNaN(player.skaia.points.mag) || Number.isNaN(player.skaia.boondollars.mag)) {
+            console.log(a)
+            player.skaia.boondollars = new Decimal(0)
+        }
+        if (act == "0.1") {
+            player.skaia.points = player.skaia.points.add(tmp.skaia.effect.levelGain.mul(delta))
+        }
 
-            if (hasUpgrade("skaia", 21)) {
-                player.skaia.tradingClock += delta
+        if (hasUpgrade("skaia", 21)) {
+            player.skaia.tradingClock += delta
 
-                if (player.skaia.tradingClock >= 1) {
-                    simulateStock("buildGrist", 3, 20, 0.015)
+            if (player.skaia.tradingClock >= 1) {
+                simulateStock("buildGrist", 3, 20, 0.015)
 
-                    if (hasUpgrade("skaia", 22)) {
-                        if (player.skaia.buildGristSpeed.gt(0)) {
-                            let stocks = player.skaia.boondollars.div(player.skaia.buildGristPrice)
-                            player.skaia.boondollars = player.skaia.boondollars.sub(stocks.mul(player.skaia.buildGristPrice))
-                            if (Number.isNaN(player.skaia.boondollars.mag)) player.skaia.boondollars = new Decimal(0)
-                            player.skaia.buildGristStock = player.skaia.buildGristStock.add(stocks)
-                        } else {
-                            player.skaia.boondollars = player.skaia.boondollars.add(player.skaia.buildGristStock.mul(player.skaia.buildGristPrice))
-                            player.skaia.buildGristStock = new Decimal(0)
-                        }
+                if (hasUpgrade("skaia", 22)) {
+                    if (player.skaia.buildGristSpeed.gt(0)) {
+                        let stocks = player.skaia.boondollars.div(player.skaia.buildGristPrice)
+                        player.skaia.boondollars = player.skaia.boondollars.sub(stocks.mul(player.skaia.buildGristPrice))
+                        if (Number.isNaN(player.skaia.boondollars.mag)) player.skaia.boondollars = new Decimal(0)
+                        player.skaia.buildGristStock = player.skaia.buildGristStock.add(stocks)
+                    } else {
+                        player.skaia.boondollars = player.skaia.boondollars.add(player.skaia.buildGristStock.mul(player.skaia.buildGristPrice))
+                        player.skaia.buildGristStock = new Decimal(0)
                     }
-                    player.skaia.tradingClock = 0
                 }
-            }
-
-            if (hasUpgrade("skaia", 13) && player.aspTime.points.gte("1")) {
-                buyUpgrade("skaia", 14)
+                player.skaia.tradingClock = 0
             }
         }
     },
