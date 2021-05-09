@@ -311,6 +311,7 @@ function fixOldSave(oldVersion) {
 	if (player.tab == "aspects") player.tab = "metaAspects";
 	if (oldVersion <= "0.1.0.3") {
 		if (act == 0) {
+			player.version = VERSION.num
 			if (hasUpgrade("skaia", 12)) switchAct("0.1", false)
 			else if (hasUpgrade("skaia", 13) || hasUpgrade("skaia", 14)) switchAct("0.2", false)
 			else switchAct("0.0", false)
