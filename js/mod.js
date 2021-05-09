@@ -38,7 +38,7 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 	<h2>v0.1.1</h2><br>
 		<h5 style="opacity:0.5">- The Great Split -</h5>
 		Attepted to split Act 0 into 3 different stages to improve performance.<br>
-		Migrated to The Modding Tree v2.5.2.1. The update everyoune was waiting for!<br>
+		Migrated to The Modding Tree v2.5.2.1. The update everyone was waiting for!<br>
 		Fixed hard reset not working properly (if I don't want to say at all).<br>
 		Improved readability (sort of).<br>
 	<br>
