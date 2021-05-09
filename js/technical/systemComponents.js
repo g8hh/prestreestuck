@@ -1,4 +1,4 @@
-var systemVer = "0.1.0.4";
+var systemVer = "0.1.1";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -144,6 +144,7 @@ var systemComponents = {
         Time Played: {{ formatTime(player.timePlayed) }}<br><br>
         <h3>Hotkeys</h3><br>
         <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><br>{{key.description}}</span>
+		<br><br>Hold Shift while clicking on a node to pin its tooltip.
 		<br><br>&nbsp;
 		</div>
 		

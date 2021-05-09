@@ -1037,7 +1037,7 @@ if (act == "0.2") addLayer("metaMeta", {
                 }
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
         12: {
@@ -1074,7 +1074,7 @@ if (act == "0.2") addLayer("metaMeta", {
                 player[this.layer].overflowsTotal = player[this.layer].overflowsTotal.add(inc)
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
         13: {
@@ -1113,7 +1113,7 @@ if (act == "0.2") addLayer("metaMeta", {
                 player[this.layer].eternitiesTotal = player[this.layer].eternitiesTotal.add(inc)
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
         21: {
@@ -1148,7 +1148,7 @@ if (act == "0.2") addLayer("metaMeta", {
                 }
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
         22: {
@@ -1189,7 +1189,7 @@ if (act == "0.2") addLayer("metaMeta", {
 
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
     },
