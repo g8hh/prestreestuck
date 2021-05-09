@@ -1,4 +1,4 @@
-var systemVer = "0.1.0.3";
+var systemVer = "0.1.1";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -6,7 +6,8 @@ var systemComponents = {
 		template: `
 			<div class="upgRow">
 				<div v-for="tab in Object.keys(data)">
-					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}" v-bind:style="[{'border-color': tmp[layer].color}, tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
+					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
+					v-bind:style="[{'border-color': tmp[layer].color}, (data[tab].glowColor && subtabShouldNotify(layer, name, tab) ? {'box-shadow': 'var(--hqProperty2a), 0 0 20px '  + data[tab].glowColor} : {}), tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
 						v-on:click="function(){player.subtabs[layer][name] = tab; needCanvasUpdate = true;}">{{tab}}</button>
 				</div>
 			</div>
@@ -19,46 +20,38 @@ var systemComponents = {
 		<button v-if="nodeShown(layer)"
 			v-bind:id="layer"
 			v-on:click="function() {
-				if(tmp[layer].isLayer) {showTab(layer)}
+				if (shiftDown) player[layer].forceTooltip = !player[layer].forceTooltip
+				else if(tmp[layer].isLayer) {showTab(layer)}
 				else {run(layers[layer].onClick, layers[layer])}
 			}"
 
-			v-bind:tooltip="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
+
+			v-bind:class="{
+				treeNode: tmp[layer].isLayer,
+				treeButton: !tmp[layer].isLayer,
+				smallNode: size == 'small',
+				[layer]: true,
+				tooltipBox: true,
+				forceTooltip: player[layer].forceTooltip,
+				ghost: tmp[layer].layerShown == 'ghost',
+				hidden: !tmp[layer].layerShown,
+				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
+				notify: tmp[layer].notify && player[layer].unlocked,
+				resetNotify: tmp[layer].prestigeNotify,
+				can: ((player[layer].unlocked || tmp[layer].isLayer) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
+			}"
+			v-bind:style="constructNodeStyle(layer)">
+			<span v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
+			<tooltip
+      v-if="tmp[layer].tooltip != ''"
+			:text="(tmp[layer].isLayer) ? (
 				player[layer].unlocked ? (tmp[layer].tooltip ? tmp[layer].tooltip : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
 			)
 			: (
 				tmp[layer].canClick ? (tmp[layer].tooltip ? tmp[layer].tooltip : 'I am a button!')
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
-			)
-			"
-			v-bind:class="{
-				treeNode: tmp[layer].isLayer,
-				treeButton: !tmp[layer].isLayer,
-				smallNode: size == 'small',
-				[layer]: true,
-				ghost: tmp[layer].layerShown == 'ghost',
-				hidden: !tmp[layer].layerShown,
-				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
-				notify: tmp[layer].notify,
-				resetNotify: tmp[layer].prestigeNotify,
-				can: ((player[layer].unlocked || tmp[layer].isLayer) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
-			}"
-			v-bind:style="tmp[layer].computedNodeStyle" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'">
-			} : {}, tmp[layer].nodeStyle]">
-			{{(abb !== '' ? abb : '&nbsp;')}}
-			} : {}, tmp[layer].nodeStyle]">
-			{{(abb !== '' ? abb : '&nbsp;')}}
-			} : {}, tmp[layer].nodeStyle]">
-			{{(abb !== '' ? abb : '&nbsp;')}}
-			} : {}, tmp[layer].nodeStyle]">
-			{{(abb !== '' ? abb : '&nbsp;')}}
-			} : {}, tmp[layer].nodeStyle]">
-			{{(abb !== '' ? abb : '&nbsp;')}}
-			} : {}, tmp[layer].nodeStyle]">
-			{{(abb !== '' ? abb : '&nbsp;')}}
-			} : {}, tmp[layer].nodeStyle]">
-			{{(abb !== '' ? abb : '&nbsp;')}}
+			)"></tooltip>
 		</button>
 		`
 	},
@@ -67,7 +60,7 @@ var systemComponents = {
 	'layer-tab': {
 		props: ['layer', 'back', 'spacing', 'embedded'],
 		template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]">
-		<div v-if="back && (layoutInfo.showTree() || ['info-tab', 'options-tab'].includes(layer))"><button v-bind:class="back == 'big' ? 'other-back' : 'back'" :style="{left: layoutInfo.showTree() ? '' : '8px'}" v-on:click="layoutInfo.showTree() ? goBack() : player.tab = 'player1'">←</button></div>
+		<div v-if="back && (layoutInfo.showTree() || ['info-tab', 'options-tab', 'changelog-tab'].includes(layer))"><button v-bind:class="back == 'big' ? 'other-back' : 'back'" :style="{left: layoutInfo.showTree() ? '' : '8px'}" v-on:click="layoutInfo.showTree() ? goBack() : player.tab = 'player1'">←</button></div>
 		<div v-if="!tmp[layer].tabFormat">
 			<div v-if="spacing" v-bind:style="{'height': spacing}" :key="this.$vnode.key + '-spacing'"></div>
 			<info-box v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]":key="this.$vnode.key + '-info'"></info-box>
@@ -116,7 +109,7 @@ var systemComponents = {
 		<h2  class="overlayThing" id="points">{{format(player.points)}}</h2>
 		<span v-if="player.points.lt('1e1e6')"  class="overlayThing"> {{modInfo.pointsName}}</span>
 		<br>
-		<span v-if="canGenPoints()"  class="overlayThing">({{tmp.other.oompsMag != 0 ? format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "") + "s" : format(getPointGen())}}/sec)</span>
+		<span v-if="canGenPoints()"  class="overlayThing">({{tmp.other.oompsMag != 0 ? format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "") + "s" : formatSmall(getPointGen())}}/sec)</span>
 		<div v-for="thing in tmp.displayThings" class="overlayThing"><span v-if="thing" v-html="thing"></span></div>
 	</div>
 	`
@@ -151,6 +144,7 @@ var systemComponents = {
         Time Played: {{ formatTime(player.timePlayed) }}<br><br>
         <h3>Hotkeys</h3><br>
         <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><br>{{key.description}}</span>
+		<br><br>Hold Shift while clicking on a node to pin its tooltip.
 		<br><br>&nbsp;
 		</div>
 		
@@ -186,5 +180,12 @@ var systemComponents = {
         template: `
         <button v-bind:class="back" onclick="goBack()">←</button>
         `
-    }
+    },
+
+
+	'tooltip' : {
+		props: ['text'],
+		template: `<div class="tooltip" v-html="text"></div>
+		`
+	}
 }

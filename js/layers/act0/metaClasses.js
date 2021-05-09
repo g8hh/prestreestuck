@@ -1,4 +1,4 @@
-if (act == 0) addLayer("metaClasses", {
+if (act == "0.1") addLayer("metaClasses", {
     name: "Classes",
     symbol: "C",
     row: 8,

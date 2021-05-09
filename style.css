@@ -375,12 +375,13 @@ h1, h2, h3, b, input, .pesterlog > * > *, .courier {
 }
 
 .upg {
-	height: 120px;
+	min-height: 120px;
 	width: 120px;
 	border-radius: 25%;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	font-size: 10px;
+	overflow: visible;
 }
 
 .achievement {
@@ -485,11 +486,14 @@ h1, h2, h3, b, input, .pesterlog > * > *, .courier {
 
 #discord-links {
 	position: absolute;
-	top: 0;
-	padding-top: 44px;
-	left: -244px;
+	top: 30px;
+	padding-top: 10px;
+	left: -260px;
 	width: 200px;
 	transition: left .3s ease;
+
+	background-color: var(--background);
+	box-shadow: 0 0 15px 15px var(--background);
 }
 
 #discord:hover #discord-links {
@@ -684,70 +688,83 @@ ul {
 	transition-duration: 0s
 }
 
-[tooltip] {
+.tooltipBox { 
 	position: relative;
-	z-index: 2147483647 !important
-}
+	display: inline-block;
+  }
+  
+  .tooltipBox:hover .tooltip{
+	opacity: 1;
+  }
 
-[tooltip]:before,
-[tooltip]:after {
-	visibility: hidden;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
-	opacity: 0;
+  .forceTooltip .tooltip{
+	opacity: 1;
+  }
+  
+  .tooltip { 
 	pointer-events: none;
-	white-space: pre-wrap;
-	transform:translate3d(0,0,0);
-}
-
-[tooltip]:before {
-	position: absolute;
+	text-align: center;
+	width: 150px;
+	font-size: 16px;
+	line-height: 1.2;
 	bottom: 100%;
 	left: 50%;
 	margin-bottom: 5px;
 	margin-left: -80px;
 	padding: 7px;
-	width: 160px;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+	opacity: 0;
+	transition: opacity 0.5s;
+  
+	position: absolute;
+	z-index: 99999999 !important;
+  
 	background-color: var(--background_tooltip);
 	color: var(--points);
 	content: attr(tooltip);
-	text-align: center;
-	font-family: Inconsolata, monospace;
-	line-height: 1.2;
-	font-size: 13px;
-	transition-duration: 0.5s;
-	white-space: pre-wrap;
-}
+	font-size:14px;
 
-[tooltip]:after {
+  }
+
+  .tooltip::after {
+	content: " ";
 	position: absolute;
+
 	bottom: 100%;
 	left: 50%;
+	top: 100%;
 	margin-left: -5px;
-	width: 0;
-	border-top: 5px solid var(--background_tooltip);
-	border-right: 5px solid transparent;
-	border-left: 5px solid transparent;
-	content: " ";
-	font-size: 0;
-	line-height: 0;
-	transition-duration: 0.5s;
-	white-space: pre-wrap;
-}
+	border-width: 5px;
+	border-style: solid;
+	border-color: var(--background_tooltip) transparent transparent transparent;
+  }
 
-[tooltip]:hover:before,
-[tooltip]:hover:after {
-	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
-	visibility: visible;
+  .tooltip::before {
+	content: " 📌";
+	color: var(--points);
+	font-size: 10px;
+	position: absolute;
+	right: -8px;
+	top: -8px;
+	opacity: 0;
+	transition-duration: 0.2s;
+  }
+  .forceTooltip .tooltip::before {
+	font-size: 8px;
+	right: -3px;
+	top: -3px;
+	opacity: 0.5;
+  }
+  .forceTooltip:hover .tooltip::before {
+	font-size: 10px;
+	right: -5px;
+	top: -5px;
 	opacity: 1;
-	white-space: pre-wrap;
-	transform:translate3d(0,0,0);
-
-}
-
+  }
+  
 #loadingSection {
 	display: flex;
 	flex-direction: column;
@@ -756,7 +773,7 @@ ul {
 
 .treeOverlay {
 	pointer-events:none;
-	overflow:hidden;
+	overflow: visible;
 }
 
 .overlayThing {

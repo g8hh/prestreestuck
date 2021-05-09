@@ -1,10 +1,10 @@
-if (act == 0) addLayer("metaAspects", {
+if (act == "0.1") addLayer("metaAspects", {
     name: "Aspects",
     symbol: "A",
     row: 8,
     position: 0,
 
-    layerShown() { return hasUpgrade("skaia", 12) },
+    layerShown() { return true },
     resource: "Aspect Points",
     color: "#e5b9ff",
     type: "none",
@@ -2152,7 +2152,7 @@ if (act == 0) addLayer("metaAspects", {
     },
 
     update(delta) {
-        if (hasUpgrade("skaia", 12)) player.metaAspects.points = player.metaAspects.points.add(tmp.metaAspects.effect.selfGain.mul(delta))
+        player.metaAspects.points = player.metaAspects.points.add(tmp.metaAspects.effect.selfGain.mul(delta))
 
         player[this.layer].autoBuyerTime += delta
         if (player[this.layer].autoBuyerTime >= 1) {

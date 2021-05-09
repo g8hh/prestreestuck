@@ -1,10 +1,10 @@
-if (act == 0) addLayer("metaMeta", {
+if (act == "0.2") addLayer("metaMeta", {
     name: "Meta",
     symbol: "<img src='data/favicon.png' style='width:calc(60%);height:calc(60%);margin:20%'></img>",
     row: 8,
     position: 0,
 
-    layerShown() { return hasUpgrade("skaia", 14) },
+    layerShown() { return true },
     resource: "Metaness",
     color: "#31aeb0",
     type: "custom",
@@ -16,14 +16,12 @@ if (act == 0) addLayer("metaMeta", {
         return "Ascend for <b>+" + formatWhole(tmp[this.layer].resetGain) + "</b> Metaness<br/>Next at " + formatWhole(tmp[this.layer].nextAt) + " points"
     },
     getResetGain() {
-        if (!hasUpgrade("skaia", 14)) return new Decimal(0)
         var pow = buyableEffect(this.layer, 13).mul(hasUpgrade("metaMeta", 11) ? 1.12 : 1).mul(tmp.metaMeta.effect.overflowNerf).mul(tmp.metaMeta.effect.eternityNerf).mul(tmp.metaMeta.effect.powBoost)
         if (hasMilestone("metaMeta", 30)) pow = pow.mul(Decimal.pow(3, player.metaMeta.eternities.max(0)))
         if (hasMilestone("metaMeta", 31)) pow = pow.mul(Decimal.pow(1.5, player.metaMeta.overflows.max(0)))
         return applyLogapolynomialSoftcap(player.points.div(2).add(1).slog(10).pow(0.4).pow(pow).floor(), "e2100000", 2)
     },
     getNextAt() {
-        if (!hasUpgrade("skaia", 14)) return Decimal.dInf
         var pow = buyableEffect(this.layer, 13).mul(hasUpgrade("metaMeta", 11) ? 1.12 : 1).mul(tmp.metaMeta.effect.overflowNerf).mul(tmp.metaMeta.effect.eternityNerf).mul(tmp.metaMeta.effect.powBoost)
         if (hasMilestone("metaMeta", 30)) pow = pow.mul(Decimal.pow(3, player.metaMeta.eternities.max(0)))
         if (hasMilestone("metaMeta", 31)) pow = pow.mul(Decimal.pow(1.5, player.metaMeta.overflows.max(0)))
@@ -1039,7 +1037,7 @@ if (act == 0) addLayer("metaMeta", {
                 }
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
         12: {
@@ -1076,7 +1074,7 @@ if (act == 0) addLayer("metaMeta", {
                 player[this.layer].overflowsTotal = player[this.layer].overflowsTotal.add(inc)
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
         13: {
@@ -1115,7 +1113,7 @@ if (act == 0) addLayer("metaMeta", {
                 player[this.layer].eternitiesTotal = player[this.layer].eternitiesTotal.add(inc)
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
         21: {
@@ -1150,7 +1148,7 @@ if (act == 0) addLayer("metaMeta", {
                 }
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
         22: {
@@ -1191,7 +1189,7 @@ if (act == 0) addLayer("metaMeta", {
 
             },
             style: {
-                "height": "50px",
+                "min-height": "50px",
             }
         },
     },
@@ -1957,14 +1955,14 @@ if (act == 0) addLayer("metaMeta", {
             done() { return player.metaMeta.sacrificeMulti.gte(160000000) }
         },
         16: {
-            requirementDescription: "×390,000,000 Sacrifice Multiplier",
+            requirementDescription: "×360,000,000 Sacrifice Multiplier",
             effectDescription() { return "Sacrifice Multiplier formula becomes better." },
-            done() { return player.metaMeta.sacrificeMulti.gte(390000000) }
+            done() { return player.metaMeta.sacrificeMulti.gte(360000000) }
         },
         17: {
-            requirementDescription: "×1.612e9 Sacrifice Multiplier",
+            requirementDescription: "×1.413e9 Sacrifice Multiplier",
             effectDescription() { return "Replaces the Respec Overflow Upgrades button to Reset Current Dilation." },
-            done() { return player.metaMeta.sacrificeMulti.gte(1.612e9) }
+            done() { return player.metaMeta.sacrificeMulti.gte(1.413e9) }
         },
         18: {
             requirementDescription: "×1.800e11 Sacrifice Multiplier",

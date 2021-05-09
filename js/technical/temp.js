@@ -6,14 +6,17 @@ var NaNalert = false;
 // Tmp will not call these
 var activeFunctions = [
 	"startData", "onPrestige", "doReset", "update", "automate",
-	"buy", "buyMax", "respec", "onComplete", "onPurchase", "onPress", "onClick", "masterButtonPress",
-	"sellOne", "sellAll", "pay",
+	"buy", "buyMax", "respec", "onComplete", "onPurchase", "onPress", "onClick", "onHold", "masterButtonPress",
+	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
+	"effectDescription", "display", "fullDisplay", "effectDisplay", "rewardDisplay",
 ]
 
 var noCall = doNotCallTheseFunctionsEveryTick
 for (item in noCall) {
 	activeFunctions.push(noCall[item])
 }
+
+var tempSetup = false;
 
 // Add the names of classes to traverse
 var traversableClasses = []
@@ -33,18 +36,30 @@ function setupTemp() {
 		tmp[layer].canReset = {}
 		tmp[layer].notify = {}
 		tmp[layer].prestigeNotify = {}
-		tmp[layer].prestigeButtonText = {}
 		tmp[layer].computedNodeStyle = []
 		setupBarStyles(layer)
+		setupBuyables(layer)
+		tmp[layer].trueGlowColor = []
 	}
 
 	tmp.other = {
 		screenWidth: window.innerWidth,
+		splitScreen: window.innerWidth >=1024,
 		lastPoints: player.points || new Decimal(0),
 		oomps: new Decimal(0),
+
+		held: {
+			time: null,
+			id: null,
+			layer: null,
+			type: null,
+		}
     }
-	
+
+
 	temp = tmp
+
+	tempSetup = true;
 }
 
 function setupTempData(layerData, tmpData, funcsData) {
@@ -88,14 +103,10 @@ function updateTemp() {
 		tmp[layer].nextAt = getNextAt(layer)
 		tmp[layer].nextAtDisp = getNextAt(layer, true)
 		tmp[layer].canReset = canReset(layer)
+		tmp[layer].trueGlowColor = tmp[layer].glowColor
 		tmp[layer].notify = shouldNotify(layer)
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
-		tmp[layer].prestigeButtonText = prestigeButtonText(layer)
 		constructBarStyles(layer)
-		constructAchievementStyles(layer)
-		constructNodeStyle(layer)
-		updateChallengeDisplay(layer)
-
 	}
 
 	tmp.pointGen = getPointGen()
@@ -105,40 +116,6 @@ function updateTemp() {
 		if (isFunction(text)) text = text()
 		tmp.displayThings.push(text) 
 	}
-
-	tmp.other.oompsMag = 0
-
-	var pp = new Decimal(player.points);
-	var lp = tmp.other.lastPoints || new Decimal(0);
-	if (pp.gt(lp)) {
-		if (pp.gte("10^^8")) {
-			pp = pp.slog(1e10)
-			lp = lp.slog(1e10)
-			tmp.other.oomps = pp.sub(lp).div(diff)
-			tmp.other.oompsMag = -1;
-		} else {
-			while (pp.div(lp).log(10).div(diff).gte("100") && tmp.other.oompsMag <= 5 && lp.gt(0)) {
-				pp = pp.log(10)
-				lp = lp.log(10)
-				tmp.other.oomps = pp.sub(lp).div(diff)
-				tmp.other.oompsMag++;
-			}
-		}
-	}
-
-	var screenWidth = window.innerWidth
-	var splitScreen = screenWidth >= 1024
-	if (player.splitMode === "disabled") splitScreen = false
-	if (player.splitMode === "enabled") splitScreen = true
-
-	tmp.other = {
-		screenWidth: screenWidth,
-		splitScreen: splitScreen,
-		lastPoints: player.points,
-		oomps: tmp.other.oomps,
-		oompsMag: tmp.other.oompsMag,
-	}
-
 }
 
 function updateTempData(layerData, tmpData, funcsData) {
@@ -163,8 +140,6 @@ function updateTempData(layerData, tmpData, funcsData) {
 					NaNalert = true;
 				}
 			}
-
-
 			Vue.set(tmpData, item, value)
 		}
 	}	
@@ -173,20 +148,8 @@ function updateTempData(layerData, tmpData, funcsData) {
 function updateChallengeTemp(layer)
 {
 	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges)
-	updateChallengeDisplay(layer)
 }
 
-function updateChallengeDisplay(layer) {
-	for (id in player[layer].challenges) {
-		let style = "locked"
-		if (player[layer].activeChallenge == id && canCompleteChallenge(layer, id)) style = "canComplete"
-		else if (hasChallenge(layer, id)) style = "done"
-		tmp[layer].challenges[id].defaultStyle = style
-
-		tmp[layer].challenges[id].buttonText = (player[layer].activeChallenge==(id)?(canCompleteChallenge(layer, id)?"Finish":"Exit Early"):(hasChallenge(layer, id)?"Completed":"Start"))
-	}
-
-}
 
 function updateBuyableTemp(layer)
 {
@@ -198,33 +161,6 @@ function updateClickableTemp(layer)
 	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables)
 }
 
-function constructNodeStyle(layer){
-	let style = []
-	if ((tmp[layer].isLayer && layerunlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick))
-		style.push({'background-color': tmp[layer].color})
-	if (tmp[layer].image !== undefined)
-		style.push({'background-image': 'url("' + tmp[layer].image + '")'})
-	style.push(tmp[layer].nodeStyle)
-	Vue.set(tmp[layer], 'computedNodeStyle', style)
-}
-
-
-
-
-function constructAchievementStyles(layer){
-	for (id in tmp[layer].achievements) {
-		ach = tmp[layer].achievements[id]
-		if (isPlainObject(ach)) {
-			let style = []
-			if (ach.image){ 
-				style.push({'background-image': 'url("' + ach.image + '")'})
-			} 
-			if (!ach.unlocked) style.push({'visibility': 'hidden'})
-			style.push(ach.style)
-			Vue.set(ach, 'computedStyle', style)
-		}
-	}
-}
 
 function constructBarStyles(layer){
 	if (layers[layer].bars === undefined)
@@ -268,5 +204,31 @@ function setupBarStyles(layer){
 		let bar = tmp[layer].bars[id]
 		bar.dims = {}
 		bar.fillDims = {}
+	}
+}
+
+function setupBuyables(layer) {
+	for (id in layers[layer].buyables) {
+		if (!isNaN(id)) {
+			let b = layers[layer].buyables[id]
+			// prevent this from setting up more than once, which may cause issues
+			if (!tempSetup) {
+				// check for whether cost or effect is a function
+				if (isFunction(b.cost)) {
+					b.actualCostFunction = b.cost
+					b.cost = function(x) {
+						x = x ?? player[this.layer].buyables[this.id]
+						return layers[this.layer].buyables[this.id].actualCostFunction(x)
+					}
+				}
+				if (isFunction(b.effect)) {
+					b.actualEffectFunction = b.effect
+					b.effect = function(x) {
+						x = x ?? player[this.layer].buyables[this.id]
+						return layers[this.layer].buyables[this.id].actualEffectFunction(x)
+					}
+				}
+			}
+		}
 	}
 }
