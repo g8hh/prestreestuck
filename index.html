@@ -115,11 +115,12 @@
 
 		<div id="treeOverlay" v-if="!(gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" class="treeOverlay" onscroll="resizeCanvas()"
 			v-bind:class="{ 
-			fullWidth: (player.tab == 'none' || player.navTab == 'none' || !tmp.other.splitScreen), 
+			fullWidth: (player.tab == 'none' || player.navTab == 'none' || !readData(layoutInfo.showTree)), 
 			col: (player.tab !== 'none' && player.navTab !== 'none'), 
 			left: (player.tab !== 'none' && player.navTab !== 'none')}"
-			 :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
-			<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">
+			 :style="{'margin-top': !readData(layoutInfo.showTree) && ['info-tab', 'changelog-tab'].includes(player.tab) ? '50px' : ''}">
+			<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px" 
+				v-bind:style="{'margin-top': !readData(layoutInfo.showTree) && ['info-tab', 'changelog-tab'].includes(player.tab) ? '-50px' : ''}">
 				{{VERSION.withoutName}}</div>
 			<button
 				v-if="player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside')"
@@ -130,13 +131,14 @@
 			<div id="discord" class="overlayThing">
 				<img onclick="window.open((modInfo.discordLink ? modInfo.discordLink : 'https://discord.gg/F3xveHV'),'mywindow')" src="data/discord.png" target="_blank"></img>
 				<ul id="discord-links">
+					<li>Discord links:<br/><br/></li>
 					<li v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink"
 							target="_blank">{{modInfo.discordName}}</a><br></li>
-					<li><a class="link" href="https://discord.gg/F3xveHV" target="_blank"
+					<a class="link" href="https://discord.gg/F3xveHV" target="_blank"
 							v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree
 							Discord</a><br></li>
 					<li><a class="link" href="http://discord.gg/wwQfgPa" target="_blank"
-							v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a></li>
+							v-bind:style="{'font-size': '16px'}">Jacorb's Main Server</a></li>
 				</ul>
 			</div>
 			<overlay-head v-if="!(gameEnded && !player.keepGoing) && layoutInfo.showTree()"></overlay-head>

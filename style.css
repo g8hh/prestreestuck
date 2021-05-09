@@ -486,11 +486,14 @@ h1, h2, h3, b, input, .pesterlog > * > *, .courier {
 
 #discord-links {
 	position: absolute;
-	top: 0;
-	padding-top: 44px;
-	left: -244px;
+	top: 30px;
+	padding-top: 10px;
+	left: -260px;
 	width: 200px;
 	transition: left .3s ease;
+
+	background-color: var(--background);
+	box-shadow: 0 0 15px 15px var(--background);
 }
 
 #discord:hover #discord-links {
@@ -770,7 +773,7 @@ ul {
 
 .treeOverlay {
 	pointer-events:none;
-	overflow:hidden;
+	overflow: visible;
 }
 
 .overlayThing {
