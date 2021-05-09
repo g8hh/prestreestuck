@@ -65,7 +65,7 @@ if (act == 1) addLayer("player1", {
 
     update(delta) {
         player.phaseTimer += delta
-    }
+    },
 
     startData() {
         return {
