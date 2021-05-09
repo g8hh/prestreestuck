@@ -16,6 +16,8 @@ for (item in noCall) {
 	activeFunctions.push(noCall[item])
 }
 
+var tempSetup = false;
+
 // Add the names of classes to traverse
 var traversableClasses = []
 
@@ -56,6 +58,8 @@ function setupTemp() {
 
 
 	temp = tmp
+
+	tempSetup = true;
 }
 
 function setupTempData(layerData, tmpData, funcsData) {
@@ -207,15 +211,18 @@ function setupBuyables(layer) {
 	for (id in layers[layer].buyables) {
 		if (!isNaN(id)) {
 			let b = layers[layer].buyables[id]
-			b.actualCostFunction = b.cost
-			b.cost = function(x) {
-				x = x ?? player[this.layer].buyables[this.id]
-				return layers[this.layer].buyables[this.id].actualCostFunction(x)
-			}
-			b.actualEffectFunction = b.effect
-			b.effect = function(x) {
-				x = x ?? player[this.layer].buyables[this.id]
-				return layers[this.layer].buyables[this.id].actualEffectFunction(x)
+			// prevent this from setting up more than once, which may cause issues
+			if (!tempSetup) {
+				b.actualCostFunction = b.cost
+				b.cost = function(x) {
+					x = x ?? player[this.layer].buyables[this.id]
+					return layers[this.layer].buyables[this.id].actualCostFunction(x)
+				}
+				b.actualEffectFunction = b.effect
+				b.effect = function(x) {
+					x = x ?? player[this.layer].buyables[this.id]
+					return layers[this.layer].buyables[this.id].actualEffectFunction(x)
+				}
 			}
 		}
 	}

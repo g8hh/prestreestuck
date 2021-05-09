@@ -56,14 +56,14 @@ function drawTree() {
 		if (player.act == "0.0" && (player.aspHope.unlocked || player.aspRage.unlocked) && sDensity < 8) sDensity++
 		else if ((player.act == "0.0" && (player.aspHope.unlocked && player.aspRage.unlocked)) && sDensity < 16) sDensity++
 		else if (sDensity > 0) sDensity--
-		if (sDensity > 0 || hasUpgrade("skaia", 12)) {
+		if (sDensity > 0 || player.act == "0.1") {
 			if (!document.getElementById("skaia")) return
 			let skaia = document.getElementById("skaia").getBoundingClientRect();
 			let x = skaia.left + (skaia.width / 2) + document.body.scrollLeft;
 			let y = skaia.top + (skaia.height / 2) + document.body.scrollTop;
-			ctx.lineWidth = hasUpgrade("skaia", 11) ? 25 : 5;
+			ctx.lineWidth = player.act == "0.1" || hasUpgrade("skaia", 11) ? 25 : 5;
 			ctx.beginPath()
-			ctx.strokeStyle = hasUpgrade("skaia", 11) ? "#38f43d" : colors_theme[1] + sDensity.toString(16).padStart(2, "0")
+			ctx.strokeStyle = player.act == "0.1" || hasUpgrade("skaia", 11) ? "#38f43d" : colors_theme[1] + sDensity.toString(16).padStart(2, "0")
 			let step = Math.PI / 21
 			let offset = (player.time / 600000) % (Math.PI * 2)
 			ctx.moveTo(getSpirographX(0, offset) * 25 + x, getSpirographY(0, offset) * 25 + y)

@@ -3,7 +3,7 @@
 	src: url(Oblivion.ttf);
 }
 
-* {
+*:not(span) {
 	transition-duration: 0.5s;
 	text-align: center;
 	font-family: Inconsolata, monospace;
@@ -709,7 +709,7 @@ ul {
 	margin-bottom: 5px;
 	margin-left: -80px;
 	padding: 7px;
-	font-family: "Lucida Console", "Courier New", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;

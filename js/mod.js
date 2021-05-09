@@ -22,7 +22,8 @@ let flavorTitles = [
 	"BUT WHY THOUGH",
 	"READ HOMESTUCK INSTEAD",
 	"UNDEFINED",
-	"PLAY THIS GAME IN TRICKSTER THEME, I DARE YOU"
+	"PLAY THIS GAME IN TRICKSTER THEME, I DARE YOU",
+	"FUN FACT: THE PERSON WHO MADE THE FIVE HOUR MEME IS A HOMESTUCK",
 ]
 let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
@@ -202,7 +203,7 @@ function canGenPoints(){
 // Calculate points/sec!
 function getPointGen() {
 	if (act == "omega") {
-		player.act = -1
+		player.act = "-1"
 		save()
 		window.location = "https://mspfa.com/?s=16414&p=1"
 	}
@@ -211,7 +212,7 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if (act == -1) {
+	if (act == "-1") {
 		clearInterval(interval);
 		openStartModal();
 	} else if (act == "0.0") {
@@ -261,7 +262,7 @@ function getPointGen() {
 
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
-	act: -1,
+	act: "-1",
 	phaseTimer: 0,
 }}
 

@@ -10,10 +10,10 @@ var meta = {
 function save(saveId) {
 	if (!saveId) saveId = player.saveId
 
-	meta.currentSave = player.saveId
+	meta.currentSave = saveId
 	meta.act = player.act
 	
-	meta.saves[player.saveId].act = player.act
+	meta.saves[player.saveId].act = act
 	meta.saves[player.saveId].desc = (() => {
 		var ret = format(player.points) + " points"
 		return ret
@@ -105,6 +105,9 @@ function getStartLayerData(layer) {
 	layerdata.lastMilestone = null;
 	layerdata.achievements = [];
 	layerdata.challenges = getStartChallenges(layer);
+	layerdata.story = {
+		page: 1
+	}
 	return layerdata;
 }
 
@@ -234,7 +237,7 @@ function load(saveId) {
 			}
 			return;
 		}
-		let data = JSON.parse(atob(get))
+		let data = JSON.parse(decodeURIComponent(escape(atob(get))))
 		if (data.points) {
 			player = Object.assign(getStartPlayer(), data)
 			meta.currentSave = player.saveId
@@ -304,7 +307,7 @@ function exportSave() {
 function importSave(imported=undefined, forced=false) {
 	if (imported===undefined) imported = prompt("Paste your save here")
 	try {
-		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)))
+		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(get)))
 		if(tempPlr.versionType != modInfo.id && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) // Wrong save (use "Forced" to force it to accept.)
 			return
 		tempPlr.saveId = player.saveId
@@ -409,7 +412,7 @@ function openCreateSaveModal() {
 			    <h3 style="font-size:21px">Act 0</h3><br/>
 				<span style='font-size:14px'>Tree of Genesis</span>
 			</div>
-			<div class="saveState" style='cursor:pointer' onclick='createSave(document.getElementById("newSaveNameInput").value, 1); modal.hide()'>
+			<div class="saveState" style='cursor:pointer' onclick='createSave(document.getElementById("newSaveNameInput").value, "1"); modal.hide()'>
 			    <h3 style="font-size:21px">Act 1</h3><br/>
 				<span style='font-size:14px'>MS-Paint Incremental</span>
 			</div>
@@ -422,7 +425,7 @@ function openCreateSaveModal() {
 function createSave(name, targetAct) {
 	clearInterval(interval)
 	load("new")
-	player.act = targetAct ?? -1
+	player.act = targetAct ?? "-1"
 	meta.currentSave = player.saveId
 	meta.saves[player.saveId] = {
 		name: name || "New Save",
@@ -454,7 +457,7 @@ function deleteSave(id) {
 function changeSave(id) {
 	meta.currentSave = id
 	meta.act = meta.saves[id].act
-	localStorage.setItem(modInfo.id, btoa(JSON.stringify(meta)))
+	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(meta)))))
 	window.location.reload();
 }
 

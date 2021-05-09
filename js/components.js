@@ -494,11 +494,13 @@ function loadVue() {
 		props: ['layer'],
 		data: () => {
 			return {
+				page: player[layer].story.page,
 				current: tmp[layer].story ? tmp[layer].story[player[layer].story.page] : null
 			}
 		},
 		template: `
 		<div v-if="current" style="max-width:650px;margin:15px;font-size:14px;">
+			<div v-html="page" style="display:none"></div>
 		    <div v-html="current.content"></div>
 			<div v-if="current.pesterlog" class="pesterlog">
 				<div v-for="msg in current.pesterlog" style="margin:10px" v-bind:style="{'text-align': msg[0] == 'msg' ? (msg[3] && msg[3].split(' ').includes('right') ? 'right' : 'left') : 'center'}">
