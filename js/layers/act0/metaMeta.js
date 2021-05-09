@@ -1955,14 +1955,14 @@ if (act == "0.2") addLayer("metaMeta", {
             done() { return player.metaMeta.sacrificeMulti.gte(160000000) }
         },
         16: {
-            requirementDescription: "×390,000,000 Sacrifice Multiplier",
+            requirementDescription: "×360,000,000 Sacrifice Multiplier",
             effectDescription() { return "Sacrifice Multiplier formula becomes better." },
-            done() { return player.metaMeta.sacrificeMulti.gte(390000000) }
+            done() { return player.metaMeta.sacrificeMulti.gte(360000000) }
         },
         17: {
-            requirementDescription: "×1.612e9 Sacrifice Multiplier",
+            requirementDescription: "×1.413e9 Sacrifice Multiplier",
             effectDescription() { return "Replaces the Respec Overflow Upgrades button to Reset Current Dilation." },
-            done() { return player.metaMeta.sacrificeMulti.gte(1.612e9) }
+            done() { return player.metaMeta.sacrificeMulti.gte(1.413e9) }
         },
         18: {
             requirementDescription: "×1.800e11 Sacrifice Multiplier",

@@ -11,7 +11,7 @@ if (act.startsWith("0")) addLayer("skaia", {
     color: "#ffffff",
 
     tooltip() {
-        return "Skaia Level " + formatWhole(player.skaia.level) + "\n" + formatWhole(player.skaia.points.floor()) + " Echepoints\n" + (!tmp.skaia.effect.climbReq || tmp.skaia.effect.climbReq.gte(1e9) ? "" : "(+" + format((player.skaia.points % 1) * 100) + "%)")
+        return "Skaia Level " + formatWhole(player.skaia.level) + "<br><span style='font-size:12px'>" + formatWhole(player.skaia.points.floor()) + " Echepoints<br>" + (!tmp.skaia.effect.climbReq || tmp.skaia.effect.climbReq.gte(1e9) ? "" : "(+" + format((player.skaia.points % 1) * 100) + "%)") + "</span>"
     },
 
     startData() {

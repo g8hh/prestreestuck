@@ -31,7 +31,7 @@ function simulateStock(target, min, max, mag) {
 	return price + ' ' + speed
 }
 
-// ************ Colors, for stuff >;D ************
+// ************ Colors, for stuff ************
 
 function brightness(hex){
     // strip the leading # if it's there
@@ -62,7 +62,7 @@ function lighten(hex){
 		
 	var lum = Math.round(((parseInt(r) * 299) + (parseInt(g) * 587) + (parseInt(b) * 114)) / 1000);
 
-	var percent = Math.max(Math.floor(100 - lum / 2), 0);
+	var percent = Math.max(100 - lum, 0);
 
     return '#' +
        ((0|(1<<8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +

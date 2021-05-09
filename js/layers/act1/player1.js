@@ -57,25 +57,6 @@ if (act == 1) addLayer("player1", {
                 // { page: 3, title: "Enter name." }
             ]
         },
-        // demo, content may change
-        3: {
-            content: () => `
-                <br/><br/>
-                [insert a gif with a joke name then the message "not funny, dumbass" appears here]
-                <br/><br/>
-            `,
-            pesterlog: () => [
-                ["msg", "system", `
-                    <h3>Introducing Pesterchum 14!</h3>
-                `],
-                ["msg", "cc", `
-                    yeah nobody cares about this
-                `, "right"],
-            ],
-            commands: [
-                // { page: 4, title: "Try again." }
-            ]
-        },
     },
 
     tabFormat: [
