@@ -30,7 +30,7 @@ if (act.startsWith("0")) addLayer("skaia", {
     },
     effect() {
         return {
-            levelGain: hasUpgrade("skaia", 12) ? player.points.add(1).log(1e10).pow(0.001).div(100) : new Decimal(0),
+            levelGain: act == "0.1" ? player.points.add(1).log(1e10).pow(0.001).div(100) : new Decimal(0),
             climbReq: player.skaia.level.pow(player.skaia.level.pow(0.03).div(2)).pow(player.skaia.level.sub(299).max(1).pow(0.15)).pow(player.skaia.level.div(6120).max(1).pow(3.5)).ceil(),
             boondollarGain: act == "0.0" && hasMilestone("aspLife", 2) ? player.skaia.level.sub(20).max(1).pow(3).pow(player.skaia.level.sub(98).max(1).div(3).pow(0.35)) : new Decimal(0),
             boondollarBoost: applyPolynomialSoftcap(player.skaia.boondollars.max(1e10).div(1e10).pow(0.5), 1e10, 10)
