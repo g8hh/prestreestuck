@@ -213,15 +213,20 @@ function setupBuyables(layer) {
 			let b = layers[layer].buyables[id]
 			// prevent this from setting up more than once, which may cause issues
 			if (!tempSetup) {
-				b.actualCostFunction = b.cost
-				b.cost = function(x) {
-					x = x ?? player[this.layer].buyables[this.id]
-					return layers[this.layer].buyables[this.id].actualCostFunction(x)
+				// check for whether cost or effect is a function
+				if (isFunction(b.cost)) {
+					b.actualCostFunction = b.cost
+					b.cost = function(x) {
+						x = x ?? player[this.layer].buyables[this.id]
+						return layers[this.layer].buyables[this.id].actualCostFunction(x)
+					}
 				}
-				b.actualEffectFunction = b.effect
-				b.effect = function(x) {
-					x = x ?? player[this.layer].buyables[this.id]
-					return layers[this.layer].buyables[this.id].actualEffectFunction(x)
+				if (isFunction(b.effect)) {
+					b.actualEffectFunction = b.effect
+					b.effect = function(x) {
+						x = x ?? player[this.layer].buyables[this.id]
+						return layers[this.layer].buyables[this.id].actualEffectFunction(x)
+					}
 				}
 			}
 		}

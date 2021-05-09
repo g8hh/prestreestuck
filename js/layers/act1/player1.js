@@ -63,6 +63,10 @@ if (act == 1) addLayer("player1", {
         "story"
     ],
 
+    update(delta) {
+        player.phaseTimer += delta
+    }
+
     startData() {
         return {
             points: new Decimal(0),

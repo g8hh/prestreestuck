@@ -105,9 +105,7 @@ function getStartLayerData(layer) {
 	layerdata.lastMilestone = null;
 	layerdata.achievements = [];
 	layerdata.challenges = getStartChallenges(layer);
-	layerdata.story = {
-		page: 1
-	}
+	layerdata.story = getStartStory(layer);
 	return layerdata;
 }
 

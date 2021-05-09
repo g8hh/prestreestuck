@@ -115,7 +115,7 @@
 
 		<div id="treeOverlay" v-if="!(gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" class="treeOverlay" onscroll="resizeCanvas()"
 			v-bind:class="{ 
-			fullWidth: (player.tab == 'none' || player.navTab == 'none'), 
+			fullWidth: (player.tab == 'none' || player.navTab == 'none' || !tmp.other.splitScreen), 
 			col: (player.tab !== 'none' && player.navTab !== 'none'), 
 			left: (player.tab !== 'none' && player.navTab !== 'none')}"
 			 :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
