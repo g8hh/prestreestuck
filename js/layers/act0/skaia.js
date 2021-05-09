@@ -185,7 +185,7 @@ if (act.startsWith("0")) addLayer("skaia", {
                 player.phaseTimer = 0
                 player.tab = "none"
             },
-            unlocked() { return player.points.gte("1e2200") && !hasUpgrade(this.layer, this.id) },
+            unlocked() { return act == "0.0" && player.points.gte("1e2200") && !hasUpgrade(this.layer, this.id) },
         },
         12: {
             fullDisplay: "<h3>REACH BEYOND THE CIRCLE.</h3><br/>Need " + format("ee216") + " points",
@@ -196,7 +196,7 @@ if (act.startsWith("0")) addLayer("skaia", {
 
                 switchAct("0.1")
             },
-            unlocked() { return player.points.gte("ee20") && !hasUpgrade(this.layer, this.id) },
+            unlocked() { return act == "0.0" && player.points.gte("ee20") && !hasUpgrade(this.layer, this.id) },
         },
         13: {
             fullDisplay: "<h3>INFLATE.</h3><br/>Need " + format("eeee1111") + " points<br/>(PS: Might contains flashing lights.)",
