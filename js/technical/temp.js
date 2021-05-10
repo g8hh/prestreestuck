@@ -129,20 +129,11 @@ function updateTempData(layerData, tmpData, funcsData, itemName = "") {
 		}
 		else if (isFunction(layerData[item]) && !isFunction(tmpData[item])){
 			let value = layerData[item]()
-			if (value !== value || (value instanceof Decimal && Number.isNaN(value.mag))){
-				alert("NaN lol\n(at " + itemName + "." + item + ")\nPlease contact the mod author.");
-				throw new Error("NaN lol (at " + itemName + "." + item + ")")
-				/*
-				if (NaNalert === true || confirm ("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know! Would you like to try to auto-fix the save and keep going?")){
-					NaNalert = true
-					value = (value !== value ? 0 : decimalZero)
-				}
-				else {
-					clearInterval(interval);
-					player.autosave = false;
-					NaNalert = true;
-				}
-				*/
+			if (!NaNalert && (value !== value || (value instanceof Decimal && Number.isNaN(value.mag)))){
+				alert("NaN lol\n(at tmp" + itemName + "." + item + ")\nPlease contact the mod author.");
+				clearInterval(interval);
+				player.autosave = false;
+				NaNalert = true;
 			}
 			Vue.set(tmpData, item, value)
 		}
