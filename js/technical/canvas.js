@@ -90,7 +90,7 @@ function drawTree() {
 	if (player.act == "0.2" && getBuyableAmount("metaMeta", 121).gte(999.5)) {
 		ctx.fillStyle = "#ffffff" + Math.min(Math.floor(25 * player.phaseTimer), 255).toString(16).padStart(2, "0")
 		ctx.fillRect(0, 0, canvas.width, canvas.height)
-		if (25 * player.phaseTimer > 255) switchAct(1);
+		if (25 * player.phaseTimer > 255) switchAct("1");
     }
 }
 

@@ -13,7 +13,8 @@ if (act == "0.2") addLayer("metaMeta", {
     canReset() { return new Decimal(tmp[this.layer].resetGain).gte(1) },
     canBuyMax() { return true },
     prestigeButtonText() { 
-        return "Ascend for <b>+" + formatWhole(tmp[this.layer].resetGain) + "</b> Metaness<br/>Next at " + formatWhole(tmp[this.layer].nextAt) + " points"
+        return "Ascend for <b>+" + formatWhole(tmp[this.layer].resetGain) + "</b> Metaness" +
+         (tmp[this.layer].resetGain.gte(1000) ? "" : "<br/>Next at " + formatWhole(tmp[this.layer].nextAt) + " points")
     },
     getResetGain() {
         var pow = buyableEffect(this.layer, 13).mul(hasUpgrade("metaMeta", 11) ? 1.12 : 1).mul(tmp.metaMeta.effect.overflowNerf).mul(tmp.metaMeta.effect.eternityNerf).mul(tmp.metaMeta.effect.powBoost)
@@ -22,6 +23,7 @@ if (act == "0.2") addLayer("metaMeta", {
         return applyLogapolynomialSoftcap(player.points.div(2).add(1).slog(10).pow(0.4).pow(pow).floor(), "e2100000", 2)
     },
     getNextAt() {
+        if (tmp[this.layer].resetGain.gte(1e16)) return player.points
         var pow = buyableEffect(this.layer, 13).mul(hasUpgrade("metaMeta", 11) ? 1.12 : 1).mul(tmp.metaMeta.effect.overflowNerf).mul(tmp.metaMeta.effect.eternityNerf).mul(tmp.metaMeta.effect.powBoost)
         if (hasMilestone("metaMeta", 30)) pow = pow.mul(Decimal.pow(3, player.metaMeta.eternities.max(0)))
         if (hasMilestone("metaMeta", 31)) pow = pow.mul(Decimal.pow(1.5, player.metaMeta.overflows.max(0)))
@@ -54,8 +56,8 @@ if (act == "0.2") addLayer("metaMeta", {
             powTowerBoost: ptb,
             mmUpgradeBoost: new Decimal(player.metaMeta.metaFaucets[23]).add(1).log(10).mul(2).add(1).pow(0.55),
             mmSpaceTimeBoost: new Decimal(player.metaMeta.metaFaucets[71]).add(1).log(10).mul(3).add(1).pow(0.75),
-            mFaucetUpgradeBoost: new Decimal(player.metaMeta.metaFaucets[215]).add(1).log(10).pow(0.35).floor().toNumber(),
-            mFaucetUpgrade2Boost: new Decimal(player.metaMeta.metaFaucets[431]).add(1).log(10).pow(0.25).floor().toNumber(),
+            mFaucetUpgradeBoost: new Decimal(player.metaMeta.metaFaucets[215]).add(1).log(10).pow(0.35).floor(),
+            mFaucetUpgrade2Boost: new Decimal(player.metaMeta.metaFaucets[431]).add(1).log(10).pow(0.25).floor(),
 
         }
         
@@ -131,7 +133,7 @@ if (act == "0.2") addLayer("metaMeta", {
                 if ((x || getBuyableAmount(this.layer, this.id)).gte(10) && !hasUpgrade("metaMeta", 91)) return Decimal.dInf
                 return Decimal.pow(80, Decimal.pow(3, x || getBuyableAmount(this.layer, this.id))).root(tmp.metaMeta.effect.mmUpgradeBoost) 
             },
-            effect(x) { return Decimal.pow(2 + (hasUpgrade("metaMeta", 44) ? player.metaMeta.meta * 0.01 : 0), applyPolynomialSoftcap(x || getBuyableAmount(this.layer, this.id), 10, 100)) },
+            effect(x) { return Decimal.pow(2 + (hasUpgrade("metaMeta", 44) ? player.metaMeta.meta.mul(0.01) : 0), applyPolynomialSoftcap(x || getBuyableAmount(this.layer, this.id), 10, 100)) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 
@@ -788,6 +790,7 @@ if (act == "0.2") addLayer("metaMeta", {
                 var eff = (x || getBuyableAmount(this.layer, this.id)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost).add(buyableEffect("metaMeta", 94)).mul(Decimal.pow(1.01 + buyableEffect("metaMeta", 92), (x || getBuyableAmount(this.layer, this.id)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost).add(buyableEffect("metaMeta", 94)))).add(1)
                 if (hasMilestone("metaMeta", 4)) eff = eff.mul(player.metaMeta.sacrificeMulti) 
                 if (hasUpgrade("metaMeta", 104)) eff = eff.pow(upgradeEffect("metaMeta", 104))
+                if (Number.isNaN(eff.mag)) return new Decimal(1)
                 return eff.mul(tmp.metaMeta.effect.mFaucet1Boost)
             },
             canAfford() { return new Decimal(player[this.layer].metaFaucets[0]).gte(this.cost()) },
@@ -812,7 +815,7 @@ if (act == "0.2") addLayer("metaMeta", {
         },
         92: {
             cost(x) { return Decimal.pow(1e8, (x || getBuyableAmount(this.layer, this.id)).div(10).add(1).pow(2).pow((x || getBuyableAmount(this.layer, this.id)).div(1000).max(1))) },
-            effect(x) { return (+(x || getBuyableAmount(this.layer, this.id)) + buyableEffect("metaMeta", 94) + tmp.metaMeta.effect.mFaucetUpgradeBoost) * 0.01 * buyableEffect("metaMeta", 93) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(buyableEffect("metaMeta", 94)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost.mul(0.01).mul(buyableEffect("metaMeta", 93))) },
             canAfford() { return new Decimal(player[this.layer].metaFaucets[19]).gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Meta-Faucet Upgrade^2s"
@@ -834,7 +837,7 @@ if (act == "0.2") addLayer("metaMeta", {
         },
         93: {
             cost(x) { return Decimal.pow(1e255, (x || getBuyableAmount(this.layer, this.id)).div(5.67).add(1).pow(2).pow((x || getBuyableAmount(this.layer, this.id)).div(1000).max(1))) },
-            effect(x) { return (+(x || getBuyableAmount(this.layer, this.id)) + buyableEffect("metaMeta", 94) +  tmp.metaMeta.effect.mFaucetUpgradeBoost) * 0.1 + 1 },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(buyableEffect("metaMeta", 94)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost.mul(0.1).add(1)) },
             canAfford() { return new Decimal(player[this.layer].metaFaucets[49]).gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Meta-Faucet Upgrade^3s"
@@ -947,6 +950,7 @@ if (act == "0.2") addLayer("metaMeta", {
                     "Each permile multiplies sacrifice multiplier by 10."
             },
             buy() {
+                if (getBuyableAmount(this.layer, this.id).gte(1000)) return
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 if (getBuyableAmount(this.layer, this.id).gte(1000)) {
                     player.tab = "none"
@@ -1970,8 +1974,7 @@ if (act == "0.2") addLayer("metaMeta", {
             done() { return player.metaMeta.sacrificeMulti.gte(1.800e11) }
         },
         19: {
-            requirementDescription: "×2.160e14 Sacrifice Multiplier",
-            unlocked() { return hasUpgrade("metaMeta", 124) },
+            requirementDescription: "×2.160e14 Sacrifice Multiplier", 
             effectDescription() { return "Raises the Metaness effect power tower by your amount of Overflows, plus 1." },
             done() { return player.metaMeta.sacrificeMulti.gte(2.160e14) }
         },
@@ -2027,10 +2030,10 @@ if (act == "0.2") addLayer("metaMeta", {
             done() { return player.metaMeta.sacrificeMulti.gte("e1234") }
         },
         28: {
-            requirementDescription: "×1e1503 Sacrifice Multiplier",
+            requirementDescription: "×1e1497 Sacrifice Multiplier",
             unlocked() { return hasUpgrade("metaMeta", 124) },
             effectDescription() { return "^2.5 previous milestone effect."  },
-            done() { return player.metaMeta.sacrificeMulti.gte("e1503") }
+            done() { return player.metaMeta.sacrificeMulti.gte("e1497") }
         },
         29: {
             requirementDescription: "×1e1740 Sacrifice Multiplier",
@@ -2306,7 +2309,7 @@ if (act == "0.2") addLayer("metaMeta", {
                             return ret
                     })],
                     ["blank", "15px"],
-                    ["display-text", () => player.metaMeta.metaMetaFaucets.length > 50 ? "<br/><h5 style='opacity:0.5'>Something has changed while you've been here.<br/>You may need to try something you think you've done with it before to continue.<br/>Something you may have not came to think about.</h5>" : ""],
+                    ["display-text", () => player.metaMeta.metaMetaFaucets.length > 50 && player.metaMeta.metaMetaFaucets.length < 1000 ? "<br/><h5 style='opacity:0.5'>Something has changed while you've been here.<br/>You may need to try something you think you've done with it before to continue.<br/>Something you may have not came to think about.</h5>" : ""],
                 ]
             },
             "Sacrifice": {

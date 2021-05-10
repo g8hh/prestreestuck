@@ -118,18 +118,21 @@ function updateTemp() {
 	}
 }
 
-function updateTempData(layerData, tmpData, funcsData) {
+function updateTempData(layerData, tmpData, funcsData, itemName = "") {
 	
 	for (item in funcsData){
 		if (Array.isArray(layerData[item])) {
-			updateTempData(layerData[item], tmpData[item], funcsData[item])
+			updateTempData(layerData[item], tmpData[item], funcsData[item], itemName + "." + item)
 		}
 		else if ((!!layerData[item]) && (layerData[item].constructor === Object) || (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)){
-			updateTempData(layerData[item], tmpData[item], funcsData[item])
+			updateTempData(layerData[item], tmpData[item], funcsData[item], itemName + "." + item)
 		}
 		else if (isFunction(layerData[item]) && !isFunction(tmpData[item])){
 			let value = layerData[item]()
-			if (value !== value || value === decimalNaN){
+			if (value !== value || (value instanceof Decimal && Number.isNaN(value.mag))){
+				alert("NaN lol\n(at " + itemName + "." + item + ")\nPlease contact the mod author.");
+				throw new Error("NaN lol (at " + itemName + "." + item + ")")
+				/*
 				if (NaNalert === true || confirm ("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know! Would you like to try to auto-fix the save and keep going?")){
 					NaNalert = true
 					value = (value !== value ? 0 : decimalZero)
@@ -139,6 +142,7 @@ function updateTempData(layerData, tmpData, funcsData) {
 					player.autosave = false;
 					NaNalert = true;
 				}
+				*/
 			}
 			Vue.set(tmpData, item, value)
 		}

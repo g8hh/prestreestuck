@@ -29,12 +29,17 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.1.1",
+	num: "0.1.1.2",
 	name: "The Great Split",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.1.1.2</h3><br>
+		Fixed some NaN bugs.<br>
+		Last layer no longer intentionally NaNs.<br>
+		Improved NaN catching system. The game now tells exactly where the NaN is instead of just keep saying 'effect' or something like that.<br>
+	<br>
 	<h3>v0.1.1.1</h3><br>
 		Reduced some of the <spoiler>Sacrifice</spoiler> milestone requirements even more.<br>
 		Adjusted the number formatting.<br>
