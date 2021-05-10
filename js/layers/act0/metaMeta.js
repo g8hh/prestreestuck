@@ -1955,9 +1955,9 @@ if (act == "0.2") addLayer("metaMeta", {
             done() { return player.metaMeta.sacrificeMulti.gte(160000000) }
         },
         16: {
-            requirementDescription: "×360,000,000 Sacrifice Multiplier",
+            requirementDescription: "×345,000,000 Sacrifice Multiplier",
             effectDescription() { return "Sacrifice Multiplier formula becomes better." },
-            done() { return player.metaMeta.sacrificeMulti.gte(360000000) }
+            done() { return player.metaMeta.sacrificeMulti.gte(345000000) }
         },
         17: {
             requirementDescription: "×1.413e9 Sacrifice Multiplier",

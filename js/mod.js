@@ -29,12 +29,16 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.1",
+	num: "0.1.1.1",
 	name: "The Great Split",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.1.1.1</h3><br>
+		Reduced some of the <spoiler>Sacrifice</spoiler> milestone requirements even more.<br>
+		Adjusted the number formatting.<br>
+	<br>
 	<h2>v0.1.1</h2><br>
 		<h5 style="opacity:0.5">- The Great Split -</h5>
 		Attepted to split Act 0 into 3 different stages to improve performance.<br>
