@@ -23,7 +23,7 @@ if (act == "0.2") addLayer("metaMeta", {
         return applyLogapolynomialSoftcap(player.points.div(2).add(1).slog(10).pow(0.4).pow(pow).floor(), "e2100000", 2)
     },
     getNextAt() {
-        if (Decimal.gte(tmp[this.layer].resetGain.gte, 1e16)) return player.points
+        if (Decimal.gte(tmp[this.layer].resetGain, 1e16)) return player.points
         var pow = buyableEffect(this.layer, 13).mul(hasUpgrade("metaMeta", 11) ? 1.12 : 1).mul(tmp.metaMeta.effect.overflowNerf).mul(tmp.metaMeta.effect.eternityNerf).mul(tmp.metaMeta.effect.powBoost)
         if (hasMilestone("metaMeta", 30)) pow = pow.mul(Decimal.pow(3, player.metaMeta.eternities.max(0)))
         if (hasMilestone("metaMeta", 31)) pow = pow.mul(Decimal.pow(1.5, player.metaMeta.overflows.max(0)))
