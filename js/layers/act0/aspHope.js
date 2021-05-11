@@ -39,6 +39,7 @@ if (act == "0.0") addLayer("aspHope", {
         if (hasUpgrade("aspHope", 11)) req = req.div(tmp.aspHope.upgrades[11].effect)
         if (hasUpgrade("aspHope", 42)) req = req.div(1e12)
         req = req.div(tmp.aspLight.buyables[16].effect)
+        if (Number.isNaN(req.mag)) return new Decimal(1e42)
         return req;
     },
     canBuyMax() { return hasMilestone("aspDoom", 5) },
