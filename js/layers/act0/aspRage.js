@@ -1,4 +1,4 @@
-if (act == 0) addLayer("aspRage", {
+if (act == "0.0") addLayer("aspRage", {
     name: "Rage",
     symbol: "<img src='data/rage.png' style='width:calc(80% + 0px);height:calc(80% + 0px);margin:10%'></img>",
     row: 3,
@@ -36,6 +36,7 @@ if (act == 0) addLayer("aspRage", {
         if (hasUpgrade("aspHope", 11)) req = req.div(tmp.aspHope.upgrades[11].effect)
         if (hasUpgrade("aspHope", 43)) req = req.div(1e10)
         req = req.div(tmp.aspLight.buyables[17].effect)
+        if (Number.isNaN(req.mag)) return new Decimal(1e32)
         return req;
     },
     canBuyMax() { return hasMilestone("aspDoom", 5) },

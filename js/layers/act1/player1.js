@@ -45,10 +45,11 @@ if (act == 1) addLayer("player1", {
                 <br/><br/>
                 A young man stands in their room. It is just so happen that today, April 13th 2021, is the day you've finished
                 a game you've been playing for a long time. (if you played it for that long, oh it's also Homestuck birthday).
-                This man is pretty open-minded for beating this so-called a game today, so they'll let you guess what his name is.
+                This man is pretty open-minded for beating this so-called a game today, so he'll let you guess what his name is.
                 <br/><br/>
                 What will you think this man's name to be?
-                <br/><br/>
+                
+                <h2><br/><br/>End of content, for now</h2><br/>
                 <i>Suggest a name in our discord server!</i><br/>
                 <i>(or the MSPFA command section if you apparently are in my MSPFA test page)</i>
             `,
@@ -61,6 +62,10 @@ if (act == 1) addLayer("player1", {
     tabFormat: [
         "story"
     ],
+
+    update(delta) {
+        player.phaseTimer += delta
+    },
 
     startData() {
         return {

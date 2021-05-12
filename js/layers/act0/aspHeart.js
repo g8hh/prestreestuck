@@ -1,4 +1,4 @@
-if (act == 0) addLayer("aspHeart", {
+if (act == "0.0") addLayer("aspHeart", {
     name: "Heart",
     symbol: "<img src='data/heart.png' style='width:calc(80% + 1px);height:calc(80% + 1px);margin:10%'></img>",
     row: 2,

@@ -10,17 +10,17 @@ var meta = {
 function save(saveId) {
 	if (!saveId) saveId = player.saveId
 
-	meta.currentSave = player.saveId
+	meta.currentSave = saveId
 	meta.act = player.act
 	
-	meta.saves[player.saveId].act = player.act
+	meta.saves[player.saveId].act = act
 	meta.saves[player.saveId].desc = (() => {
 		var ret = format(player.points) + " points"
 		return ret
 	})()
 
-	localStorage.setItem("pts_" + saveId, btoa(JSON.stringify(player)))
-	localStorage.setItem(modInfo.id, btoa(JSON.stringify(meta)))
+	localStorage.setItem("pts_" + saveId, btoa(unescape(encodeURIComponent(JSON.stringify(player)))))
+	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(meta)))))
 }
 
 function startPlayerBase() {
@@ -44,8 +44,8 @@ function startPlayerBase() {
 		showStory: true,
 		points: modInfo.initialStartPoints,
 		subtabs: {},
-		lastSafeTab: (layoutInfo.showTree ? "none" : layoutInfo.startTab)
-	}
+		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)
+	};
 }
 
 function getStartPlayer() {
@@ -79,26 +79,34 @@ function getStartPlayer() {
 	}
 	return playerdata
 }
+function getStartLayerData(layer) {
+	layerdata = {};
+	if (layers[layer].startData)
+		layerdata = layers[layer].startData();
 
-function getStartLayerData(layer){
-	layerdata = {}
-	if (layers[layer].startData) 
-		layerdata = layers[layer].startData()
+	if (layerdata.unlocked === undefined)
+		layerdata.unlocked = true;
+	if (layerdata.total === undefined)
+		layerdata.total = new Decimal(0);
+	if (layerdata.best === undefined)
+		layerdata.best = new Decimal(0);
+	if (layerdata.resetTime === undefined)
+		layerdata.resetTime = 0;
+	if (layerdata.forceTooltip === undefined)
+		layerdata.forceTooltip = false;
 
-	if (layerdata.unlocked === undefined) layerdata.unlocked = true
-	if (layerdata.total === undefined) layerdata.total = new Decimal(0)
-	if (layerdata.best === undefined) layerdata.best = new Decimal(0)
-	if (layerdata.resetTime === undefined) layerdata.resetTime = 0
-
-	layerdata.buyables = getStartBuyables(layer)
-	if(layerdata.clickables == undefined) layerdata.clickables = getStartClickables(layer)
-	layerdata.spentOnBuyables = new Decimal(0)
-	layerdata.upgrades = []
-	layerdata.milestones = []
-	layerdata.achievements = []
-	layerdata.challenges = getStartChallenges(layer)
-	layerdata.story = getStartStory(layer)
-	return layerdata
+	layerdata.buyables = getStartBuyables(layer);
+	if (layerdata.noRespecConfirm === undefined) layerdata.noRespecConfirm = false
+	if (layerdata.clickables == undefined)
+		layerdata.clickables = getStartClickables(layer);
+	layerdata.spentOnBuyables = new Decimal(0);
+	layerdata.upgrades = [];
+	layerdata.milestones = [];
+	layerdata.lastMilestone = null;
+	layerdata.achievements = [];
+	layerdata.challenges = getStartChallenges(layer);
+	layerdata.story = getStartStory(layer);
+	return layerdata;
 }
 
 
@@ -197,7 +205,7 @@ function load(saveId) {
 	if (saveId) {
 		let get = localStorage.getItem("pts_" + saveId);
 		if (get===null || get===undefined || saveId==="new") player = getStartPlayer()
-		else player = Object.assign(getStartPlayer(), JSON.parse(atob(get)))
+		else player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))))
 		player.saveId = saveId == "new" ? Date.now() : saveId
 		fixSave()
 
@@ -216,6 +224,7 @@ function load(saveId) {
 		updateTemp();
 		updateTemp();
 		loadVue();
+		
 	} else {
 		let get = localStorage.getItem(modInfo.id);
 		if (get===null || get===undefined) {
@@ -226,7 +235,7 @@ function load(saveId) {
 			}
 			return;
 		}
-		let data = JSON.parse(atob(get))
+		let data = JSON.parse(decodeURIComponent(escape(atob(get))))
 		if (data.points) {
 			player = Object.assign(getStartPlayer(), data)
 			meta.currentSave = player.saveId
@@ -241,6 +250,7 @@ function load(saveId) {
 			load(meta.currentSave)
 		}
 	}
+	
 }
 
 function setupModInfo() {
@@ -341,7 +351,9 @@ function openSaveModal() {
 		(() => {
 			var html = ""
 			var acts = {
-				0: ["Act 0", "Genesis"],
+				"0.0": ["Act 0", "Genesis"],
+				"0.1": ["Act 0", "Genesis"],
+				"0.2": ["Act 0", "Genesis"],
 				1: ["Act 1", "Incrementalism"],
 				omega: ["Act Ω", "?????"],
 			}
@@ -353,7 +365,7 @@ function openSaveModal() {
 						placeholder="Untitled Save" 
 						id="save${save}" onchange="changeSaveName(${save})"><br/>
 					<span style='font-size:14px'>
-						Act ${meta.saves[save].act} - ${acts[meta.saves[save].act][1]}<br/>
+						${acts[meta.saves[save].act][0]} - ${acts[meta.saves[save].act][1]}<br/>
 						${meta.saves[save].desc}<br/>
 					</span>
 					<span style='font-size:12px;opacity:0.5'>
@@ -394,11 +406,11 @@ function openCreateSaveModal() {
 				placeholder="New Save" 
 				id="save${save}" onchange="changeSaveName(${save})">
 			<br/><br/>Start from:
-			<div class="saveState" style='cursor:pointer;margin-top:5px' onclick='createSave(document.getElementById("newSaveNameInput").value, 0); modal.hide()'>
+			<div class="saveState" style='cursor:pointer;margin-top:5px' onclick='createSave(document.getElementById("newSaveNameInput").value, "0.0"); modal.hide()'>
 			    <h3 style="font-size:21px">Act 0</h3><br/>
 				<span style='font-size:14px'>Tree of Genesis</span>
 			</div>
-			<div class="saveState" style='cursor:pointer' onclick='createSave(document.getElementById("newSaveNameInput").value, 1); modal.hide()'>
+			<div class="saveState" style='cursor:pointer' onclick='createSave(document.getElementById("newSaveNameInput").value, "1"); modal.hide()'>
 			    <h3 style="font-size:21px">Act 1</h3><br/>
 				<span style='font-size:14px'>MS-Paint Incremental</span>
 			</div>
@@ -411,7 +423,7 @@ function openCreateSaveModal() {
 function createSave(name, targetAct) {
 	clearInterval(interval)
 	load("new")
-	player.act = targetAct ?? -1
+	player.act = targetAct ?? "-1"
 	meta.currentSave = player.saveId
 	meta.saves[player.saveId] = {
 		name: name || "New Save",
@@ -443,13 +455,13 @@ function deleteSave(id) {
 function changeSave(id) {
 	meta.currentSave = id
 	meta.act = meta.saves[id].act
-	localStorage.setItem(modInfo.id, btoa(JSON.stringify(meta)))
+	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(meta)))))
 	window.location.reload();
 }
 
-function switchAct(act) {
+function switchAct(act, reset = true) {
 	player = {
-		...getStartPlayer(),
+		...reset ? getStartPlayer() : player,
 		
 		timePlayed: player.timePlayed,
 		saveId: player.saveId,

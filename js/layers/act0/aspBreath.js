@@ -1,4 +1,4 @@
-if (act == 0) addLayer("aspBreath", {
+if (act == "0.0") addLayer("aspBreath", {
     name: "Breath",
     symbol: "<img src='data/breath.png' style='width:calc(80% - 2px);height:calc(80% - 2px);margin:10%'></img>",
     row: 7,

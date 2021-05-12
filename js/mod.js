@@ -5,7 +5,7 @@
 	pointsName: "points",
 	discordName: "The Prestreestuck Server",
 	discordLink: "https://discord.gg/fHcWmmprGm",
-	initialStartPoints: new Decimal(act == 0 ? 10 : 0), // Used for hard resets and new players
+	initialStartPoints: new Decimal(act.startsWith("0") ? 10 : 0), // Used for hard resets and new players
 	
 	offlineLimit: (+act + 1) || 1,  // In hours
 }
@@ -21,22 +21,56 @@ let flavorTitles = [
 	"NO, IT IS NOT CANON YET",
 	"BUT WHY THOUGH",
 	"READ HOMESTUCK INSTEAD",
-	"UNDEFINED"
+	"UNDEFINED",
+	"PLAY THIS GAME IN TRICKSTER THEME, I DARE YOU",
+	"FUN FACT: THE PERSON WHO MADE THE FIVE HOUR MEME IS A HOMESTUCK",
 ]
 let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.0.2",
-	name: "MS-Paint Fan Incremental",
+	num: "0.1.1.2.3",
+	name: "The Great Split",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.1.1.2.3</h3><br>
+		Fixed yet another NaN bug (hopefully).<br>
+	<h3>v0.1.1.2.2</h3><br>
+		Fixed another NaN bug (hopefully).<br>
+	<br>
+	<h3>v0.1.1.2.1</h3><br>
+		Fixed <spoiler>Meta</spoiler> unable to load.<br>
+	<br>
+	<h3>v0.1.1.2</h3><br>
+		Fixed some NaN bugs.<br>
+		Last layer no longer (intentionally) NaNs.<br>
+		Improved NaN catching system. The game now tells exactly where the NaN is instead of just keep saying 'effect' or something like that.<br>
+	<br>
+	<h3>v0.1.1.1</h3><br>
+		Reduced some of the <spoiler>Sacrifice</spoiler> milestone requirements even more.<br>
+		Adjusted the number formatting.<br>
+	<br>
+	<h2>v0.1.1</h2><br>
+		<h5 style="opacity:0.5">- The Great Split -</h5>
+		Attepted to split Act 0 into 3 different stages to improve performance.<br>
+		Migrated to The Modding Tree v2.5.2.1. The update everyone was waiting for!<br>
+		Reduced some of the <spoiler>Sacrifice</spoiler> milestone requirements.<br>
+		Fixed hard reset not working properly (if I don't want to say at all).<br>
+		Improved readability (sort of).<br>
+	<br>
+	<h3>v0.1.0.3</h3><br>
+		Redesigned the info tab. Discord links now showing member counts.<br>
+		Fixed side options sometimes getting hidden on Act 1.<br>
+		Added miscellaneous features.<br>
+	<br>
 	<h3>v0.1.0.2</h3><br>
 		Fixed selecting act 0 in the new save dialog directs you to the opening screen.<br>
+	<br>
 	<h3>v0.1.0.1</h3><br>
 		Added opening screen.<br>
+	<br>
 	<h2>v0.1.0</h2><br>
 		<h5 style="opacity:0.5">- MS-Paint Fan Incremental -</h5>
 		<i>ACT 1 POG</i><br>
@@ -46,6 +80,7 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 		Fixed <spoiler>Limitation reset</spoiler> resetting <spoiler>Meta-Meta-Faucets</spoiler> even if you have 50+ of them.<br>
 		Fixed <spoiler>Meta-Meta-Faucet</spoiler> #1000 effect showing as #100.<br>
 		Fixed <spoiler>Sburb Sacrifice Milestones</spoiler> showing sooner than intended.<br>
+	<br>
 	<h2>v0.0.3.8.6.2</h2><br>
 		<h5 style="opacity:0.5">- A Broken Game -</h5>
 		End of Act 0?<br>
@@ -188,7 +223,7 @@ function canGenPoints(){
 // Calculate points/sec!
 function getPointGen() {
 	if (act == "omega") {
-		player.act = -1
+		player.act = "-1"
 		save()
 		window.location = "https://mspfa.com/?s=16414&p=1"
 	}
@@ -197,46 +232,44 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if (act == -1) {
+	if (act == "-1") {
 		clearInterval(interval);
 		openStartModal();
-	} else if (act == 0) {
-		if (hasUpgrade("skaia", 14)) {
-			if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
-		} else if (hasUpgrade("skaia", 12)) {
-			gain = gain.mul(tmp.metaAspects.effect.pointBoost)
-		} else {
-			for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
+	} else if (act == "0.0") {
+		for (var a = 11; a <= 16; a++) gain = gain.mul(tmp.aspTime.buyables[a].effect)
 
-			if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
-			if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
+		if (hasUpgrade("aspTime", 11)) gain = gain.mul(tmp.aspTime.upgrades[11].effect)
+		if (hasUpgrade("aspTime", 12)) gain = gain.mul(tmp.aspTime.upgrades[12].effect)
 
-			if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
-			if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
-			if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
+		if (hasUpgrade("aspSpace", 11)) gain = gain.mul(tmp.aspSpace.upgrades[11].effect)
+		if (hasUpgrade("aspSpace", 13)) gain = gain.mul(tmp.aspSpace.upgrades[13].effect)
+		if (hasUpgrade("aspSpace", 23)) gain = gain.mul(tmp.aspSpace.upgrades[23].effect)
 
-			if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
-			if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
+		if (hasUpgrade("aspMind", 11)) gain = gain.mul(tmp.aspMind.upgrades[11].effect)
+		if (hasUpgrade("aspMind", 22)) gain = gain.mul(tmp.aspMind.upgrades[22].effect)
 
-			if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
-			if (hasUpgrade("aspHope", 34)) gain = gain.mul(tmp.aspHope.upgrades[34].effect)
-			if (hasUpgrade("aspHope", 51)) gain = gain.mul(tmp.aspHope.upgrades[51].effect)
-			if (hasUpgrade("aspHope", 63)) gain = gain.mul(tmp.aspHope.upgrades[63].effect)
+		if (hasUpgrade("aspHope", 21)) gain = gain.mul(tmp.aspHope.upgrades[21].effect)
+		if (hasUpgrade("aspHope", 34)) gain = gain.mul(tmp.aspHope.upgrades[34].effect)
+		if (hasUpgrade("aspHope", 51)) gain = gain.mul(tmp.aspHope.upgrades[51].effect)
+		if (hasUpgrade("aspHope", 63)) gain = gain.mul(tmp.aspHope.upgrades[63].effect)
 
-			gain = gain.mul(tmp.aspHeart.effect.pointBoost)
-			gain = gain.mul(tmp.aspMind.effect.pointBoost)
-			gain = gain.mul(tmp.aspLife.effect.pointBoost)
-			gain = gain.mul(tmp.aspDoom.effect.pointBoost)
+		gain = gain.mul(tmp.aspHeart.effect.pointBoost)
+		gain = gain.mul(tmp.aspMind.effect.pointBoost)
+		gain = gain.mul(tmp.aspLife.effect.pointBoost)
+		gain = gain.mul(tmp.aspDoom.effect.pointBoost)
 
-			gain = gain.mul(tmp.aspLight.buyables[11].effect)
+		gain = gain.mul(tmp.aspLight.buyables[11].effect)
 
-			if (getBuyableAmount("aspLife", 11).gt(0)) gain = gain.mul(tmp.aspLife.buyables[11].effect)
-			if (challengeCompletions("aspDoom", 11) >= 8) gain = gain.pow(1.05)
+		if (getBuyableAmount("aspLife", 11).gt(0)) gain = gain.mul(tmp.aspLife.buyables[11].effect)
+		if (challengeCompletions("aspDoom", 11) >= 8) gain = gain.pow(1.05)
 
-			if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
-			if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
-			if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
-		}
+		if (inChallenge("aspDoom", 13)) gain = gain.tetrate(0.1)
+		if (inChallenge("aspRage", 11)) gain = applyPolynomialSoftcap(gain, 1e20, challengeCompletions("aspRage", 11) + 2)
+		if (inChallenge("aspRage", 14)) gain = gain.tetrate(1 - (challengeCompletions("aspRage", 14) + 1) / 20)
+	} else if (act == "0.1") {
+		gain = gain.mul(tmp.metaAspects.effect.pointBoost)
+	} else if (act == "0.2") {
+		if (player[this.layer].resetTime < Number.MAX_VALUE) gain = gain.mul(tmp.metaMeta.effect.pointBoost)
 	} else if (act == 1) {
 		gain = new Decimal(0)
 	}
@@ -249,7 +282,7 @@ function getPointGen() {
 
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
-	act: -1,
+	act: "-1",
 	phaseTimer: 0,
 }}
 
@@ -258,15 +291,15 @@ var displayThings = [
 	function () {
 		var rem = 0
 		for (lys in LAYERS) {
-			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && !inChallenge("aspDoom", 12)))) rem++
+			if (player[LAYERS[lys]] !== undefined && (!player[LAYERS[lys]].unlocked || (!tmp[LAYERS[lys]].layerShown && player.act == "0.0" && !inChallenge("aspDoom", 12)))) rem++
 		}
-		if (act == 0) {
-			if (hasUpgrade("skaia", 14)) rem -= 17;
-			else if (hasUpgrade("skaia", 12)) rem -= 12;
-		}
+		if (act == "0.0") rem += 5;
+		else if (act == "0.1") rem += 1;
 		var acts = {
 			'-1': ["", "", ""],
-			0: ["Act 0", "Genesis", (rem == 0 ? "The end is nigh..." : rem + " layers remaining" + (hasUpgrade("skaia", 13) ? (player.phaseTimer > 4 ? "... wait, what?" : player.phaseTimer > 3 ? "... wait" : "") : ""))],
+			"0.0": ["Act 0", "Genesis", rem + " layers remaining"],
+			"0.1": ["Act 0", "Genesis", rem + " layers remaining"],
+			"0.2": ["Act 0", "Genesis", "The end is nigh..."],
 			1: ["End of Act 0??", "-", "Coming soon..."],
 			omega: ["Act Ω", "?????", "???????????"],
 		}
@@ -293,6 +326,14 @@ function maxTickLength() {
 function fixOldSave(oldVersion) {
 	console.log("Loaded old version from" + oldVersion)
 	if (player.tab == "aspects") player.tab = "metaAspects";
+	if (oldVersion <= "0.1.0.3") {
+		if (act == 0) {
+			player.version = VERSION.num
+			if (hasUpgrade("skaia", 12)) switchAct("0.1", false)
+			else if (hasUpgrade("skaia", 13) || hasUpgrade("skaia", 14)) switchAct("0.2", false)
+			else switchAct("0.0", false)
+		}
+    }
 	if (oldVersion <= "0.0.3.4" && player.points.gte("ee100000")) {
 		player.points = new Decimal("ee100000");
 		player.skaia.points = new Decimal(0);

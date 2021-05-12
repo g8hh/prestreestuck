@@ -14,7 +14,7 @@ var derseSigns = [
     /* Fuchsia 132 */ "Piries",   "Piga",    "Piza",    "Pio",     "Pirius",    "Piborn",    "Pipia",    "Pittarius",    "Pisces",    "Pimini",    "Piun",    "Picen",
 ]
 
-if (act == 0) addLayer("metaDerse", {
+if (act == "0.1") addLayer("metaDerse", {
     name: "Derse",
     symbol: "D",
     row: 10,

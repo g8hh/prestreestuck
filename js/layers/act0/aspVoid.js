@@ -1,4 +1,4 @@
-if (act == 0) addLayer("aspVoid", {
+if (act == "0.0") addLayer("aspVoid", {
     name: "Void",
     symbol: "<img src='data/void.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>",
     row: 4,
