@@ -133,7 +133,7 @@ if (act == "0.2") addLayer("metaMeta", {
                 if ((x || getBuyableAmount(this.layer, this.id)).gte(10) && !hasUpgrade("metaMeta", 91)) return Decimal.dInf
                 return Decimal.pow(80, Decimal.pow(3, x || getBuyableAmount(this.layer, this.id))).root(tmp.metaMeta.effect.mmUpgradeBoost) 
             },
-            effect(x) { return Decimal.pow(2 + (hasUpgrade("metaMeta", 44) ? player.metaMeta.meta.mul(0.01) : 0), applyPolynomialSoftcap(x || getBuyableAmount(this.layer, this.id), 10, 100)) },
+            effect(x) { return Decimal.pow(new Decimal(hasUpgrade("metaMeta", 44) ? player.metaMeta.meta.mul(0.01) : 0).add(2), applyPolynomialSoftcap(x || getBuyableAmount(this.layer, this.id), 10, 100)) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             title() {
                 
@@ -787,7 +787,7 @@ if (act == "0.2") addLayer("metaMeta", {
         91: {
             cost(x) { return Decimal.pow((x || getBuyableAmount(this.layer, this.id)).add(16), (x || getBuyableAmount(this.layer, this.id)).pow((x || getBuyableAmount(this.layer, this.id)).div(100).max(1))).mul(1e16) },
             effect(x) { 
-                var eff = (x || getBuyableAmount(this.layer, this.id)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost).add(buyableEffect("metaMeta", 94)).mul(Decimal.pow(1.01 + buyableEffect("metaMeta", 92), (x || getBuyableAmount(this.layer, this.id)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost).add(buyableEffect("metaMeta", 94)))).add(1)
+                var eff = (x || getBuyableAmount(this.layer, this.id)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost).add(buyableEffect("metaMeta", 94)).mul(Decimal.pow(buyableEffect("metaMeta", 92).add(1.01), (x || getBuyableAmount(this.layer, this.id)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost).add(buyableEffect("metaMeta", 94)))).add(1)
                 if (hasMilestone("metaMeta", 4)) eff = eff.mul(player.metaMeta.sacrificeMulti) 
                 if (hasUpgrade("metaMeta", 104)) eff = eff.pow(upgradeEffect("metaMeta", 104))
                 if (Number.isNaN(eff.mag)) return new Decimal(1)
@@ -815,7 +815,7 @@ if (act == "0.2") addLayer("metaMeta", {
         },
         92: {
             cost(x) { return Decimal.pow(1e8, (x || getBuyableAmount(this.layer, this.id)).div(10).add(1).pow(2).pow((x || getBuyableAmount(this.layer, this.id)).div(1000).max(1))) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(buyableEffect("metaMeta", 94)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost.mul(0.01).mul(buyableEffect("metaMeta", 93))) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(buyableEffect("metaMeta", 94)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost).mul(0.01).mul(buyableEffect("metaMeta", 93)) },
             canAfford() { return new Decimal(player[this.layer].metaFaucets[19]).gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Meta-Faucet Upgrade^2s"
@@ -837,7 +837,7 @@ if (act == "0.2") addLayer("metaMeta", {
         },
         93: {
             cost(x) { return Decimal.pow(1e255, (x || getBuyableAmount(this.layer, this.id)).div(5.67).add(1).pow(2).pow((x || getBuyableAmount(this.layer, this.id)).div(1000).max(1))) },
-            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(buyableEffect("metaMeta", 94)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost.mul(0.1).add(1)) },
+            effect(x) { return (x || getBuyableAmount(this.layer, this.id)).add(buyableEffect("metaMeta", 94)).add(tmp.metaMeta.effect.mFaucetUpgradeBoost).mul(0.1).add(1) },
             canAfford() { return new Decimal(player[this.layer].metaFaucets[49]).gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Meta-Faucet Upgrade^3s"
