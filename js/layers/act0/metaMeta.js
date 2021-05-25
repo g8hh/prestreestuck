@@ -1704,6 +1704,10 @@ if (act == "0.2") addLayer("metaMeta", {
             unlocked() { 
                 return hasUpgrade("metaMeta", 113) 
             },
+            onPurchase() {
+                var squares = player["metaMeta"].buyables[91].sqrt().floor()
+                for (var a = 0; a < squares; a++) player[this.layer].metaFaucets.push(new Decimal(0))
+            },
         },
         101: {
             title: "<p style='transform: scale(-1, -1)'><alternate>REAL TIME</alternate>",
