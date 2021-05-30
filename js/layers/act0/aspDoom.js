@@ -113,7 +113,7 @@ if (act == "0.0") addLayer("aspDoom", {
         },
         12: {
             name: "<p style='transform: scale(-1, -1)'><alternate>WHAT LAYERS</alternate></p>",
-            completionLimit: 32,
+            completionLimit: 11,
             challengeDescription() {
                 return "You cannot access any layer below this one. Their upgrades and milestones effect still exists though. Basically you'll have to play blind."
             },

@@ -1,4 +1,4 @@
-var systemVer = "0.1.1.2.4";
+var systemVer = "0.1.1.2.5";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -157,7 +157,7 @@ var systemComponents = {
             <tr>
                 <td><button class="opt" onclick="save()">Save</button></td>
                 <td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{ player.autosave?"ON":"OFF" }}</button></td>
-                <td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
+                <td><button class="opt" onclick="openHardResetModal()">HARD RESET</button></td>
             </tr>
             <tr>
                 <td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>

@@ -943,7 +943,7 @@ if (act == "0.2") addLayer("metaMeta", {
             effect(x) { return Decimal.pow(10 * (hasMilestone("metaMeta", 27) ? tmp.metaMeta.milestones[27].effect : 1), (x || getBuyableAmount(this.layer, this.id))) },
             canAfford() { return new Decimal(player.metaMeta.meta).gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "‰<br/>Build Sburb."
+                return format(getBuyableAmount(this.layer, this.id), 0) + " / 1,000<br/>Build Sburb."
             },
             display() {
                 return "Needs " + format(tmp[this.layer].buyables[this.id].cost) + " Meta-Metaness.\n" +

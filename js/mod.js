@@ -29,16 +29,25 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.1.2.4",
+	num: "0.1.1.2.5",
 	name: "The Great Split",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.1.1.2.5</h3><br>
+		Challenges now only say "Completed" when you reached the completion limit.<br>
+		Darkened locked upgrades to make it distinctable from <spoiler>Life's</spoiler> color.<br>
+		Added shadows to main display text.<br>
+		Added modals for import save and hard reset.<br>
+		Miscellaneous bug fixes.<br>
+	<br>
 	<h3>v0.1.1.2.4</h3><br>
 		Fixed <spoiler>Meta-Faucet Upgrades</spoiler> calculating the wrong results.<br>
+	<br>
 	<h3>v0.1.1.2.3</h3><br>
 		Fixed yet another NaN bug (hopefully).<br>
+	<br>
 	<h3>v0.1.1.2.2</h3><br>
 		Fixed another NaN bug (hopefully).<br>
 	<br>
