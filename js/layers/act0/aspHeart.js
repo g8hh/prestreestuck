@@ -126,7 +126,7 @@ if (act == "0.0") addLayer("aspHeart", {
         },
         22: {
             title: "<p style='transform: scale(-1, -1)'><alternate>EVEN LESS JITTERING</alternate>",
-            description: "Time Generators and Space Multipliers don't take anything away.",
+            description: "Time Multipliers and Space Generators don't take anything away.",
             cost: new Decimal(1e25),
             unlocked() { return true },
         },

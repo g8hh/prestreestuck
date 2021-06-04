@@ -33,7 +33,7 @@ if (act == 1) addLayer("player1", {
                 from that game. You don't know why, but you just feel like it. Oh, it's April 13th. That explains why.
             `,
             commands: [
-                { page: 2, title: "The Prestreestuck: Act 1" }
+                { page: 2, title: "The Prestreestuck: Act 1", time: 5 }
             ]
         },
         2: {

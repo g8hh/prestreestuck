@@ -302,6 +302,21 @@ function exportSave() {
 	document.body.removeChild(el);
 }
 
+function openImportSaveModal() {
+	modal.show(
+		"Import Save",
+		`
+			Import your save here:<br/>
+			(Warning: your current save will be overwritten!)<br/>
+			<input type="text" id="importSaveInput" style="margin:5px 0;width:400px;"
+				placeholder="Save goes here..." 
+				id="save${save}" onchange="changeSaveName(${save})"><br/>
+			<button style="margin:5px" onclick='importSave(document.getElementById("importSaveInput").value)'> Import the Save!
+		`,
+		"Nevermind, return"
+	)
+}
+
 function importSave(imported=undefined, forced=false) {
 	if (imported===undefined) imported = prompt("Paste your save here")
 	try {
@@ -385,7 +400,7 @@ function openSaveModal() {
 				`
 			}
 			html += `
-			    <button style="margin:5px" onclick='openCreateSaveModal()'> New Save </span>
+			    <button style="margin:5px" onclick='openCreateSaveModal()'> New Save
 			`
 			return html
 		})()
@@ -411,10 +426,10 @@ function openCreateSaveModal() {
 				<span style='font-size:14px'>Tree of Genesis</span>
 			</div>
 			<div class="saveState" style='cursor:pointer' onclick='createSave(document.getElementById("newSaveNameInput").value, "1"); modal.hide()'>
-			    <h3 style="font-size:21px">Act 1</h3><br/>
+			    <h3 style="font-size:21px">Act 1</h3> <i>(in progress!)</i><br/>
 				<span style='font-size:14px'>MS-Paint Incremental</span>
 			</div>
-			<button onclick='openSaveModal()'> Nevermind, return </span>
+			<button onclick='openSaveModal()'> Nevermind, return
 		`,
 		""
 	)
@@ -438,10 +453,10 @@ function openDeleteSaveModal(id) {
 	modal.show(
 		"Delete “" + (meta.saves[id].name || "Untitled Save") + "”?",
 		`
-			You will lose everything that's in this save!<br/>
+			You will lose all of your progress that's in this save!<br/>
 			This process is irreversible!<br/>
-			<button style="margin:5px" onclick='deleteSave(${id}); openSaveModal()'> Get rid of it! </span>
-			<button onclick='openSaveModal()'> Nevermind, go back </span>
+			<button style="margin:5px" onclick='deleteSave(${id}); openSaveModal()'> I understand the consequences, get rid of it! </button><br/>
+			<button onclick='openSaveModal()'> Nevermind, go back
 		`,
 		""
 	)
@@ -469,4 +484,23 @@ function switchAct(act, reset = true) {
 	}
 	save();
 	window.location.reload()
+}
+
+function openHardResetModal() {
+	modal.show(
+		"Hard Reset the Game?",
+		`
+			You will lose all of your progress that's in this save!<br/>
+			This process is irreversible!<br/>
+			<button style="margin:5px" onclick='hardReset()'> I understand the consequences, get rid of it!
+		`,
+		"Nevermind, go back"
+	)
+}
+
+function hardReset() {
+	let saveName = meta.saves[meta.currentSave].name
+	deleteSave(player.saveId)
+	createSave(saveName, "0.0")
+	window.location.reload();
 }

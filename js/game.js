@@ -1,4 +1,4 @@
-var gameVer = "0.1.1.2.3";
+var gameVer = "0.1.1.2.5";
 
 var player;
 var needCanvasUpdate = true;
@@ -391,14 +391,6 @@ function gameLoop(diff) {
 	if (player.hideQQLink && document.location.hostname == "idlegame.gitee.io" && document.querySelector(".main-im")) {
 		document.querySelector(".main-im").style.display = "none";
 	}
-}
-
-function hardReset() {
-	if (!confirm("你确定你要这么做吗？ 您将失去所有进度！")) return
-	let saveName = meta.saves[meta.currentSave].name
-	deleteSave(player.saveId)
-	createSave(saveName, "0.0")
-	window.location.reload();
 }
 
 var ticking = false

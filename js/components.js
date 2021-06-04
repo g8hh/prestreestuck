@@ -1,4 +1,4 @@
-var compVer = "0.1.1.2.3";
+var compVer = "0.1.1.2.5";
 var app;
 
 function loadVue() {
@@ -492,32 +492,53 @@ function loadVue() {
 
 	Vue.component('story', {
 		props: ['layer'],
-		data: () => {
-			return {
-				page: player[layer].story.page,
-				current: tmp[layer].story ? tmp[layer].story[player[layer].story.page] : null
-			}
+		computed: {
+			page() { return player[layer].story.page },
+			current() { return tmp[layer].story ? tmp[layer].story[player[layer].story.page] : null }
 		},
 		template: `
 		<div v-if="current" style="max-width:650px;margin:15px;font-size:14px;">
 		    <div v-html="current.content"></div>
-			<div v-if="current.pesterlog" class="pesterlog">
-				<div v-for="msg in current.pesterlog" style="margin:10px" v-bind:style="{'text-align': msg[0] == 'msg' ? (msg[3] && msg[3].split(' ').includes('right') ? 'right' : 'left') : 'center'}">
+			<div v-if="current.pesterlog && ((plr = ' ') || true)" class="pesterlog">
+				<div v-if="current.pesterlog.channel" class="channel courier">
+					<span class="courier" style="opacity:.5">::</span>
+					#{{current.pesterlog.channel}}
+					<span class="courier" style="opacity:.5">::</span>
+				</div>
+				<div v-for="msg in current.pesterlog.log" style="margin:5px" v-bind:style="{'text-align': msg[0] == 'msg' ? (msg[3] && msg[3].split(' ').includes('right') ? 'right' : 'left') : 'center'}">
 					<div v-if="msg[0] == 'start'" style="color:#00000080">
 						-- 
 						<span class="courier" v-bind:style="{color: players[msg[1]].color}">{{players[msg[1]].full}}</span>
-						began pestering <span class="courier" v-bind:style="{color: players[msg[2]].color}">{{players[msg[2]].full}}</span>
-						at <span class="courier" v-bind:style="{color: '#000000'}">{{msg[3]}}</span>
+						began {{players[msg[1]].msgClass && players[msg[1]].msgClass.includes('troll') ? 'trolling' : 'pestering'}} 
+						<span class="courier" v-bind:style="{color: players[msg[2]].color}">{{players[msg[2]].full}}</span>
+						<span v-if="msg[3]">at <span class="courier" v-bind:style="{color: '#000000'}">{{msg[3]}}</span></span>
 						--
 					</div>
 					<div v-if="msg[0] == 'end'" style="color:#00000080">
 						-- 
 						<span class="courier" v-bind:style="{color: players[msg[1]].color}">{{players[msg[1]].full}}</span>
-						ceased pestering <span class="courier" v-bind:style="{color: players[msg[2]].color}">{{players[msg[2]].full}}</span>
-						at <span class="courier" v-bind:style="{color: '#000000'}">{{msg[3]}}</span>
+						ceased {{players[msg[1]].msgClass && players[msg[1]].msgClass.includes('troll') ? 'trolling' : 'pestering'}} 
+						<span class="courier" v-bind:style="{color: players[msg[2]].color}">{{players[msg[2]].full}}</span>
+						<span v-if="msg[3]">at <span class="courier" v-bind:style="{color: '#000000'}">{{msg[3]}}</span></span>
 						--
 					</div>
-					<div v-if="msg[0] == 'msg'" v-bind:style="{color: players[msg[1]].color}" :class="msg[3] ? msg[3].split(' ').concat('msg') : ['msg']" v-html="msg[2]">
+					<div v-if="msg[0] == 'join'" style="color:#00000080">
+						-- 
+						<span class="courier" v-bind:style="{color: players[msg[1]].color}">{{players[msg[1]].full}}</span>
+						joined the chat
+						<span v-if="msg[2]">at <span class="courier" v-bind:style="{color: '#000000'}">{{msg[2]}}</span></span>
+						--
+					</div>
+					<div v-if="msg[0] == 'leave'" style="color:#00000080">
+						-- 
+						<span class="courier" v-bind:style="{color: players[msg[1]].color}">{{players[msg[1]].full}}</span>
+						left the chat
+						<span v-if="msg[2]">at <span class="courier" v-bind:style="{color: '#000000'}">{{msg[2]}}</span></span>
+						--
+					</div>
+					<div v-if="msg[0] == 'msg' && msg[1] != plr && ((plr = msg[1]) || true)" v-bind:style="{color: players[msg[1]].color}" :class="[msg[3] ? msg[3].split(' ').concat('handler') : [], 'handler']" v-html="players[msg[1]].full+ '<br/>'">
+					</div>
+					<div v-if="msg[0] == 'msg'" v-bind:style="{color: players[msg[1]].color}" :class="[msg[3] ? msg[3].split(' ').concat('msg') : [], players[msg[1]].msgClass, 'msg']" v-html="msg[2]">
 					</div>
 				</div>
 			</div>
@@ -530,25 +551,27 @@ function loadVue() {
 
 	Vue.component('discord', {
 		props: ['invite', 'title', 'desc'],
-		data: function() {
+		data() {
 			if (!discord[this.invite]) {
 				fetch("https://discord.com/api/v9/invites/" + this.invite + "?with_counts=true")
 					.then(res => res.json())
 					.then((out) => {
 					discord[this.invite] = out
+					this.$forceUpdate();
 				})
 			}
-			return { data: discord[this.invite] }
+			return { invData: discord[this.invite] }
 		},
 		template: `
 		<div class="discordInvite">
 			<div class="v-center" style="width:100%;">
 				<a class=link v-bind:href="'https://discord.gg/' + invite" style="font-size:16px;display:inline;font-weight:400">{{title || (discord[invite] ? discord[invite].guild.name : invite)}}</a><br/>
 				{{desc}}<br/>
-				<span v-if="discord[invite]" style="opacity:.5">
+				<span v-if="discord[this.invite]" style="opacity:.5">
 					({{formatWhole(discord[invite].approximate_member_count)}} members, 
 					{{formatWhole(discord[invite].approximate_presence_count)}} online)
 				</span>
+				<a if="invData">
 			</div>
 		</div>
 		`

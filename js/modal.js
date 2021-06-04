@@ -53,7 +53,7 @@ function openStartModal() {
                     <span style='font-size:14px'>Tree of Genesis</span>
                 </div>
                 <div class="saveState" style='cursor:pointer' onclick='switchAct("1");'>
-                    <h3 style="font-size:21px">Act 1</h3><br/>
+                    <h3 style="font-size:21px">Act 1</h3> <i>(in progress!)</i><br/>
                     <span style='font-size:14px'>MS-Paint Incremental</span>
                 </div>
                 (select one from above!)
