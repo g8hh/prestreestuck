@@ -222,6 +222,6 @@ if (act == "0.0") addLayer("aspDoom", {
     ],
 
     hotkeys: [
-        { key: "i", description: "I: Absorb Life Power", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
+        { key: "d", description: "D: Absorb Doom Power", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
 })

@@ -501,10 +501,32 @@ function isPlainObject(obj) {
 	return (!!obj) && (obj.constructor === Object)
 }
 
-document.title = "The Prestreestuck"
 if (window.location.hostname == "cc.bingj.com") {
 	document.body.removeChild(document.getElementsByClassName("banner")[0])
 	document.title = "The Prestreestuck, but you're playing it on Bing's cache"
+} else if (Math.random() < 0.1) {
+	let titles = [
+		"The Prestreestuck",
+		"The Preestuck",
+		"MS-Paint (Fan) Incremental",
+		"Layer Omega",
+		"Vast Numbers",
+		"Number Sleuth",
+		"Limitbreak",
+		"cool and new idle game",
+		"sweet magnitude and hella layer",
+		"The Retcon Tree",
+		"Treeswap",
+		"Number Increasing Simulator",
+		"The Candy Tab",
+		"I need some art",
+		"Act 1.798e308",
+		"3 years until the update",
+		"Number Prologue...?",
+		"{Number, 2}: Beyond Googology",
+		VERSION.name,
+	]
+	document.title = titles[Math.floor(Math.random() * titles.length)] + " - " + document.title
 }
 
 // Converts a string value to whatever it's supposed to be
@@ -521,7 +543,7 @@ var activePopups = [];
 var popupID = 0;
 
 // Function to show popups
-function doPopup(type = "none", text = "This is a test popup.", title = "", timer = 3, color = "") {
+function doPopup(type = "none", text = "This is a test popup.", title = null, timer = 3, color = "") {
 	switch (type) {
 		case "achievement":
 			popupTitle = "Achievement Unlocked!";
@@ -536,11 +558,11 @@ function doPopup(type = "none", text = "This is a test popup.", title = "", time
 			popupType = "default-popup"
 			break;
 	}
-	if (title != "") popupTitle = title;
+	if (title !== null) popupTitle = title;
 	popupMessage = text;
 	popupTimer = timer;
 
-	activePopups.push({ "time": popupTimer, "type": popupType, "title": popupTitle, "message": (popupMessage + "\n"), "id": popupID, "color": color })
+	activePopups.unshift({ "time": popupTimer, "type": popupType, "title": popupTitle, "message": (popupMessage + "\n"), "id": popupID, "color": color })
 	popupID++;
 }
 

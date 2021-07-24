@@ -95,7 +95,7 @@ if (act == "0.1") addLayer("metaProspit", {
             onClick() { setClickableState(this.layer, this.id, getClickableState(this.layer, this.id) ? 0 : 1) },
             style() {
                 return {
-                    "width": "100px", "height": "100px"
+                    "width": "100px", "min-height": "100px"
                 }
             }
         },
@@ -119,6 +119,14 @@ if (act == "0.1") addLayer("metaProspit", {
                     (bought ? "which are giving a<br/>" + format(buyableEffect(this.layer, this.id), 2) + "×<br/>boost to<br/>" +
                     (this.id < 23 ? ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"][this.id - 11] + " Essence" : prospitSigns[this.id - 23] + " gain") + "."
                     : "Cost: " + format(this.cost) + " Prospitians")
+            }
+            c[index].tooltip = function () {
+                var bought = getBuyableAmount("metaProspit", this.id).gt(0)
+                var compact = getClickableState(this.layer, 11)
+                return compact ?
+                    format(getBuyableAmount(this.layer, this.id), 0) + "<br/>" + prospitSigns[this.id - 11] + "<br/><h5>" + (bought ? format(buyableEffect(this.layer, this.id), 2) + "× " +
+                    (this.id < 23 ? ["Time", "Space", "Mind", "Heart", "Hope", "Rage", "Light", "Void", "Life", "Doom", "Breath", "Blood"][this.id - 11] + " Essence" : prospitSigns[this.id - 23] + " gain")
+                    : format(this.cost) + " Prospitians") : ""
             }
             c[index].cost = cost
             c[index].style = function () {

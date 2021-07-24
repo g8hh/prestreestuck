@@ -29,12 +29,21 @@ let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.1.2.5",
+	num: "0.1.1.2.6",
 	name: "The Great Split",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h3>v0.1.1.2.6</h3><br>
+		Added a save bank. Now you don't need to painfully grind the game again if you somehow magically delete your browser cookies.<br>
+		Adjusted some of <spoiler>Breath / Blood</spoiler> prices.<br>
+		Settings are now persistent between saves.<br>
+		Added a toggle to reduce background animations because apparently some of you guys hate it.<br>
+		Added a button to close all popups.<br>
+		Tweaked save preview text.<br>
+		Other visual adjustments.<br>
+	<br>
 	<h3>v0.1.1.2.5</h3><br>
 		Challenges now only say "Completed" when you reached the completion limit.<br>
 		Darkened locked upgrades to make it distinctable from <spoiler>Life's</spoiler> color.<br>
@@ -216,23 +225,21 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 	<br><br><br>
 `
 
-let winText = `Congratulations! You've made it to this game's end!... or did you?`
+let winText = `Congratulations! You've made it to the game's end!... or did you?`
 
-// If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
-// (The ones here are examples, all official functions are already taken care of)
 var doNotCallTheseFunctionsEveryTick = ["blowUpEverything"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
 }
 
-// Determines if it should show points/sec
 function canGenPoints(){
 	return true
 }
 
-// Calculate points/sec!
 function getPointGen() {
+
+	// I'm so funny
 	if (act == "omega") {
 		player.act = "-1"
 		save()

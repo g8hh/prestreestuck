@@ -132,7 +132,7 @@ function updateTempData(layerData, tmpData, funcsData, itemName = "") {
 			if (!NaNalert && (value !== value || (value instanceof Decimal && Number.isNaN(value.mag)))){
 				alert("NaN lol\n(at tmp" + itemName + "." + item + ")\nPlease contact the mod author.");
 				clearInterval(interval);
-				player.autosave = false;
+				meta.options.autosave = false;
 				NaNalert = true;
 			}
 			Vue.set(tmpData, item, value)

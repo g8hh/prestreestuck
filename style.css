@@ -115,6 +115,14 @@ alternate {
 	text-align: right;
 }
 
+.sburbCanvas {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	transition: none;
+	z-index: 999999;
+}
+
 .discordInvite {
 	display: inline-block;
 	font-size: 12px;
@@ -280,7 +288,7 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 }
 
 .can:hover {
-	transform: scale(1.15, 1.15);
+	transform: scale(1.1, 1.1);
 	box-shadow: 0 0 20px var(--points)
 }
 
@@ -291,7 +299,7 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 }
 
 .treeNode.can:hover {
-	transform: scale(1.15, 1.15);
+	transform: scale(1.1, 1.1);
 	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
 	z-index: 4
 }
@@ -737,14 +745,14 @@ ul {
 	bottom: 100%;
 	left: 50%;
 	margin-bottom: 5px;
-	margin-left: -80px;
+	margin-left: -82.5px;
 	padding: 7px;
 	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	opacity: 0;
-	transition: opacity 0.5s;
+	transition: opacity 0.5s, transform 0.5s;
   
 	position: absolute;
 	z-index: 99999999 !important;
@@ -792,6 +800,10 @@ ul {
 	opacity: 1;
   }
   
+  .can:hover .tooltip {
+	  transform: scale(0.9090909, 0.9090909);
+  }
+
 #loadingSection {
 	display: flex;
 	flex-direction: column;

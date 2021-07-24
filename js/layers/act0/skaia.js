@@ -188,8 +188,8 @@ if (act.startsWith("0")) addLayer("skaia", {
             unlocked() { return act == "0.0" && player.points.gte("1e2200") && !hasUpgrade(this.layer, this.id) },
         },
         12: {
-            fullDisplay: "<h3>REACH BEYOND THE CIRCLE.</h3><br/>Need " + format("ee216") + " points",
-            canAfford() { return player.points.gte("ee216") },
+            fullDisplay: "<h3>REACH BEYOND THE CIRCLE.</h3><br/>Need " + format("e1.111e111") + " points",
+            canAfford() { return player.points.gte("e1.111e111") },
             pay() {
                 player.phaseTimer = 0
                 player.tab = "none";
@@ -199,7 +199,7 @@ if (act.startsWith("0")) addLayer("skaia", {
             unlocked() { return act == "0.0" && player.points.gte("ee20") && !hasUpgrade(this.layer, this.id) },
         },
         13: {
-            fullDisplay: "<h3>INFLATE.</h3><br/>Need " + format("eeee1111") + " points<br/>(PS: Might contains flashing lights.)",
+            fullDisplay: "<h3>INFLATE.</h3><br/>Need " + format("eeee1111") + " points.",
             canAfford() { return player.points.gte("eeee1111") },
             pay() {
                 player.phaseTimer = 0
@@ -991,13 +991,13 @@ if (act.startsWith("0")) addLayer("skaia", {
             effectDescription: "Keeps Doom Wraths on Breath and Blood resets.",
         },
         4: {
-            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>IT MUST HAPPENS</alternate></p>15 Breath Essence & 15 Blood Essence",
-            done() { return player.aspBreath.best.gte(15) && player.aspBlood.best.gte(15) },
+            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>IT MUST HAPPENS</alternate></p>12 Breath Essence & 12 Blood Essence",
+            done() { return player.aspBreath.best.gte(12) && player.aspBlood.best.gte(12) },
             effectDescription: "Keeps Space Upgrades on Breath and Blood resets.",
         },
         5: {
-            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>IT CAN NOT BE UNDONE</alternate></p>32 Breath Essence & 32 Blood Essence",
-            done() { return player.aspBreath.best.gte(32) && player.aspBlood.best.gte(32) },
+            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>IT CAN NOT BE UNDONE</alternate></p>25 Breath Essence & 25 Blood Essence",
+            done() { return player.aspBreath.best.gte(25) && player.aspBlood.best.gte(25) },
             effectDescription: "Automatically do Breath and Blood resets.",
             toggles: [["aspBreath", "autoAbsorb"], ["aspBlood", "autoAbsorb"]],
         },

@@ -1,4 +1,4 @@
-var gameVer = "0.1.1.2.5";
+var gameVer = "0.1.1.2.6";
 
 var player;
 var needCanvasUpdate = true;
@@ -410,7 +410,7 @@ var interval = setInterval(function() {
 			player.offTime.remain -= offlineDiff
 			diff += offlineDiff
 		}
-		if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
+		if (!meta.options.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 	}
 	if (player.devSpeed) diff *= player.devSpeed
 	player.time = now

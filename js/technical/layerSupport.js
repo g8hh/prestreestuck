@@ -275,7 +275,7 @@ addLayer("options-tab", {
                     ["raw-html", `
                         <table><tr>
                             <td><button class="opt" onclick="save()">Save</button></td>
-                            <td><button class="opt" onclick="toggleOpt('autosave')">Autosave: ${player.autosave?"ENABLED":"DISABLED"}</button></td>
+                            <td><button class="opt" onclick="toggleOpt('autosave')">Autosave: ${meta.options.autosave?"ENABLED":"DISABLED"}</button></td>
                             <td><button class="opt" onclick="openHardResetModal()">HARD RESET</button></td>
                         </tr>
                         <tr>
@@ -284,7 +284,7 @@ addLayer("options-tab", {
                             <td><button class="opt" onclick="openSaveModal()">All Save States</button></td>
                         </tr>
                         <tr>
-                            <td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: ${player.offlineProd?"ENABLED":"DISABLED"}</button></td>
+                            <td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: ${meta.options.offlineProd?"ENABLED":"DISABLED"}</button></td>
                         </tr>
                     `],
                 ],
@@ -294,12 +294,13 @@ addLayer("options-tab", {
                     ["raw-html", `
                         <table><tr>
                             <td><button class="opt" onclick="switchTheme()">Color Theme: ${getThemeName()}</button></td>
-                            <td><button class="opt" onclick="adjustMSDisp()">Show Milestones: ${player.msDisplay.toUpperCase()}</button></td>
-                            <td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: ${player.hqTree?"ENABLED":"DISABLED"}</button></td>
+                            <td><button class="opt" onclick="adjustMSDisp()">Show Milestones: ${meta.options.msDisplay.toUpperCase()}</button></td>
+                            <td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: ${meta.options.hqTree?"ENABLED":"DISABLED"}</button></td>
                         </tr>
                         <tr>
-                            <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: ${player.hideChallenges?"HIDDEN":"SHOWN"}</button></td>
-                            <td><button class="opt" onclick="switchOpt('splitMode', ['flexible', 'enabled', 'disabled'])">Tab Splitting: ${player.splitMode == "flexible" ? "DYNAMIC" : "FORCE " + player.splitMode.toUpperCase()}</button></td>
+                            <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: ${meta.options.hideChallenges?"HIDDEN":"SHOWN"}</button></td>
+                            <td><button class="opt" onclick="switchOpt('splitMode', ['flexible', 'enabled', 'disabled'])">Tab Splitting: ${meta.options.splitMode == "flexible" ? "DYNAMIC" : "FORCE " + meta.options.splitMode.toUpperCase()}</button></td>
+                            <td><button class="opt" onclick="toggleOpt('bgAnim')">Animated Background: ${meta.options.bgAnim?"FULL":"MINIMAL"}</button></td>
                         </tr> 
                     `],
                 ],
@@ -311,6 +312,6 @@ addLayer("options-tab", {
 })
 
 addLayer("changelog-tab", {
-    tabFormat() {return ([["raw-html", modInfo.changelog]])},
+    tabFormat() {return ([["raw-html", `<div style="width:90%">${modInfo.changelog}</div>`]])},
     row: "otherside"
 })

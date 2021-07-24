@@ -15,19 +15,19 @@ const colors = {
 }
 
 function changeTheme() {
-	colors_theme = colors[player.theme] || colors[0]
-	document.body.style.setProperty('--background', themes[player.theme] ? themes[player.theme][1] : "#0f0f0f")
-	document.body.style.setProperty('--background_tooltip', themes[player.theme] ? themes[player.theme][2] : "#000000b0")
-	document.body.style.setProperty('--color', themes[player.theme] ? themes[player.theme][3] : "#dfdfdf")
-	document.body.style.setProperty('--points', themes[player.theme] ? themes[player.theme][4] : "#ffffff")
-	document.body.style.setProperty("--locked", themes[player.theme] ? themes[player.theme][5] : "#bf8f8f")
+	colors_theme = colors[meta.options.theme] || colors[0]
+	document.body.style.setProperty('--background', themes[meta.options.theme] ? themes[meta.options.theme][1] : "#0f0f0f")
+	document.body.style.setProperty('--background_tooltip', themes[meta.options.theme] ? themes[meta.options.theme][2] : "#000000b0")
+	document.body.style.setProperty('--color', themes[meta.options.theme] ? themes[meta.options.theme][3] : "#dfdfdf")
+	document.body.style.setProperty('--points', themes[meta.options.theme] ? themes[meta.options.theme][4] : "#ffffff")
+	document.body.style.setProperty("--locked", themes[meta.options.theme] ? themes[meta.options.theme][5] : "#bf8f8f")
 }
 
 function switchTheme() {
-	player.theme = themes[+player.theme + 1] ? +player.theme + 1 : 0
+	meta.options.theme = themes[+meta.options.theme + 1] ? +meta.options.theme + 1 : 0
 	changeTheme()
 }
 
 function getThemeName() {
-	return player.theme && themes[player.theme] ? themes[player.theme][0] : "Default"
+	return meta.options.theme && themes[meta.options.theme] ? themes[meta.options.theme][0] : "Default"
 }

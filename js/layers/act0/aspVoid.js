@@ -167,6 +167,6 @@ if (act == "0.0") addLayer("aspVoid", {
     ],
 
     hotkeys: [
-        { key: "l", description: "L: Absorb Light Power", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
+        { key: "v", description: "V: Absorb Void Power", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
 })

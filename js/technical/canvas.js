@@ -44,14 +44,20 @@ function drawTree() {
 			var scale = Math.max(canvas.height / 250, canvas.width / 446)
 			var skyHeight = scale * 250
 			var skyWidth = scale * 446
-			if (player.act == "0.1") ctx.filter = 'hue-rotate(' + (player.timePlayed * 6.12) + 'deg)'; 
+			if (player.act == "0.1") {
+				if (meta.options.bgAnim) ctx.filter = 'hue-rotate(' + (player.timePlayed * 6.12) + 'deg)'; 
+				else ctx.filter = 'hue-rotate(413deg)'
+			}
 			ctx.drawImage(skyImgs[Math.floor(player.time / 15000) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
 			ctx.globalAlpha = (player.time / 15000) % 1;
 			ctx.drawImage(skyImgs[Math.floor(player.time / 15000 + 1) % skyImgs.length], (canvas.width - skyWidth) / 2, (canvas.height - skyHeight) / 2, skyWidth, skyHeight)
 			ctx.globalAlpha = 1;
 		}
 
-		if (player.act == "0.1") ctx.filter = 'hue-rotate(' + -(player.timePlayed * 4.13) + 'deg)'; 
+		if (player.act == "0.1") {
+			if (meta.options.bgAnim) ctx.filter = 'hue-rotate(' + -(player.timePlayed * 6.12) + 'deg)'; 
+			else ctx.filter = 'hue-rotate(-413deg)'
+		}
 
 		if (player.act == "0.0" && (player.aspHope.unlocked || player.aspRage.unlocked) && sDensity < 8) sDensity++
 		else if ((player.act == "0.0" && (player.aspHope.unlocked && player.aspRage.unlocked)) && sDensity < 16) sDensity++
@@ -65,7 +71,7 @@ function drawTree() {
 			ctx.beginPath()
 			ctx.strokeStyle = player.act == "0.1" || hasUpgrade("skaia", 11) ? "#38f43d" : colors_theme[1] + sDensity.toString(16).padStart(2, "0")
 			let step = Math.PI / 21
-			let offset = (player.time / 600000) % (Math.PI * 2)
+			let offset = meta.options.bgAnim ? (player.time / 600000) % (Math.PI * 2) : 0
 			ctx.moveTo(getSpirographX(0, offset) * 25 + x, getSpirographY(0, offset) * 25 + y)
 			for (var t = step; t <= Math.PI * 14; t += step) {
 				ctx.lineTo(getSpirographX(t, offset) * 25 + x, getSpirographY(t, offset) * 25 + y);

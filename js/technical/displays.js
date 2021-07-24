@@ -52,8 +52,8 @@ function achievementStyle(layer, id){
 function updateWidth() {
 	var screenWidth = window.innerWidth
 	var splitScreen = screenWidth >= 1024
-	if (player.splitMode === "disabled") splitScreen = false
-	if (player.splitMode === "enabled") splitScreen = true
+	if (meta.options.splitMode === "disabled") splitScreen = false
+	if (meta.options.splitMode === "enabled") splitScreen = true
 
 
 	tmp.other.screenWidth = screenWidth

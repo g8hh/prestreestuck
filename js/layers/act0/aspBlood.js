@@ -268,7 +268,7 @@ if (act == "0.0") addLayer("aspBlood", {
             }
         },
         20: {
-            cost(x) { return new Decimal(1e41) },
+            cost(x) { return new Decimal(1e38) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(50).add(1).log(10).add(1).mul(tmp.aspBlood.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {

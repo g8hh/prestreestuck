@@ -5,6 +5,16 @@ var meta = {
 	currentSave: "",
 	act: -1,
 	saves: {},
+	options: {
+		autosave: true,
+		msDisplay: "always",
+		offlineProd: true,
+		hideChallenges: false,
+		splitMode: "flexible",
+		hqTree: false,
+		bgAnim: true,
+		theme: 0,
+	}
 }
 
 function save(saveId) {
@@ -15,7 +25,7 @@ function save(saveId) {
 	
 	meta.saves[player.saveId].act = act
 	meta.saves[player.saveId].desc = (() => {
-		var ret = format(player.points) + " points"
+		var ret = format(player.points) + " points, " + formatTime(player.timePlayed) + " played"
 		return ret
 	})()
 
@@ -29,18 +39,13 @@ function startPlayerBase() {
 		navTab: (layoutInfo.showTree ? "tree-tab" : "none"),
 		saveId: Date.now(),
 		time: Date.now(),
-		autosave: true,
 		notify: {},
-		msDisplay: "always",
-		offlineProd: true,
 		versionType: modInfo.id,
 		version: VERSION.num,
 		beta: VERSION.beta,
 		timePlayed: 0,
 		keepGoing: false,
 		hasNaN: false,
-		hideChallenges: false,
-		splitMode: "flexible",
 		showStory: true,
 		points: modInfo.initialStartPoints,
 		subtabs: {},
@@ -209,7 +214,7 @@ function load(saveId) {
 		player.saveId = saveId == "new" ? Date.now() : saveId
 		fixSave()
 
-		if (player.offlineProd) {
+		if (meta.options.offlineProd) {
 			if (player.offTime === undefined) player.offTime = { remain: 0 }
 			player.offTime.remain += (Date.now() - player.time) / 1000
 		}
@@ -224,6 +229,7 @@ function load(saveId) {
 		updateTemp();
 		updateTemp();
 		loadVue();
+		if (act.startsWith(1)) loadSburb()
 		
 	} else {
 		let get = localStorage.getItem(modInfo.id);
@@ -277,7 +283,7 @@ function NaNcheck(data) {
 			}
 			else {
 				clearInterval(interval);
-				player.autosave = false;
+				meta.options.autosave = false;
 				NaNalert = true;
 			}
 		}
@@ -308,9 +314,8 @@ function openImportSaveModal() {
 		`
 			Import your save here:<br/>
 			(Warning: your current save will be overwritten!)<br/>
-			<input type="text" id="importSaveInput" style="margin:5px 0;width:400px;"
-				placeholder="Save goes here..." 
-				id="save${save}" onchange="changeSaveName(${save})"><br/>
+			<input type="text" id="importSaveInput" autocomplete="off" style="margin:5px 0;width:400px;"
+				placeholder="Save goes here..."><br/>
 			<button style="margin:5px" onclick='importSave(document.getElementById("importSaveInput").value)'> Import the Save!
 		`,
 		"Nevermind, return"
@@ -355,9 +360,10 @@ function versionCheck() {
 }
 
 var saveInterval = setInterval(function() {
+	if (typeof player === 'undefined') return;
 	if (player===undefined) return;
 	if (gameEnded&&!player.keepGoing) return;
-	if (player.autosave) save();
+	if (meta.options.autosave) save();
 }, 5000)
 
 function openSaveModal() {
@@ -417,9 +423,8 @@ function openCreateSaveModal() {
 		"Create New Save",
 		`
 			Enter your new save's name:<br/>
-			<input type="text" id="newSaveNameInput" style="margin:5px 0;width:400px;"
-				placeholder="New Save" 
-				id="save${save}" onchange="changeSaveName(${save})">
+			<input type="text" id="newSaveNameInput" autocomplete="off" style="margin:5px 0;width:400px;"
+				placeholder="New Save">
 			<br/><br/>Start from:
 			<div class="saveState" style='cursor:pointer;margin-top:5px' onclick='createSave(document.getElementById("newSaveNameInput").value, "0.0"); modal.hide()'>
 			    <h3 style="font-size:21px">Act 0</h3><br/>
@@ -429,10 +434,35 @@ function openCreateSaveModal() {
 			    <h3 style="font-size:21px">Act 1</h3> <i>(in progress!)</i><br/>
 				<span style='font-size:14px'>MS-Paint Incremental</span>
 			</div>
+			Or:<br/>
+			<input type="text" id="importSaveInput" autocomplete="off" style="margin:5px 0;width:400px;"
+				placeholder="Save goes here..."><br/>
+			<button onclick='createImportSave(document.getElementById("newSaveNameInput").value, document.getElementById("importSaveInput").value)'> Import from String </button><br/><br/>
 			<button onclick='openSaveModal()'> Nevermind, return
 		`,
 		""
 	)
+}
+
+function createImportSave(name, data) {
+	try {
+		data = Object.assign(getStartPlayer(), JSON.parse(atob(data)))
+		load("new")
+		data.saveId = player.saveId
+		player = data;
+		player.versionType = modInfo.id
+		meta.currentSave = player.saveId
+		meta.saves[player.saveId] = {
+			name: name || "New Save",
+			act: player.act ?? 0,
+			desc: "0 points",
+		}
+		save()
+		window.location.reload()
+	} catch(e) {
+		console.log(e)
+		return;
+	}
 }
 
 function createSave(name, targetAct) {

@@ -3,14 +3,14 @@ function toggleOpt(name) {
 	if (name == "oldStyle" && styleCooldown > 0)
 		return;
 
-	player[name] = !player[name];
+	meta.options[name] = !meta.options[name];
 	if (name == "hqTree")
 		changeTreeQuality();
 	if (name == "oldStyle")
 		updateStyle();
 }
 function switchOpt(name, opts) {
-	player[name] = opts[(opts.indexOf(player[name]) + 1) % opts.length];
+	meta.options[name] = opts[(opts.indexOf(meta.options[name]) + 1) % opts.length];
 }
 var styleCooldown = 0;
 function updateStyle() {
@@ -20,7 +20,7 @@ function updateStyle() {
 	needCanvasUpdate = true;
 }
 function changeTreeQuality() {
-	var on = player.hqTree;
+	var on = meta.options.hqTree;
 	document.body.style.setProperty('--hqProperty1', on ? "2px solid" : "4px solid");
 	document.body.style.setProperty('--hqProperty2a', on ? "-4px -4px 4px rgba(0, 0, 0, 0.25) inset" : "-4px -4px 4px rgba(0, 0, 0, 0) inset");
 	document.body.style.setProperty('--hqProperty2b', on ? "0px 0px 20px var(--background)" : "");
@@ -35,13 +35,13 @@ const MS_DISPLAYS = ["ALL", "LAST, AUTO, INCOMPLETE", "AUTOMATION, INCOMPLETE", 
 const MS_SETTINGS = ["always", "last", "automation", "incomplete", "never"];
 
 function adjustMSDisp() {
-	player.msDisplay = MS_SETTINGS[(MS_SETTINGS.indexOf(player.msDisplay) + 1) % 5];
+	meta.options.msDisplay = MS_SETTINGS[(MS_SETTINGS.indexOf(meta.options.msDisplay) + 1) % 5];
 }
 function milestoneShown(layer, id) {
 	complete = player[layer].milestones.includes(id);
 	auto = layers[layer].milestones[id].toggles;
 
-	switch (player.msDisplay) {
+	switch (meta.options.msDisplay) {
 		case "always":
 			return true;
 			break;

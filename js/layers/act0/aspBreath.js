@@ -268,7 +268,7 @@ if (act == "0.0") addLayer("aspBreath", {
             }
         },
         20: {
-            cost(x) { return new Decimal(1e31) },
+            cost(x) { return new Decimal(1e27) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(20).add(1).log(20).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
@@ -292,7 +292,7 @@ if (act == "0.0") addLayer("aspBreath", {
             }
         },
         21: {
-            cost(x) { return new Decimal(1e51) },
+            cost(x) { return new Decimal(1e48) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(1.2).add(1).log(1.2).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
@@ -364,7 +364,7 @@ if (act == "0.0") addLayer("aspBreath", {
             }
         },
         24: {
-            cost(x) { return new Decimal(1e100) },
+            cost(x) { return new Decimal(1e95) },
             effect(x) { return (x || getBuyableAmount(this.layer, this.id)).max(1).log(1.12).add(1).log(1.12).add(1).mul(tmp.aspBreath.buyables[28].effect) },
             canAfford() { return player[this.layer].power.gte(this.cost()) && player[this.layer].buyables[this.id].lte(0) },
             title() {
@@ -571,6 +571,6 @@ if (act == "0.0") addLayer("aspBreath", {
     ],
 
     hotkeys: [
-        { key: "r", description: "R: Absorb Breath Essence", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
+        { key: "e", description: "E: Absorb Breath Essence", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
 })
