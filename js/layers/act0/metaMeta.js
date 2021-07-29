@@ -40,7 +40,7 @@ if (act == "0.2") addLayer("metaMeta", {
         var bns = new Decimal(1)
         for (var a = 51; a <= 62; a++) bns = bns.mul(tmp[this.layer].buyables[a].effect)
         var ptb = new Decimal(player.metaMeta.metaFaucets[7]).add(1).log(10).add(1).pow(0.25)
-        var tet = mtn.pow(mtt).add(1).log(10).mul(bns).mul(asf).mul(clf).root(nrf.div(player.metaMeta.sacrificeMulti)).pow(tmd).pow(ptb)
+        var tet = mtn.pow(mtt).add(1).log(10).mul(bns).mul(asf).mul(clf).pow(tmd).pow(ptb).root(nrf.div(player.metaMeta.sacrificeMulti))
         if (hasUpgrade("metaMeta", 19)) tet = tet.pow(player.metaMeta.overflows.add(1))
         if (tet.gt(Number.MAX_VALUE)) tet = Number.MAX_VALUE
         var eff = {
