@@ -40,7 +40,7 @@ if (act == "0.0") addLayer("aspMind", {
         1: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>WORRY ABOUT UPGRADES LESS</alternate></p>10 Mind Power",
             done() { return player[this.layer].best.gte(10) },
-            effectDescription: "You keep your 1st, 3nd, and 5th Space upgrades on Mind Power absorb.",
+            effectDescription: "You keep your 1st, 3rd, and 5th Space upgrades on Mind Power absorb.",
         },
         2: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>ALMOST THE ENTIRE UPGRADE PANEL</alternate></p>100 Mind Power",
@@ -55,7 +55,7 @@ if (act == "0.0") addLayer("aspMind", {
         4: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>WORRY LESS ABOUT UPGRADES AGAIN</alternate></p>" + formatWhole(10000000) + " Mind Power",
             done() { return player[this.layer].best.gte(10000000) },
-            effectDescription: "You keep your forth row of Space upgrades on Mind Power absorb.",
+            effectDescription: "You keep your fourth row of Space upgrades on Mind Power absorb.",
         },
         5: {
             requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>EXPAND YOUR MIND</alternate></p>" + formatWhole(1e12) + " Mind Power",
@@ -63,7 +63,7 @@ if (act == "0.0") addLayer("aspMind", {
             effectDescription: "Unlocks Mind Upgrades.",
         },
         6: {
-            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>THE BALNCE IS BROKEN</alternate></p>" + formatWhole(1e25) + " Mind Power",
+            requirementDescription: "<p style='transform: scale(-1, -1)'><alternate>THE BALANCE IS BROKEN</alternate></p>" + formatWhole(1e25) + " Mind Power",
             done() { return player[this.layer].best.gte(1e25) },
             effectDescription: "Gain 5% of your Mind Power gain on absorb per second.",
         },
@@ -137,7 +137,7 @@ if (act == "0.0") addLayer("aspMind", {
         },
         23: {
             title: "<p style='transform: scale(-1, -1)'><alternate>RESET PROOFING</alternate>",
-            description: "Time Booster^2s no longer resets, and its multi boosts Time Power gain.",
+            description: "Time Booster^2s no longer reset, and their multi boosts Time Power gain.",
             cost: new Decimal(1e30),
             effect() {
                 let ret = tmp.aspTime.buyables[22].effect.pow(0.06).add(1)

@@ -302,6 +302,12 @@ addLayer("options-tab", {
                             <td><button class="opt" onclick="switchOpt('splitMode', ['flexible', 'enabled', 'disabled'])">Tab Splitting: ${meta.options.splitMode == "flexible" ? "DYNAMIC" : "FORCE " + meta.options.splitMode.toUpperCase()}</button></td>
                             <td><button class="opt" onclick="toggleOpt('bgAnim')">Animated Background: ${meta.options.bgAnim?"FULL":"MINIMAL"}</button></td>
                         </tr> 
+                        <tr>
+                            <td><button class="opt" onclick="switchOpt('subtitle', ['subtitle', 'points', 'none'])">Subtitle: ${ 
+                                {subtitle: "ALT TITLE", points: "POINTS", none: "NONE"}[meta.options.subtitle]
+                            }</button></td>
+                            <td><button class="opt" onclick="toggleOpt('showFPS')">FPS Counter: ${meta.options.showFPS?"SHOWN":"HIDDEN"}</button></td>
+                        </tr>
                     `],
                 ],
             },

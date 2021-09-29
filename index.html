@@ -3,6 +3,7 @@
 <head>
 	<link rel="shortcut icon" href="data/favicon.png" />
 
+	<meta charset="utf-8">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<link rel="apple-touch-icon" href="data/main-icon.png">
 
@@ -29,6 +30,8 @@
 	<script src="js/utils/NumberFormating.js"></script>
 	<script src="js/utils/options.js"></script>
 	<script src="js/utils/themes.js"></script>
+
+	<script src="js/layers/tracker.js"></script>
 
 	<!-- Act 0 -->
 	<script src="js/layers/act0/skaia.js"></script>
@@ -73,7 +76,7 @@
 		<div v-if="false" id="loadingSection" class="fullWidth" style="z-index:2147483647;position:fixed;background-color:var(--background)">
 			<div>
 				<h1>The Prestreestuck</h1><br />
-				<h2>v0.1.1.2.6</h2>
+				<h2>v0.1.1.3</h2>
 			</div>
 			<div>
 				<h3>Loading...</h3>
@@ -85,14 +88,14 @@
 		</div>
 		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.splitScreen && player.tab!='none' && !(gameEnded && !player.keepGoing)"></div>
 
-		<div v-if="VERSION.num != '0.1.1.2.6' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
+		<div v-if="VERSION.num != '0.1.1.3' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
 			<br>
 			<h2>The game is currently being updated.</h2><br />
 			If you can see this message, that means the game has detected inconsistent version number between files.<br />
 			This can be caused by the website currently being updated and not ready yet or there is an error causing the files to be read incorrectly.<br />
 			Please try again later, or if this screen has been up for more than 30 minutes, please contact the mod author.<br />
 			<br>
-			index.js version: 0.1.1.2.6<br />
+			index.js version: 0.1.1.3<br />
 			mod.js version: {{VERSION.num}}<br />
 			game.js version: {{gameVer}}<br />
 			components.js version: {{compVer}}<br />
@@ -195,6 +198,11 @@
 					<layer-tab :layer="layer" :back="'none'" :spacing="'50px'" :key="'left'"></layer-tab>
 				</div>
 			</div>
+		</div>
+
+		<!-- Debug -->
+		<div class="debug">
+			<span v-if="meta.options.showFPS">tick: {{format(rawDiff*1000, 0)}}ms ~ {{format(1/rawDiff)}}ps</span>
 		</div>
 	</div>
 </body>

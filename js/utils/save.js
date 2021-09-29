@@ -14,6 +14,8 @@ var meta = {
 		hqTree: false,
 		bgAnim: true,
 		theme: 0,
+		subtitle: "subtitle",
+		showFPS: false,
 	}
 }
 
@@ -252,7 +254,9 @@ function load(saveId) {
 			load(player.saveId)
 		}
 		if (data.currentSave !== undefined) {
+			let options = meta.options
 			meta = Object.assign(meta, data)
+			meta.options = Object.assign(options, meta.options)
 			load(meta.currentSave)
 		}
 	}
@@ -306,6 +310,8 @@ function exportSave() {
     el.setSelectionRange(0, 999999);
 	document.execCommand("copy");
 	document.body.removeChild(el);
+
+	doPopup("", "", "Exported to clipboard", 2, "var(--color)")
 }
 
 function openImportSaveModal() {
@@ -507,6 +513,7 @@ function changeSave(id) {
 function switchAct(act, reset = true) {
 	player = {
 		...reset ? getStartPlayer() : player,
+		tracker: player.tracker,
 		
 		timePlayed: player.timePlayed,
 		saveId: player.saveId,

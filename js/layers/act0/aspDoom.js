@@ -88,9 +88,9 @@ if (act == "0.0") addLayer("aspDoom", {
             },
             unlocked() { return true },
             goalDescription() {
-                return format(["1e4950", "1e5500", "1e7500", "1e9350", "e13000", "e15500", "e19300", "e27000", "e43500", Decimal.dInf][challengeCompletions(this.layer, this.id)]) + ' points'
+                return format(["1e4950", "1e5500", "1e7500", "1e9350", "e13000", "e15500", "e19300", "e25600", "e43500", Decimal.dInf][challengeCompletions(this.layer, this.id)]) + ' points'
             },
-            canComplete() { return player.points.gte(["1e4950", "1e5500", "1e7500", "1e9350", "e13000", "e15500", "e19300", "e27000", "e43500", Decimal.dInf][challengeCompletions(this.layer, this.id)]) },
+            canComplete() { return player.points.gte(["1e4950", "1e5500", "1e7500", "1e9350", "e13000", "e15500", "e19300", "e25600", "e43500", Decimal.dInf][challengeCompletions(this.layer, this.id)]) },
             rewardEffect() {
                 let ret = {}
             },
@@ -102,7 +102,7 @@ if (act == "0.0") addLayer("aspDoom", {
                     "Squares the second Time upgrade's effect. You still have a long way to go.",
                     "Cubes the first Void Enhancement's effect. That'll make it more interesting.",
                     "Squares the fourth Time upgrade's effect. Wow, who could have thought of that?",
-                    "Tesseracts all of the second row of Time upgrades' effect. Wow, such boost, much synergy.",
+                    "Tesseracts (^4) all of the second row of Time upgrades' effect. Wow, such boost, much synergy.",
                     "Increases the maximum number of challenges you can do per each Rage Challenge from 5 to 10.",
                     "Okay, you're almost there. Complete this challenge to give yourself a ^1.05 boost to point gain!",
                     "This is the last one. Complete this challenge to get 2 more wraths to conquer >:D",

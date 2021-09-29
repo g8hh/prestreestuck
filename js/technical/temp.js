@@ -142,18 +142,18 @@ function updateTempData(layerData, tmpData, funcsData, itemName = "") {
 
 function updateChallengeTemp(layer)
 {
-	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges)
+	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges, "tmp." + layer + ".challenges")
 }
 
 
 function updateBuyableTemp(layer)
 {
-	updateTempData(layers[layer].buyables, tmp[layer].buyables, funcs[layer].buyables)
+	updateTempData(layers[layer].buyables, tmp[layer].buyables, funcs[layer].buyables, "tmp." + layer + ".buyables")
 }
 
 function updateClickableTemp(layer)
 {
-	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables)
+	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables, "tmp." + layer + ".clickables")
 }
 
 

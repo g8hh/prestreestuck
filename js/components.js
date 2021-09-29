@@ -1,4 +1,4 @@
-var compVer = "0.1.1.2.6";
+var compVer = "0.1.1.3";
 var app;
 
 function loadVue() {
@@ -628,6 +628,8 @@ function loadVue() {
 			hotkeys,
 			activePopups,
 			window,
+			diff,
+			rawDiff,
 		},
 	})
 }

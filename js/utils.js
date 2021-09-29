@@ -434,7 +434,7 @@ function updateAchievements(layer) {
 		if (isPlainObject(layers[layer].achievements[id]) && !(hasAchievement(layer, id)) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id)
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()
-			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup("achievement", tmp[layer].achievements[id].name, "Achievement Gotten!", 3, tmp[layer].color);
+			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup("achievement", run(layers[layer].achievements[id].name), "Achievement Gotten!", 3, tmp[layer].color);
 		}
 	}
 }
@@ -501,10 +501,12 @@ function isPlainObject(obj) {
 	return (!!obj) && (obj.constructor === Object)
 }
 
+let subtitle = ""
+
 if (window.location.hostname == "cc.bingj.com") {
 	document.body.removeChild(document.getElementsByClassName("banner")[0])
-	document.title = "The Prestreestuck, but you're playing it on Bing's cache"
-} else if (Math.random() < 0.1) {
+	subtitle = "The Prestreestuck, but you're playing it on Bing's cache"
+} else {
 	let titles = [
 		"The Prestreestuck",
 		"The Preestuck",
@@ -514,19 +516,17 @@ if (window.location.hostname == "cc.bingj.com") {
 		"Number Sleuth",
 		"Limitbreak",
 		"cool and new idle game",
-		"sweet magnitude and hella layer",
 		"The Retcon Tree",
 		"Treeswap",
-		"Number Increasing Simulator",
 		"The Candy Tab",
-		"I need some art",
 		"Act 1.798e308",
 		"3 years until the update",
 		"Number Prologue...?",
 		"{Number, 2}: Beyond Googology",
+		"Karkat plays an Incremental Game",
 		VERSION.name,
 	]
-	document.title = titles[Math.floor(Math.random() * titles.length)] + " - " + document.title
+	subtitle = titles[Math.floor(Math.random() * titles.length)]
 }
 
 // Converts a string value to whatever it's supposed to be
