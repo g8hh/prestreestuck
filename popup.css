@@ -1,0 +1,82 @@
+.popup {
+	border: 4px solid;
+	border-radius: 7px;
+	width: 240px;
+	color: #000000;
+	display: block;
+	margin-top: 10px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-color: rgba(0, 0, 0, 0.25);
+}
+
+.popup-close {
+	position: absolute;
+	right: 260px;
+	top: 30px;
+	width: 48px;
+	height: 48px;
+	font-size: 30px;
+}
+
+.popup-container {
+	position: absolute;
+	z-index: 2000000000;
+	padding-top: 20px;
+	right: 30px;
+	width: 260px;
+}
+
+.achievement-popup {
+	background: #7182BC;
+}
+
+.milestone-popup {
+	background: #D1C23C;
+}
+
+.fade-enter-active {
+	transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+}
+.fade-leave-active {
+	transition: transform .2s ease-in
+}
+
+.fade-transition {
+	transition: transform .2s
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	transform: translate(300px);
+}
+
+.redtext {
+	color: red;
+}
+
+
+.modal {
+	background-color: #000000af;
+	position: fixed;
+	top: 0%;
+	bottom: 0%;
+	left: 0%;
+	right: 0%;
+	z-index: 99999;
+}
+.modal > div {
+	background-color: var(--background);
+	color: var(--color);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	min-width: 400px;
+	max-width: 90%;
+	max-height: 90%;
+	overflow-y: auto;
+	transform: translate(-50%, -50%);
+	padding: 10px;
+	border: 2px solid rgba(0, 0, 0, 0.125);
+	border-radius: 10px;
+	z-index: 100000;
+}
