@@ -52,8 +52,8 @@ function achievementStyle(layer, id){
 function updateWidth() {
 	var screenWidth = window.innerWidth
 	var splitScreen = screenWidth >= 1024
-	if (player.splitMode === "disabled") splitScreen = false
-	if (player.splitMode === "enabled") splitScreen = true
+	if (meta.options.splitMode === "disabled") splitScreen = false
+	if (meta.options.splitMode === "enabled") splitScreen = true
 
 
 	tmp.other.screenWidth = screenWidth
@@ -75,7 +75,7 @@ function updateOomps(diff)
 			tmp.other.oomps = pp.sub(lp).div(diff)
 			tmp.other.oompsMag = -1;
 		} else {
-			while (pp.div(lp).log(10).div(diff).gte("100") && tmp.other.oompsMag <= 5 && lp.gt(0)) {
+			while (pp.div(lp).log(10).div(diff).gte("10") && tmp.other.oompsMag <= 5 && lp.gt(0)) {
 				pp = pp.log(10)
 				lp = lp.log(10)
 				tmp.other.oomps = pp.sub(lp).div(diff)

@@ -132,7 +132,7 @@ function updateTempData(layerData, tmpData, funcsData, itemName = "") {
 			if (!NaNalert && (value !== value || (value instanceof Decimal && Number.isNaN(value.mag)))){
 				alert("NaN lol\n(at tmp" + itemName + "." + item + ")\nPlease contact the mod author.");
 				clearInterval(interval);
-				player.autosave = false;
+				meta.options.autosave = false;
 				NaNalert = true;
 			}
 			Vue.set(tmpData, item, value)
@@ -142,18 +142,18 @@ function updateTempData(layerData, tmpData, funcsData, itemName = "") {
 
 function updateChallengeTemp(layer)
 {
-	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges)
+	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges, "tmp." + layer + ".challenges")
 }
 
 
 function updateBuyableTemp(layer)
 {
-	updateTempData(layers[layer].buyables, tmp[layer].buyables, funcs[layer].buyables)
+	updateTempData(layers[layer].buyables, tmp[layer].buyables, funcs[layer].buyables, "tmp." + layer + ".buyables")
 }
 
 function updateClickableTemp(layer)
 {
-	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables)
+	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables, "tmp." + layer + ".clickables")
 }
 
 

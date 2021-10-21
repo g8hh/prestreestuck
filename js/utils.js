@@ -434,7 +434,7 @@ function updateAchievements(layer) {
 		if (isPlainObject(layers[layer].achievements[id]) && !(hasAchievement(layer, id)) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id)
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()
-			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup("achievement", tmp[layer].achievements[id].name, "Achievement Gotten!", 3, tmp[layer].color);
+			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup("achievement", run(layers[layer].achievements[id].name), "Achievement Gotten!", 3, tmp[layer].color);
 		}
 	}
 }
@@ -501,10 +501,32 @@ function isPlainObject(obj) {
 	return (!!obj) && (obj.constructor === Object)
 }
 
-document.title = "The Prestreestuck"
+let subtitle = ""
+
 if (window.location.hostname == "cc.bingj.com") {
 	document.body.removeChild(document.getElementsByClassName("banner")[0])
-	document.title = "The Prestreestuck, but you're playing it on Bing's cache"
+	subtitle = "The Prestreestuck, but you're playing it on Bing's cache"
+} else {
+	let titles = [
+		"The Prestreestuck",
+		"The Preestuck",
+		"MS-Paint (Fan) Incremental",
+		"Layer Omega",
+		"Vast Numbers",
+		"Number Sleuth",
+		"Limitbreak",
+		"cool and new idle game",
+		"The Retcon Tree",
+		"Treeswap",
+		"The Candy Tab",
+		"Act 1.798e308",
+		"3 years until the update",
+		"Number Prologue...?",
+		"{Number, 2}: Beyond Googology",
+		"Karkat plays an Incremental Game",
+		VERSION.name,
+	]
+	subtitle = titles[Math.floor(Math.random() * titles.length)]
 }
 
 // Converts a string value to whatever it's supposed to be
@@ -521,7 +543,7 @@ var activePopups = [];
 var popupID = 0;
 
 // Function to show popups
-function doPopup(type = "none", text = "This is a test popup.", title = "", timer = 3, color = "") {
+function doPopup(type = "none", text = "This is a test popup.", title = null, timer = 3, color = "") {
 	switch (type) {
 		case "achievement":
 			popupTitle = "Achievement Unlocked!";
@@ -536,11 +558,11 @@ function doPopup(type = "none", text = "This is a test popup.", title = "", time
 			popupType = "default-popup"
 			break;
 	}
-	if (title != "") popupTitle = title;
+	if (title !== null) popupTitle = title;
 	popupMessage = text;
 	popupTimer = timer;
 
-	activePopups.push({ "time": popupTimer, "type": popupType, "title": popupTitle, "message": (popupMessage + "\n"), "id": popupID, "color": color })
+	activePopups.unshift({ "time": popupTimer, "type": popupType, "title": popupTitle, "message": (popupMessage + "\n"), "id": popupID, "color": color })
 	popupID++;
 }
 

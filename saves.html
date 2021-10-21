@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Prestreestuck Save Bank</title>
+        <link rel="shortcut icon" href="data/favicon.png" />
+        <style>
+            @font-face {
+                font-family: Lucidastuck;
+                src: url("data/fonts/lucidastuck-12.fon");
+            }
+
+            body {
+                text-align: center;
+                background: #535353;
+                padding: 0;
+                margin: 0;
+            }
+
+            h1, h2, h3, h4, h5 {
+                margin: 0;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2[id]::before {
+                content: "[" attr(id) "]";
+                font-size: 12px;
+                padding-right: 1ch;
+            }
+
+            main {
+                background: #c6c6c6;
+                width: min(960px, 100%);
+                min-height: 100vh;
+                display: inline-block;
+            }
+
+            article, pre {
+                font-family: "Lucidastuck", "Lucida Console", "Consolas", "Courier New", "monospace";
+                line-height: 1.2;
+            }
+
+            article {
+                width: 586px;
+                min-height: calc(100vh - 64px);
+                padding: 32px;
+                background: #efefef;
+                font-size: 12px;
+                text-align: left;
+                display: inline-block;
+            }
+
+            contents {
+                border: 3px double black;
+                position: relative;
+                display: inline-block;
+                margin: auto;
+                padding: 1rem 2ch;
+                text-align: left;
+                width: 65ch;
+            }
+
+            contents:before {
+                content: "ALL SAVES";
+                position: absolute;
+                top: -.5rem;
+                padding: 0 1ch;
+                background: #efefef;
+            }
+
+            separator {
+                position: relative;
+                display: inline-block;
+                text-align: center;
+                border-top: 3px double black;
+                width: 100%;
+            }
+            separator:before {
+                content: attr(title);
+                position: absolute;
+                top: -.5rem;
+                transform: translateX(-50%);
+                padding: 0 1ch;
+                text-align: center;
+                background: #efefef;
+            }
+
+            button {
+                font-family: "Courier New", "monospace";
+                font-weight: bold;
+                font-size: 13px;
+                border: none;
+                border-radius: 0;
+                background-color: #cdcdcd;
+                margin: 4px 0;
+                box-shadow: 1px 1px var(--shadow-color), 2px 2px var(--shadow-color);
+
+                --shadow-color: #a1a1a1;
+            }
+            button.red {
+                color: #ffffff;
+                background-color: #ff0000;
+                --shadow-color: #aa0000;
+            }
+            button.saveButton {
+                width: calc(50% - 0.5ch);
+                display: inline-block;
+                text-align: left;
+                padding: 8px 12px;
+                margin: 4px 0;
+                word-wrap: normal;
+            }
+            button.bigButton {
+                width: 100%;
+                display: block;
+                text-align: left;
+                padding: 8px 12px;
+                margin: 4px 0;
+                word-wrap: normal;
+                position: relative;
+            }
+            button:hover {
+                transform: translate(-1px, -1px);
+                box-shadow: 1px 1px var(--shadow-color), 2px 2px var(--shadow-color), 3px 3px var(--shadow-color);
+            }
+            button:active, button:disabled {
+                transform: translate(1px, 1px);
+                box-shadow: 1px 1px var(--shadow-color);
+            }
+            button.bigButton > div * {
+                text-shadow: 0 0 15px #cdcdcd, 0 0 15px #cdcdcd, 0 0 15px #cdcdcd;
+            }
+
+            input {
+                font-family: "Courier New", "monospace";
+                font-weight: bold;
+                font-size: 18px;
+                background-color: #cdcdcd;
+                border: none;
+                outline: none;
+                padding: 4px 8px;
+                margin: 4px 0;
+                display: block;
+                width: calc(100% - 16px);
+            }
+            top input {
+                padding: 0;
+                margin: 0;
+                background-color: #0000;
+                display: inline-block;
+                width: 100%;
+            }
+
+            textarea {
+                font-family: "Courier New", "monospace";
+                font-weight: bold;
+                font-size: 2px;
+                line-height: .5;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                overflow: hidden;
+                margin: -8px -12px;
+                color: #0003;
+                background-color: #cdcdcd;
+                border: none;
+                outline: none;
+                position: absolute;
+                resize: none;
+                cursor: default;
+            }
+            textarea::selection {
+                background-color: transparent;
+                color: inherit;
+            }
+            textarea::-webkit-scrollbar {
+                display: none;
+
+            }
+
+            #popup {
+                font-family: "Courier New", "monospace";
+                font-weight: bold;
+                font-size: 13px;
+                z-index: 100000;
+                background-color: #eeeeee;
+                border: 1px solid var(--shadow-color);
+                box-shadow: 0 0 0 calc(100vw + 100vh) #0005, 2px 2px var(--shadow-color), 4px 4px var(--shadow-color);
+                display: block;
+                position: fixed;
+                top: 0%; left: 0%;
+                padding: 16px;
+                text-align: left;
+                transform: translate(calc(50vw - 50%), calc(50vh - 50%)) translate(-8px, -8px);
+                max-width: 500px;
+                user-select: none;
+
+                --shadow-color: #a9a9a9;
+            }
+            #popup.none {
+                display: none;
+            }
+            #popup:not(.none) {
+                animation: popupFade .05s linear;
+            }
+            #popup.active {
+                animation: popupPop .05s linear;
+            }
+
+            @keyframes popupPop {
+                from {
+                    transform: translate(calc(50vw - 50%), calc(50vh - 50%)) translate(-6px, -6px);
+                }
+                to {
+                    transform: translate(calc(50vw - 50%), calc(50vh - 50%)) translate(-8px, -8px);
+                }
+            }
+            @keyframes popupFade {
+                from {
+                    box-shadow: 0 0 0 calc(100vw + 100vh) #0000, 0px 0px var(--shadow-color), 0px 0px var(--shadow-color);
+                }
+                to {
+                    box-shadow: 0 0 0 calc(100vw + 100vh) #0005, 2px 2px var(--shadow-color), 4px 4px var(--shadow-color);
+                }
+            }
+
+            top {
+                background-color: #dddddd;
+                display: block;
+                margin: -16px -16px 0 -16px;
+                padding: 8px 16px;
+                width: 100%;
+                font-size: 18px;
+            }
+            bottom {
+                display: block;
+                margin-top: 12px;
+                width: 100%;
+                text-align: right;
+            }
+
+        </style>
+
+        <script src="js/init.js"></script>
+        <script src="js/technical/break_eternity.js"></script>
+        <script src="js/technical/layerSupport.js"></script>
+        <script src="js/mod.js"></script>
+        <script src="js/tree.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/utils/save.js"></script>
+        <script src="js/utils/NumberFormating.js"></script>
+        <script>
+            var popup, meta
+            var saveCache = ""
+
+            var acts = {
+                "0.0": "Act 0 - Genesis - First Circle",
+                "0.1": "Act 0 - Genesis - Second Circle",
+                "0.2": "Act 0 - Genesis - Metaness",
+                "1": "Act 1 - The Incrementalism",
+            }
+
+            function formatData(bytes) {
+                bytes = +bytes
+
+                let pfxs2 = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"]
+                let pfxs10 = ["B", "KB", "MB", "GB", "TB", "PB", "EB"]
+
+                if (bytes < 1000) return bytes.toLocaleString("en-US") + " bytes"
+
+                let p2 = Math.floor(Math.log2(bytes) / 10)
+                let p10 = Math.floor(Math.log10(bytes) / 3)
+                let fmt = {
+                    maximumFractionDigits: 2, minimumFractionDigits: 2
+                }
+                return (bytes / Math.pow(1024, p2)).toLocaleString("en-US", fmt) + " " + pfxs2[p2] + ", " + 
+                    (bytes / Math.pow(1000, p10)).toLocaleString("en-US", fmt) + " " + pfxs10[p10]
+            }
+
+            function getDetails(save) {
+                if (save.act == "0.0") {
+                    if (!save.aspTime) return "Not yet initialized"
+                    var target = [
+                        ["aspBreath", "Breath Essence"],
+                        ["aspBlood", "Blood Essence"],
+                        ["aspDoom", "Doom Power"],
+                        ["aspLife", "Life Power"],
+                        ["aspVoid", "Void Power"],
+                        ["aspLight", "Light Power"],
+                        ["aspHope", "Hope Essence"],
+                        ["aspRage", "Rage Essence"],
+                        ["aspMind", "Mind Power"],
+                        ["aspHeart", "Heart Power"],
+                        ["aspSpace", "Space Power"],
+                        ["aspTime", "Time Power"],
+                    ]
+                    let str = ""
+                    let index = 0
+                    for (let t of target) {
+                        if (save[t[0]].points == '0') continue
+                        str += (str ? ", " : "") + format(save[t[0]].points, 0) + " " + t[1]
+                        index += 1
+                        if (index >= 2) break
+                    }
+                    if (!str) str = "0 Time Power"
+                    return str
+                } if (save.act == "0.1") {
+                    if (!save.metaAspects) return "Not yet initialized"
+                    var target = [
+                        ["metaProspit", "Prospit Points"],
+                        ["metaDerse", "Derse Points"],
+                        ["metaClasses", "Class Points"],
+                        ["metaAspects", "Aspect Points"],
+                    ]
+                    let str = "Skaia Level " + format(save.skaia.level, 0)
+                    for (let t of target) {
+                        if (save[t[0]].points <= '1') continue
+                        str += (str ? ", " : "") + format(save[t[0]].points, 0) + " " + t[1] 
+                        break
+                    }
+                    return str
+                } if (save.act == "0.2") {
+                    if (!save.metaMeta) return "Not yet initialized"
+                    var target = [
+                        ["eternitiesTotal", "Eternities"],
+                        ["overflowsTotal", "Overflows"],
+                        ["meta", "Meta-Metaness"],
+                        ["points", "Metaness"],
+                    ]
+                    let str = ""
+                    let index = 0
+                    if (save.metaMeta.sacrificeMulti > "1") index += 1
+                    if (save.metaMeta.buyables[121] > "0") index += 1
+                    if (index < 2) for (let t of target) {
+                        if (save.metaMeta[t[0]] == '0') continue
+                        str += (str ? ", " : "") + format(save.metaMeta[t[0]], 0) + " " + t[1] 
+                        index += 1
+                        if (index >= 2) break
+                    }
+                    if (save.metaMeta.buyables[121] > "0")
+                        str += (str ? ", " : "") + formatWhole(save.metaMeta.buyables[121]) + " / 1,000 Sburb"
+                    if (save.metaMeta.sacrificeMulti > "1") 
+                        str += (str ? ", " : "") + format(save.metaMeta.sacrificeMulti) + "× Sacrifice"
+                    if (!str) str = "0 Metaness"
+                    return str
+                }
+
+                return ""
+            }
+
+            function load() {
+                popup = document.getElementById("popup")
+                
+                let get = localStorage.getItem("treestuck")
+                if (get===null || get===undefined) return
+                meta = JSON.parse(decodeURIComponent(escape(atob(get))))
+            }
+            function save() {
+	            localStorage.setItem("treestuck", btoa(unescape(encodeURIComponent(JSON.stringify(meta)))))
+            }
+
+            function closePopup() {
+                popup.innerHTML = ""
+                popup.classList.add("none")
+                popup.classList.remove("active")
+            }
+            function openPopup() {
+                popup.classList.remove("none")
+                popup.classList.remove("active")
+                void popup.offsetWidth;
+                popup.classList.add("active")
+            }
+
+            function openSaveManager() {
+                let saves = ""
+
+
+                for (let save in meta.saves) {
+                    saves += `
+                        <button class="bigButton" onclick="openSaveModal(${save})">
+                            <span style="font-size:18px">${meta.saves[save].name}</span>
+                            ${meta.currentSave == save ? "(Active)" : ""}<br/>
+                            ${acts[meta.saves[save].act]}<br/>
+                            ${meta.saves[save].desc}<br/>
+                        </button>
+                    `
+                }
+
+                popup.innerHTML = `
+                    <top>Save Manager</top><br/>
+                    Below are the SAVE STATES that you can access in the game's SETTINGS PAGE.
+                    You can EDIT AND MANAGE them just like how you can do it in the game (plus more!).<br/><br/>
+                    ${saves}
+                    <bottom>
+                        <button onclick="openNewSavePopup()">New Save</button>
+                        <button onclick="closePopup()">Close</button>
+                    </bottom>
+                `
+                openPopup();
+            }
+            function openNewSavePopup() {
+                popup.innerHTML = `
+                    <top>Create New Save</top><br/>
+                    What will this newly created save's name be? &nbsp;
+                    <input id="saveNameInput" placeholder="New Save"></input><br/>
+                    Start at:
+                    <button class="bigButton" onClick="createSave(document.getElementById('saveNameInput').value, '0.0')">
+                        <span style="font-size:18px">Act 0</span><br/>
+                        Genesis
+                    </button>
+                    <button class="bigButton" onClick="createSave(document.getElementById('saveNameInput').value, '1')">
+                        <span style="font-size:18px">Act 1</span><br/>
+                        MS-Paint Incremental
+                    </button>
+                    <br/>or:
+                    <input id="saveInput" placeholder="Save string goes here..."></input>
+                    <div style="text-align:right"><button onclick="createImportSave(document.getElementById('saveInput').value, document.getElementById('saveNameInput').value)">Import from String</button></div>
+                    <bottom>
+                        <button onclick="openSaveManager()">Nevermind, return</button>
+                    </bottom>
+                `
+                openPopup();
+            }
+
+            function createSave(name, targetAct) {
+                let player = startPlayerBase()
+                player.act = targetAct ?? "-1"
+                meta.currentSave = player.saveId
+                meta.act = player.act
+                meta.saves[player.saveId] = {
+                    name: name || "New Save",
+                    act: targetAct ?? 0,
+                    desc: "0 points",
+                }
+	            localStorage.setItem("pts_" + player.saveId, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+                save();
+                openSaveManager();
+            }
+
+            function createImportSave(data, name) {
+                try {
+                    if (data===null || data===undefined) return
+                    let player = JSON.parse(decodeURIComponent(escape(atob(data))))
+                    
+                    player.saveId = Date.now()
+                    meta.currentSave = player.saveId
+                    meta.act = player.act
+                    meta.saves[player.saveId] = {
+                        name: name || "New Save",
+                        act: player.act ?? 0,
+                        desc: format(player.points) + " points",
+                    }
+                    localStorage.setItem("pts_" + player.saveId, data);
+                    save();
+                    openSaveManager();
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+
+            function changeSaveName(id, name) {
+                meta.saves[id].name = name || "Untitled Save",
+                save();
+            }
+
+            function openSaveModal(id) {
+                let save = meta.saves[id]
+
+                let get = localStorage.getItem("pts_" + id)
+                if (get===null || get===undefined) return
+                let player = JSON.parse(decodeURIComponent(escape(atob(get))))
+
+                popup.innerHTML = `
+                    <top>
+                        <input placeholder="Untitled Save" value="${save.name.replaceAll('"', '\\"')}"
+                            onchange="changeSaveName(${id}, this.value)"></input>
+                        <div style="opacity:.5;font-size:10px">#${id}</div>
+                    </top>
+                    <br/>
+                    ${acts[save.act]}<br/>
+                    ${save.desc}<br/>
+                    ${getDetails(player)}<br/>
+                    <button class="bigButton"
+                        onClick="let t=document.getElementById('saveString'); 
+                        t.focus(); t.select(); document.execCommand('copy'); 
+                        document.getElementById('saveHelp').innerHTML='Copied to clipboard!'">
+                        <textarea readonly class="button" id="saveString">${get}</textarea>
+                        <div style="position:relative;width:360px"><span id="saveHelp">Copy to clipboard</span>
+                            <div style="font-size:10px">${formatData(get.length)}</div>
+                        </div>
+                    </button>
+                    <bottom>
+                        ${meta.currentSave == id ? `<button disabled>Is Active</button> <button disabled>Delete</button>` :
+                           `<button onClick="switchActive(${id})">Set Active</button>
+                            <button onClick="openDeleteModal(${id})" class="red">Delete</button>`
+                        }
+                        <button onclick="openDuplicateModal(${id})">Duplicate</button>
+                        <br/>
+                        <button onclick="openSaveManager()">Save Manager</button>
+                        <button onclick="closePopup()">Close</button>
+                    </bottom>
+                `
+                openPopup();
+            }
+
+            function switchActive(id) {
+                meta.currentSave = id
+                meta.act = meta.saves[id].act
+                save()
+                openSaveModal(id)
+            }
+
+            function openDeleteModal(id) {
+                let save = meta.saves[id]
+
+                popup.innerHTML = `
+                    <top>
+                        Delete “${save.name}”?
+                    </top>
+                    <br/>
+                    You will lose all of your progress that's in this save!<br/>
+                    This process is irreversible!<br/>
+                    <bottom>
+                        <button onclick="deleteSave(${id})" class="red">I understand the consequences, get rid of it!</button><br/>
+                        <button onclick="openSaveModal(${id})">Nevermind, return</button>
+                    </bottom>
+                `
+                openPopup();
+            }
+
+            function deleteSave(id) {
+                localStorage.removeItem("pts_" + id)
+                delete meta.saves[id]
+                save()
+                openSaveManager()
+            }
+
+            function openDuplicateModal(id) {
+                let save = meta.saves[id]
+
+                popup.innerHTML = `
+                    <top>
+                        Duplicate “${save.name}”
+                    </top>
+                    <br/>
+                    What will this newly duplicated save's name be? &nbsp;
+                    <input id="saveNameInput" value="Copy of ${save.name}" placeholder="New Save"></input>
+                    <bottom>
+                        <button onclick="duplicateSave(${id}, document.getElementById('saveNameInput').value)">Duplicate it!</button><br/>
+                        <button onclick="openSaveModal(${id})">Nevermind, return</button>
+                    </bottom>
+                `
+                openPopup();
+            }
+
+            function duplicateSave(id, name) {
+                var newId = Date.now()
+
+                let get = localStorage.getItem("pts_" + id)
+                if (get===null || get===undefined) return
+                let player = JSON.parse(decodeURIComponent(escape(atob(get))))
+                player.saveId = newId
+                meta.currentSave = newId
+                meta.act = meta.saves[id].act
+                meta.saves[newId] = {
+                    name: name || "New Save",
+                    act: meta.saves[id].act,
+                    desc: meta.saves[id].desc,
+                }
+	            localStorage.setItem("pts_" + player.saveId, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+                save()
+                openSaveManager()
+            }
+
+            function openExternalSave(url, name) {
+                popup.innerHTML = `
+                    <center><br/>
+                    Loading...
+                    </center>
+                    <bottom>
+                        <button onclick="closePopup()">Close</button><br/>
+                    </bottom>
+                `
+                openPopup();
+
+                const xhttp = new XMLHttpRequest();
+                xhttp.open("GET", url, true);
+                xhttp.onload = function () {
+                    try {
+                        let save = this.responseText
+                        if (save===null || save===undefined) return
+                        let player = JSON.parse(decodeURIComponent(escape(atob(save))))
+                        saveCache = save
+
+                        popup.innerHTML = `
+                            <top>
+                                ${name || "External Save"}
+                            </top>
+                            <br/>
+                            ${acts[player.act]}<br/>
+                            ${format(player.points)} points, ${formatTime(player.timePlayed)} played<br/>
+                            ${getDetails(player)}<br/>
+                            <button class="bigButton"
+                                onClick="let t=document.getElementById('saveString'); 
+                                t.focus(); t.select(); document.execCommand('copy'); 
+                                document.getElementById('saveHelp').innerHTML='Copied to clipboard!'">
+                                <textarea readonly class="button" id="saveString">${save}</textarea>
+                                <div style="position:relative;width:360px"><span id="saveHelp">Copy to clipboard</span>
+                                    <div style="font-size:10px">${formatData(save.length)}</div>
+                                </div>
+                            </button>
+                            <bottom>
+                                <button onclick="openDuplicateExternalSave(saveCache, '${name}')">Duplicate</button><br/>
+                                <button onclick="closePopup()">Close</button>
+                            </bottom>
+                        `
+                        openPopup();
+                    } catch (e) {
+                        popup.innerHTML = `
+                            <center><br/>
+                            ${e}
+                            </center>
+                            <bottom>
+                                <button onclick="closePopup()">Close</button><br/>
+                            </bottom>
+                        `
+                    }
+                }
+                xhttp.send();
+            }
+
+            function openDuplicateExternalSave(save, name) {
+                saveCache = save
+
+                popup.innerHTML = `
+                    <top>
+                        Duplicate “${name}”
+                    </top>
+                    <br/>
+                    What will this newly duplicated save's name be? &nbsp;
+                    <input id="saveNameInput" value="Copy of ${name}" placeholder="New Save"></input>
+                    <bottom>
+                        <button onclick="createImportSave(saveCache, document.getElementById('saveNameInput').value)">Duplicate it!</button><br/>
+                        <button onclick="closePopup()">Nevermind, close</button>
+                    </bottom>
+                `
+                openPopup();
+            }
+            
+
+        </script>
+    </head>
+    <body onload="load()">
+        <main>
+            <article>
+                <center>
+                    <h1>The Prestreestuck Save Bank</h1><br/>
+                    Just in case your save is lost or you want to skip the not-so-pleasing parts<br/>
+                    <br/>
+                    <button onclick="openSaveManager()">Save Manager</button>
+                    <br/><br/>
+                    <contents>
+                        <separator title="Act 0: First Circle"></separator>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/heart', this.innerText)">
+                            Start of Heart</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/mind', this.innerText)">
+                            Start of Mind</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/hope', this.innerText)">
+                            Start of Hope</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/rage', this.innerText)">
+                            Start of Rage</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/void', this.innerText)">
+                            Start of Void</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/plan', this.innerText)">
+                            BEGIN THE PLAN</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/doom', this.innerText)">
+                            Start of Doom</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/breath', this.innerText)">
+                            Start of Breath</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/blood', this.innerText)">
+                            Start of Blood</button>
+                        <br/><br/><separator title="Act 0: Second Circle"></separator>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/aspects', this.innerText)">
+                            Start of Second Circle</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/meta', this.innerText)">
+                            INFLATE</button>
+                        <br/><br/><separator title="Act 0: Metaness"></separator>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/metaAspects', this.innerText)">
+                            Meta-Aspects</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/limitation', this.innerText)">
+                            Limitation</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/metaMeta', this.innerText)">
+                            Start of Meta-Metaness</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/overflows', this.innerText)">
+                            Start of Overflows</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/metaClasses', this.innerText)">
+                            Start of Meta-Classes</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/faucets', this.innerText)">
+                            Start of Faucets</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/metaFaucets', this.innerText)">
+                            Start of Meta-Faucets</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/sacrifice', this.innerText)">
+                            Start of Sacrifice</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/sacrifice2', this.innerText)">
+                            Sacrifice Halfway</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/metaMetaFaucets', this.innerText)">
+                            Start of Meta-Meta-Faucets</button>
+                        <button class="saveButton" onclick="openExternalSave('saves/act0/sburb', this.innerText)">
+                            Start of Sburb</button>
+                    </contents>
+                </center>
+                <br/><br/>
+            </article>
+        </main>
+        <div id="popup" class="none"></div>
+    </body>
+</html>

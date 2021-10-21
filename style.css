@@ -65,6 +65,40 @@ alternate {
 	transform: scale(-1, -1) !important;
 }
 
+gs {
+	font-family: inherit;
+	animation: gsAnim .10s linear infinite;
+}
+
+@keyframes gsAnim {
+	0% { color: #00d246; }
+	50% { color: #00ed4f; }
+	50.01% { color: #00ed4f; }
+	100% { color: #00ed4f; }
+}
+
+ts {
+	font-family: inherit;
+	animation: tsAnim .35s linear infinite;
+}
+
+@keyframes tsAnim {
+	0% { color: #ffd1d1; }
+	14.27% { color: #ffd1d1; }
+	14.28% { color: #ffe6d1; }
+	28.56% { color: #ffe6d1; }
+	28.57% { color: #fff6d1; }
+	42.85% { color: #fff6d1; }
+	42.86% { color: #d1ffe3; }
+	57.13% { color: #d1ffe3; }
+	57.14% { color: #d1f9ff; }
+	71.41% { color: #d1f9ff; }
+	71.42% { color: #d1dcff; }
+	85.7% { color: #d1dcff; }
+	85.71% { color: #f0d1ff; }
+	100% { color: #f0d1ff; }
+}
+
 .pesterlog {
 	margin: 20px;
 
@@ -115,6 +149,14 @@ alternate {
 	text-align: right;
 }
 
+.sburbCanvas {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	transition: none;
+	z-index: 999999;
+}
+
 .discordInvite {
 	display: inline-block;
 	font-size: 12px;
@@ -142,6 +184,12 @@ alternate {
 	transform: translate(-50%, -50%);
 }
 
+.debug {
+	position: fixed;
+	bottom: 5px;
+	left: 5px;
+	text-shadow: 0 0 10px var(--background), 0 0 5px var(--background);
+}
 
 /* end of custom styles */
 
@@ -163,6 +211,28 @@ body {
 	border-radius: 10px;
 	display: table-cell;
 	vertical-align: middle
+}
+
+.act-bar {
+	width: 480px;
+	border: 4px solid #f3f3f2;
+	background: linear-gradient(#ffffff, #f6f6f5);
+	color: #00b1ff;
+	border-radius: 5px;
+	margin: 5px;
+	padding: 10px;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-weight: normal;
+	font-size: 16px;
+	line-height: 1.4;
+	transform: scale(1);
+}
+
+.act-bar h2 {
+	color: #c9c9c9;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-weight: normal;
+	font-size: 21px;
 }
 
 html, body {
@@ -264,8 +334,8 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 
 
 .smallNode {
-	height: 60px;
-	width: 60px;
+	height: 50px;
+	width: 50px;
 	font-size: 30px;
 }
 
@@ -280,7 +350,7 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 }
 
 .can:hover {
-	transform: scale(1.15, 1.15);
+	transform: scale(1.1, 1.1);
 	box-shadow: 0 0 20px var(--points)
 }
 
@@ -291,7 +361,7 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 }
 
 .treeNode.can:hover {
-	transform: scale(1.15, 1.15);
+	transform: scale(1.1, 1.1);
 	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
 	z-index: 4
 }
@@ -419,7 +489,7 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 	border-color: rgba(0, 0, 0, 0.125);
 	font-size: 10px;
 	color: white;
-	text-shadow: 0 0 2px #000000;
+	text-shadow: 0 0 1px #000000, 0 0 2px #000000, 0 0 3px #000000, 0 0 4px #000000, 0 0 6px #000000, 0 0 8px #000000;
 }
 .achievement:hover {
 	box-shadow: 0 0 10px var(--points);
@@ -737,17 +807,18 @@ ul {
 	bottom: 100%;
 	left: 50%;
 	margin-bottom: 5px;
-	margin-left: -80px;
+	margin-left: -82.5px;
 	padding: 7px;
 	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	opacity: 0;
-	transition: opacity 0.5s;
+	transition: opacity 0.5s, transform 0.5s;
   
 	position: absolute;
-	z-index: 99999999 !important;
+	z-index: 2147483647 !important;
+	transform: translate(0px, 0px);
   
 	background-color: var(--background_tooltip);
 	color: var(--points);
@@ -792,6 +863,10 @@ ul {
 	opacity: 1;
   }
   
+  .can:hover .tooltip {
+	  transform: scale(0.9090909, 0.9090909);
+  }
+
 #loadingSection {
 	display: flex;
 	flex-direction: column;

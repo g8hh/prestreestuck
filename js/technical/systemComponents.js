@@ -1,4 +1,4 @@
-var systemVer = "0.1.1.2.5";
+var systemVer = "0.1.1.3";
 
 var systemComponents = {
 	'tab-buttons': {
@@ -135,6 +135,10 @@ var systemComponents = {
 			<a class=link onclick="showTab('changelog-tab')" style="font-size:16px;display:inline;font-weight:400">
 			The Changelog</a><br/>Pretty much the history of the game
 		</div></div>
+		<div class="discordInvite"> <div class="v-center" style="width:100%">
+			<a class=link href="saves.html" style="font-size:16px;display:inline;font-weight:400">
+			The Save Bank</a><br/>Just in case your save is lost or you want to skip the not-so-pleasing parts
+		</div></div>
 		<br><br>
         <h3>Discord servers:</h3><br/>
 		<discord invite="fHcWmmprGm" title="The Prestreestuck Server" desc="Suggest things and talk about how bad this is here"></discord>
@@ -156,22 +160,22 @@ var systemComponents = {
         <table>
             <tr>
                 <td><button class="opt" onclick="save()">Save</button></td>
-                <td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{ player.autosave?"ON":"OFF" }}</button></td>
+                <td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{ meta.options.autosave?"ON":"OFF" }}</button></td>
                 <td><button class="opt" onclick="openHardResetModal()">HARD RESET</button></td>
             </tr>
             <tr>
                 <td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
                 <td><button class="opt" onclick="importSave()">Import</button></td>
                 <td><button class="opt" onclick="openSaveModal()">All Save States</button></td>
-                <td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: {{ player.offlineProd?"ON":"OFF" }}</button></td>
+                <td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: {{ meta.options.offlineProd?"ON":"OFF" }}</button></td>
             </tr>
             <tr>
-                <td><button class="opt" onclick="switchTheme()">Color Scheme: {{ (player.theme ? "" : "") + getThemeName() }}</button></td>
-                <td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button></td>
-                <td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{ player.hqTree?"ON":"OFF" }}</button></td>
+                <td><button class="opt" onclick="switchTheme()">Color Scheme: {{ (meta.options.theme ? "" : "") + getThemeName() }}</button></td>
+                <td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{ meta.options.msDisplay.toUpperCase() }}</button></td>
+                <td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{ meta.options.hqTree?"ON":"OFF" }}</button></td>
             </tr>
         	<tr>
-                <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: {{ player.hideChallenges?"HIDDEN":"SHOWN" }}</button></td>
+                <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: {{ meta.options.hideChallenges?"HIDDEN":"SHOWN" }}</button></td>
             </tr> 
         </table>`
     },

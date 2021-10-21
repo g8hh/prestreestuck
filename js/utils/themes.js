@@ -5,7 +5,7 @@ const themes = {
 	0: ["Default", "#0f0f0f", "#000000b0", "#dfdfdf", "#ffffff", "#bf8f8f"],
 	1: ["Aqua", "#001f3f", "#000f1fb0", "#bfdfff", "#dfefff", "#c4a7b3"],
 	2: ["The Felt", "#042300", "#030f00b0", "#abefb0", "#efffdf", "#c4a7b3"],
-	3: ["Trickster", "#00117e", "#ff73fdb0", "#f9fd60", "#44ff00", "#ff0000"],
+	3: ["<ts style='text-shadow:0 0 5px var(--background),0 0 5px var(--background)'>Trickster</ts>", "#00117e", "#ff73fdb0", "#f9fd60", "#44ff00", "#ff0000"],
 }
 const colors = {
 	0: { 1: "#ffffff", 2: "#ffffffbf", 3: "#ffffff7f", },
@@ -15,19 +15,19 @@ const colors = {
 }
 
 function changeTheme() {
-	colors_theme = colors[player.theme] || colors[0]
-	document.body.style.setProperty('--background', themes[player.theme] ? themes[player.theme][1] : "#0f0f0f")
-	document.body.style.setProperty('--background_tooltip', themes[player.theme] ? themes[player.theme][2] : "#000000b0")
-	document.body.style.setProperty('--color', themes[player.theme] ? themes[player.theme][3] : "#dfdfdf")
-	document.body.style.setProperty('--points', themes[player.theme] ? themes[player.theme][4] : "#ffffff")
-	document.body.style.setProperty("--locked", themes[player.theme] ? themes[player.theme][5] : "#bf8f8f")
+	colors_theme = colors[meta.options.theme] || colors[0]
+	document.body.style.setProperty('--background', themes[meta.options.theme] ? themes[meta.options.theme][1] : "#0f0f0f")
+	document.body.style.setProperty('--background_tooltip', themes[meta.options.theme] ? themes[meta.options.theme][2] : "#000000b0")
+	document.body.style.setProperty('--color', themes[meta.options.theme] ? themes[meta.options.theme][3] : "#dfdfdf")
+	document.body.style.setProperty('--points', themes[meta.options.theme] ? themes[meta.options.theme][4] : "#ffffff")
+	document.body.style.setProperty("--locked", themes[meta.options.theme] ? themes[meta.options.theme][5] : "#bf8f8f")
 }
 
 function switchTheme() {
-	player.theme = themes[+player.theme + 1] ? +player.theme + 1 : 0
+	meta.options.theme = themes[+meta.options.theme + 1] ? +meta.options.theme + 1 : 0
 	changeTheme()
 }
 
 function getThemeName() {
-	return player.theme && themes[player.theme] ? themes[player.theme][0] : "Default"
+	return meta.options.theme && themes[meta.options.theme] ? themes[meta.options.theme][0] : "Default"
 }

@@ -14,9 +14,8 @@ let flavorTitles = [
 	"NOW WITH TROLL LANGUAGE SUPPORT",
 	"P.S. YOU CAN USE COPY AND PASTE TO SEE THE TRANSLATIONS. I AM JUST SAYING",
 	"WAIT THIS ISNT HOMESTUCK WHERE IS MY JHON EGBRET",
-	"COOL AND NEW INCREMENTAL GAME",
+	"COOL AND NEW IDLE GAME",
 	"COOL AND NEW PRESTIGE TREE",
-	"I NEVER SAID IT WAS AN IDLE GAME",
 	"DUE TO THE NATURE OF HOMESTUCK, SUFFERING IS MANDATORY",
 	"NO, IT IS NOT CANON YET",
 	"BUT WHY THOUGH",
@@ -24,17 +23,35 @@ let flavorTitles = [
 	"UNDEFINED",
 	"PLAY THIS GAME IN TRICKSTER THEME, I DARE YOU",
 	"FUN FACT: THE PERSON WHO MADE THE FIVE HOUR MEME IS A HOMESTUCK",
+	"NOW ON HOMESTUCK DOT NET",
 ]
 let flavorTitle = flavorTitles[Math.floor(Math.random() * flavorTitles.length)]
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.1.2.5",
-	name: "The Great Split",
+	num: "0.1.1.3",
+	name: "You Have Potential",
 }
 
 let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.05">(ue)</h1></h1><br>
 	<h5 style="opacity:0.5">Tip: Click and hold on a spoiler to reveal it.</h5><br>
+	<h2>v0.1.1.3</h2><br>
+		<h5 style="opacity:0.5">- You Have Potential -</h5>
+		Added the potential system, which is literally achievements for a game that don't need them. They can be quite an important plot device late game though.<br>
+		Completely revamped Act 1 - Part 2.<br>
+		Fixed some typo and errors.<br>
+		Improved the "NaN lol" system.<br>
+		Added some useless settings.<br>
+	<br>
+	<h3>v0.1.1.2.6</h3><br>
+		Added a save bank. Now you don't need to painfully grind the game again if you somehow magically delete your browser cookies.<br>
+		Adjusted some of <spoiler>Breath / Blood</spoiler> prices.<br>
+		Settings are now persistent between saves.<br>
+		Added a toggle to reduce background animations because apparently some of you guys hate it.<br>
+		Added a button to close all popups.<br>
+		Tweaked save preview text.<br>
+		Other visual adjustments.<br>
+	<br>
 	<h3>v0.1.1.2.5</h3><br>
 		Challenges now only say "Completed" when you reached the completion limit.<br>
 		Darkened locked upgrades to make it distinctable from <spoiler>Life's</spoiler> color.<br>
@@ -216,23 +233,21 @@ let changelog = `<h1>&nbsp;&nbsp;&nbsp;&nbsp;The Changelog<h1 style="opacity:0.0
 	<br><br><br>
 `
 
-let winText = `Congratulations! You've made it to this game's end!... or did you?`
+let winText = `Congratulations! You've made it to the game's end!... or did you?`
 
-// If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
-// (The ones here are examples, all official functions are already taken care of)
 var doNotCallTheseFunctionsEveryTick = ["blowUpEverything"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
 }
 
-// Determines if it should show points/sec
 function canGenPoints(){
 	return true
 }
 
-// Calculate points/sec!
 function getPointGen() {
+
+	// I'm so funny
 	if (act == "omega") {
 		player.act = "-1"
 		save()
@@ -337,13 +352,16 @@ function maxTickLength() {
 function fixOldSave(oldVersion) {
 	console.log("Loaded old version from" + oldVersion)
 	if (player.tab == "aspects") player.tab = "metaAspects";
-	if (oldVersion <= "0.1.0.3") {
-		if (act == 0) {
-			player.version = VERSION.num
-			if (hasUpgrade("skaia", 12)) switchAct("0.1", false)
-			else if (hasUpgrade("skaia", 13) || hasUpgrade("skaia", 14)) switchAct("0.2", false)
-			else switchAct("0.0", false)
-		}
+	if (oldVersion <= "0.1.1.3" && act == "0.1") {
+		player.version = VERSION.num
+		alert("Due to Skaia being rewritten, unfortunately we'll need to take you back to the beginning of this part to continue.")
+		switchAct("0.1")
+	}
+	if (oldVersion <= "0.1.0.3" && act == 0) {
+		player.version = VERSION.num
+		if (hasUpgrade("skaia", 12)) switchAct("0.1", false)
+		else if (hasUpgrade("skaia", 13) || hasUpgrade("skaia", 14)) switchAct("0.2", false)
+		else switchAct("0.0", false)
     }
 	if (oldVersion <= "0.0.3.4" && player.points.gte("ee100000")) {
 		player.points = new Decimal("ee100000");

@@ -1,4 +1,4 @@
-var gameVer = "0.1.1.2.5";
+var gameVer = "0.1.1.3";
 
 var player;
 var needCanvasUpdate = true;
@@ -386,14 +386,15 @@ function gameLoop(diff) {
 		if (layers[layer].achievements) updateAchievements(layer)
 	}
 
-	// For anyone who is Chinese but don't like watermarks: Setting "player.hideQQLinks" to true and reload 
-	// might hide the QQ links.
-	if (player.hideQQLink && document.location.hostname == "idlegame.gitee.io" && document.querySelector(".main-im")) {
-		document.querySelector(".main-im").style.display = "none";
+	switch (meta.options.subtitle){
+		case "subtitle": document.title = subtitle + " - " + modInfo.name; break
+		case "points": document.title = format(player.points, 0) + " points - " + modInfo.name; break
+		case "none": document.title = modInfo.name; break
 	}
 }
 
 var ticking = false
+var rawDiff = 0;
 var diff = 0;
 
 var interval = setInterval(function() {
@@ -402,7 +403,7 @@ var interval = setInterval(function() {
 	if (gameEnded&&!player.keepGoing) return;
 	ticking = true
 	let now = Date.now()
-	diff = (now - player.time) / 1e3
+	app.rawDiff += ((rawDiff = diff = (now - player.time) / 1e3) - app.rawDiff) / 2
 	if (player.offTime !== undefined) {
 		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
 		if (player.offTime.remain > 0) {
@@ -410,7 +411,7 @@ var interval = setInterval(function() {
 			player.offTime.remain -= offlineDiff
 			diff += offlineDiff
 		}
-		if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
+		if (!meta.options.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 	}
 	if (player.devSpeed) diff *= player.devSpeed
 	player.time = now

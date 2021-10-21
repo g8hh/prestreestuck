@@ -3,61 +3,80 @@
 <head>
 	<link rel="shortcut icon" href="data/favicon.png" />
 
-	<title>创世声望树 - The Prestreestuck</title>
-	<meta charset="utf-8" />
-	<meta name="description" content="When you try to mix Homestuck with The Prestige Tree together. 18 layers and very huge numbers. Don't say we didn't warn you.">
+	<meta charset="utf-8">
 
-	<link rel="stylesheet" type="text/css" href="style.css?20210530" />
-	<link rel="stylesheet" type="text/css" href="popup.css?20210530" />
+	<!-- Embed -->
+	<title>创世声望树 - The Prestreestuck</title>
+	<meta name="description" content="When you try to mix Homestuck with The Prestige Tree together. 18 layers and very huge numbers. I'm starting to regret making this.">
+
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="https://ducdat0507.github.io/prestreestuck/data/main-icon.png" />
+	<meta property="og:description" content="When you try to mix Homestuck with The Prestige Tree together. 18 layers and very huge numbers. I'm starting to regret making this." />
+	
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:image" content="https://ducdat0507.github.io/prestreestuck/data/main-icon.png" />
+	<meta name="twitter:description" content="When you try to mix Homestuck with The Prestige Tree together. 18 layers and very huge numbers. I'm starting to regret making this." />
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-icon" href="data/main-icon.png">
+
+	<!-- Dependencies -->
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" type="text/css" href="popup.css" />
 
 <!--
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Courier+Prime:wght@400;700" rel="stylesheet">
 -->
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
-	<script src="js/technical/break_eternity.js?20210530"></script>
-	<script src="js/init.js?20210530"></script>
-	<script src="js/modal.js?20210530"></script>
-	<script src="js/technical/layerSupport.js?20210530"></script>
-	<script src="js/utils/save.js?20210530"></script>
-	<script src="js/tree.js?20210530"></script>
-	<script src="js/mod.js?20210530"></script>
-	<script src="js/utils.js?20210530"></script>
-	<script src="js/utils/NumberFormating.js?20210530"></script>
-	<script src="js/utils/options.js?20210530"></script>
-	<script src="js/utils/themes.js?20210530"></script>
+	<script src="https://cdn.jsdelivr.net/npm/three@0.129.0"></script>
 
-	<script src="js/layers/act0/skaia.js?20210530"></script>
-	<script src="js/layers/act0/aspTime.js?20210530"></script>
-	<script src="js/layers/act0/aspSpace.js?20210530"></script>
-	<script src="js/layers/act0/aspHeart.js?20210530"></script>
-	<script src="js/layers/act0/aspMind.js?20210530"></script>
-	<script src="js/layers/act0/aspHope.js?20210530"></script>
-	<script src="js/layers/act0/aspRage.js?20210530"></script>
-	<script src="js/layers/act0/aspLight.js?20210530"></script>
-	<script src="js/layers/act0/aspVoid.js?20210530"></script>
-	<script src="js/layers/act0/aspLife.js?20210530"></script>
-	<script src="js/layers/act0/aspDoom.js?20210530"></script>
-	<script src="js/layers/act0/aspBreath.js?20210530"></script>
-	<script src="js/layers/act0/aspBlood.js?20210530"></script>
+	<script src="js/technical/break_eternity.js"></script>
+	<script src="js/init.js"></script>
+	<script src="js/modal.js"></script>
+	<script src="js/technical/layerSupport.js"></script>
+	<script src="js/utils/save.js"></script>
+	<script src="js/tree.js"></script>
+	<script src="js/mod.js"></script>
+	<script src="js/utils.js"></script>
+	<script src="js/utils/NumberFormating.js"></script>
+	<script src="js/utils/options.js"></script>
+	<script src="js/utils/themes.js"></script>
 
-	<script src="js/layers/act0/metaAspects.js?20210530"></script>
-	<script src="js/layers/act0/metaClasses.js?20210530"></script>
-	<script src="js/layers/act0/metaProspit.js?20210530"></script>
-	<script src="js/layers/act0/metaDerse.js?20210530"></script>
-	<script src="js/layers/act0/metaMeta.js?20210530"></script>
+	<script src="js/layers/tracker.js"></script>
 
-	<script src="js/layers/act1/players.js?20210530"></script>
-	<script src="js/layers/act1/player1.js?20210530"></script>
+	<!-- Act 0 -->
+	<script src="js/layers/act0/skaia.js"></script>
+	<script src="js/layers/act0/aspTime.js"></script>
+	<script src="js/layers/act0/aspSpace.js"></script>
+	<script src="js/layers/act0/aspHeart.js"></script>
+	<script src="js/layers/act0/aspMind.js"></script>
+	<script src="js/layers/act0/aspHope.js"></script>
+	<script src="js/layers/act0/aspRage.js"></script>
+	<script src="js/layers/act0/aspLight.js"></script>
+	<script src="js/layers/act0/aspVoid.js"></script>
+	<script src="js/layers/act0/aspLife.js"></script>
+	<script src="js/layers/act0/aspDoom.js"></script>
+	<script src="js/layers/act0/aspBreath.js"></script>
+	<script src="js/layers/act0/aspBlood.js"></script>
 
-	<script src="https://cdn.bootcdn.net/ajax/libs/p5.js/1.2.0/p5.min.js?20210530"></script>
+	<script src="js/layers/act0/metaAspects.js"></script>
+	<script src="js/layers/act0/metaClasses.js"></script>
+	<script src="js/layers/act0/metaProspit.js"></script>
+	<script src="js/layers/act0/metaDerse.js"></script>
+	<script src="js/layers/act0/metaMeta.js"></script>
 
-	<script src="js/technical/temp.js?20210530"></script>
-	<script src="js/technical/displays.js?20210530"></script>
-	<script src="js/game.js?20210530"></script>
-	<script src="js/technical/systemComponents.js?20210530"></script>
-	<script src="js/components.js?20210530"></script>
-	<script src="js/technical/canvas.js?20210530"></script>
+	<!-- Act 1 -->
+	<script src="js/sburb/main.js"></script>
+	<script src="js/layers/act1/players.js"></script>
+	<script src="js/layers/act1/player1.js"></script>
+
+	<script src="js/technical/temp.js"></script>
+	<script src="js/technical/displays.js"></script>
+	<script src="js/game.js"></script>
+	<script src="js/technical/systemComponents.js"></script>
+	<script src="js/components.js"></script>
+	<script src="js/technical/canvas.js"></script>
 
 </head>
 
@@ -66,11 +85,11 @@
 <script src="//g8hh.com/zh/core.js"></script>
 	<div id="app">
 		<canvas id="treeCanvas" class="canvas" v-if="!(gameEnded && !player.keepGoing)"></canvas>
-
-		<div v-if="false" id="loadingSection" class="fullWidth" style="z-index:2147483647;background-color:var(--background)">
+		
+		<div v-if="false" id="loadingSection" class="fullWidth" style="z-index:2147483647;position:fixed;background-color:var(--background)">
 			<div>
 				<h1>The Prestreestuck</h1><br />
-				<h2>v0.1.1.2.5</h2>
+				<h2>v0.1.1.3</h2>
 			</div>
 			<div>
 				<h3>Loading...</h3>
@@ -82,14 +101,14 @@
 		</div>
 		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.splitScreen && player.tab!='none' && !(gameEnded && !player.keepGoing)"></div>
 
-		<div v-if="VERSION.num != '0.1.1.2.5' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
+		<div v-if="VERSION.num != '0.1.1.3' || VERSION.num != gameVer || VERSION.num != compVer || VERSION.num != systemVer" class="fullWidth" style="z-index:2147483000;background-color:var(--background)">
 			<br>
 			<h2>The game is currently being updated.</h2><br />
 			If you can see this message, that means the game has detected inconsistent version number between files.<br />
 			This can be caused by the website currently being updated and not ready yet or there is an error causing the files to be read incorrectly.<br />
 			Please try again later, or if this screen has been up for more than 30 minutes, please contact the mod author.<br />
 			<br>
-			index.js version: 0.1.1.2.5<br />
+			index.js version: 0.1.1.3<br />
 			mod.js version: {{VERSION.num}}<br />
 			game.js version: {{gameVer}}<br />
 			components.js version: {{compVer}}<br />
@@ -163,18 +182,21 @@
 
 		</div>
 
-		<!-- Modals -->
+		<!-- Popups -->
 		<div class="popup-container">
+			<button v-on:click="() => { activePopups.splice(0, activePopups.length) }" class="popup-close" v-bind:style="{transform: activePopups.length > 1 ? 'translateY(0px)' : 'translateY(-90px)'}">
+				✕
+			</button>
 			<transition-group name="fade">
 				<div v-for="popup,index in activePopups" class="popup" v-bind:class="popup.type"
 					v-bind:key="'p' + popup.id" v-on:click="() => {activePopups.splice(index, 1)}" v-bind:style="popup.color ? {'background-color': popup.color} : {}">
-					<h3>{{popup.title}}</h3><br>
-					<h2 v-html="popup.message"></h2>
+					{{popup.title}}<br>
+					<h3 v-html="popup.message"></h3>
 				</div>
 			</transition-group>
 		</div>
 
-		<!-- Popups -->
+		<!-- Modals -->
 		<div v-if="modal.showing" class="modal">
 			<div>
 				<span v-if="modal.title"><h3 style="font-size:24px" v-html="modal.title"></h3><br/></span>
@@ -189,6 +211,11 @@
 					<layer-tab :layer="layer" :back="'none'" :spacing="'50px'" :key="'left'"></layer-tab>
 				</div>
 			</div>
+		</div>
+
+		<!-- Debug -->
+		<div class="debug">
+			<span v-if="meta.options.showFPS">tick: {{format(rawDiff*1000, 0)}}ms ~ {{format(1/rawDiff)}}ps</span>
 		</div>
 	</div>
 	
