@@ -71,7 +71,7 @@
 
         function update() {
             app.mods = []
-            app.statusText = "Patience is a virtue"
+            app.statusText = "Patience is a virtue, I guess"
             fetchParent()
 		}
 
@@ -88,7 +88,7 @@
             ms /= 24
             if (ms < 365) return Math.floor(ms).toLocaleString("en-US") + "d " + Math.floor((ms % 1) * 24).toLocaleString("en-US") + "h"
             ms /= 365
-            return Math.floor(ms / 365).toLocaleString("en-US") + "y " + Math.floor((ms % 1) * 365).toLocaleString("en-US") + "d"
+            return Math.floor(ms).toLocaleString("en-US") + "y " + Math.floor((ms % 1) * 365).toLocaleString("en-US") + "d"
         }
 
         function setTab(tab) {
