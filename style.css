@@ -1,18 +1,12 @@
 @font-face {
 	font-family: Oblivion;
 	src: url(Oblivion.ttf);
-	unicode-range: U+00-2F, U+3A-7F;
-}
-
-body {
-	transform: scale(-1, -1);
 }
 
 * {
 	transition-duration: 0.5s;
 	text-align: center;
-	font-family: Oblivion, Inconsolata, monospace;
-	text-transform: uppercase;
+	font-family: Inconsolata, monospace;
 	font-weight: bold;
 	table-align: center;
 	margin: auto;
@@ -67,7 +61,7 @@ body {
 /* extra quirk */
 
 alternate {
-	font-family: "Courier New", monospace;
+	font-family: Oblivion;
 	transform: scale(-1, -1) !important;
 }
 
@@ -81,7 +75,7 @@ alternate {
 	background-color: #ffffff;
 	color: #000000;
 	
-	font-family: Oblivion, "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 }
 
 .channel {
@@ -235,11 +229,11 @@ button {
 
 h1, h2, h3, b, input, .pesterlog > * > * {
 	display: inline;
-	font-family: Oblivion, "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace
 }
 
 .courier {
-	font-family: Oblivion, "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace
 }
 
 
@@ -253,7 +247,7 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 	border-radius: 50%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
-	font-family: Oblivion, "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
@@ -270,7 +264,7 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 	border-radius: 33%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
-	font-family: Oblivion, "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
@@ -391,7 +385,7 @@ h1, h2, h3, b, input, .pesterlog > * > * {
 
 .tabButton {
 	background-color: transparent;
-	font-family: Oblivion, "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	color: var(--color);
 	font-size: 20px;
 	cursor: pointer;
@@ -567,7 +561,7 @@ a {
 	font-size: 20px;
 	color: #41f5f5;
 	cursor: pointer;
-	font-family: Oblivion, "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	-webkit-text-stroke-width: 1px;
 	-webkit-text-stroke-color: #02f2f2;
 	text-decoration: none;
@@ -753,7 +747,7 @@ ul {
 	margin-bottom: 5px;
 	margin-left: -82.5px;
 	padding: 7px;
-	font-family: Oblivion, "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
