@@ -17,8 +17,6 @@ if (act == 1) addLayer("player1", {
     story: {
         1: {
             content: () => `
-                <img src="data/player1/0001.gif"/>
-                <br/><br/>
                 Alright, yes, finally!
                 <br/><br/>
                 You've just finally did it!
@@ -40,8 +38,6 @@ if (act == 1) addLayer("player1", {
             content: () => `
                 <h2>Act 1</h2><br/>
                 - The Incrementalism -
-                <br/><br/>
-                <img src="data/player1/0002_original.png"/>
                 <br/><br/>
                 A young man stands in their room. It is just so happen that today, April 13th 2021, is the day you've finished
                 a game you've been playing for a long time. (if you played it for that long, oh it's also Homestuck birthday).
